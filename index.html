@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EA Bot Admin</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',sans-serif; }
+body { background:#0f1117; color:#ddd; }
+
+/* LOGIN */
+#loginWrap { display:flex; align-items:center; justify-content:center; min-height:100vh; }
+.loginBox { background:#1a1f2e; border:2px solid #00d4aa; border-radius:16px; padding:40px; width:360px; text-align:center; }
+.loginBox h1 { color:#00d4aa; font-size:22px; margin-bottom:6px; }
+.loginBox p { color:#888; margin-bottom:24px; font-size:13px; }
+.loginBox input { width:100%; padding:12px; background:#0f1117; border:1px solid #333; border-radius:8px; color:#fff; font-size:14px; margin-bottom:12px; display:block; }
+.loginBox input:focus { outline:none; border-color:#00d4aa; }
+.btn-teal { background:#00d4aa; color:#000; border:none; padding:12px 24px; border-radius:8px; font-size:15px; font-weight:700; cursor:pointer; width:100%; }
+.btn-teal:hover { background:#00b894; }
+.err { color:#ff6b6b; font-size:13px; margin-top:8px; }
+
+/* APP */
+#app { display:none; }
+.topbar { background:#1a1f2e; border-bottom:2px solid #00d4aa; padding:14px 24px; display:flex; justify-content:space-between; align-items:center; }
+.topbar h1 { color:#00d4aa; font-size:18px; }
+.topbar-right { display:flex; gap:10px; align-items:center; }
+
+/* DANGER BUTTON */
+.btn-danger-big { background:#c0392b; color:#fff; border:none; padding:10px 22px; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer; }
+.btn-danger-big:hover { background:#e74c3c; }
+
+.content { padding:24px; }
+
+/* STATS */
+.stats { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:24px; }
+.stat { background:#1a1f2e; border:1px solid #2a3050; border-radius:12px; padding:18px; text-align:center; }
+.stat h3 { color:#888; font-size:11px; text-transform:uppercase; margin-bottom:6px; }
+.stat .num { font-size:32px; font-weight:700; }
+.s1 .num{color:#00d4aa} .s2 .num{color:#2ecc71} .s3 .num{color:#e74c3c} .s4 .num{color:#f39c12}
+
+/* ADD BOT FORM */
+.addForm { background:#1a1f2e; border:1px solid #2a3050; border-radius:12px; padding:20px; margin-bottom:24px; }
+.addForm h2 { color:#fff; font-size:15px; margin-bottom:16px; }
+.formRow { display:grid; grid-template-columns:repeat(4,1fr) auto; gap:10px; align-items:end; }
+.formRow label { display:block; color:#888; font-size:11px; margin-bottom:4px; }
+.formRow input, .formRow select { width:100%; padding:9px 12px; background:#0f1117; border:1px solid #333; border-radius:8px; color:#fff; font-size:13px; }
+.formRow input:focus, .formRow select:focus { outline:none; border-color:#00d4aa; }
+.formRow select option { background:#1a1f2e; }
+.btn-add { background:#00d4aa; color:#000; border:none; padding:9px 20px; border-radius:8px; font-weight:700; cursor:pointer; font-size:13px; white-space:nowrap; }
+.addErr { color:#e74c3c; font-size:12px; margin-top:8px; }
+
+/* TABLE */
+.tableWrap { background:#1a1f2e; border:1px solid #2a3050; border-radius:12px; overflow:hidden; margin-bottom:24px; }
+.tableHead { padding:14px 18px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #2a3050; }
+.tableHead h2 { color:#fff; font-size:14px; }
+input.search { background:#0f1117; border:1px solid #333; border-radius:8px; padding:7px 12px; color:#fff; font-size:13px; width:200px; }
+input.search:focus { outline:none; border-color:#00d4aa; }
+table { width:100%; border-collapse:collapse; }
+th { background:#0f1117; color:#888; font-size:11px; text-transform:uppercase; padding:10px 14px; text-align:left; }
+td { padding:11px 14px; border-bottom:1px solid #111; font-size:13px; }
+tr:hover td { background:#1e2535; }
+.badge { padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; }
+.ACTIVE { background:#0d3d2a; color:#2ecc71; }
+.DISABLED { background:#3d1515; color:#e74c3c; }
+.EXPIRED { background:#2a2a2a; color:#888; }
+
+/* ACTION BUTTONS */
+.acts { display:flex; gap:5px; flex-wrap:wrap; }
+.btn-sm { padding:4px 11px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer; border:none; }
+.btn-on { background:#0d3d2a; color:#2ecc71; }
+.btn-off { background:#3d1515; color:#e74c3c; }
+.btn-edit { background:#2a2010; color:#f39c12; }
+.btn-del { background:#3d0000; color:#ff6b6b; }
+
+/* EDIT MODAL */
+.overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:999; align-items:center; justify-content:center; }
+.overlay.show { display:flex; }
+.modal { background:#1a1f2e; border:2px solid #2a3050; border-radius:16px; padding:28px; width:420px; }
+.modal h2 { color:#fff; margin-bottom:18px; }
+.modal label { display:block; color:#888; font-size:12px; margin-bottom:4px; margin-top:12px; }
+.modal input, .modal select { width:100%; padding:9px 12px; background:#0f1117; border:1px solid #333; border-radius:8px; color:#fff; font-size:13px; }
+.modal input:focus, .modal select:focus { outline:none; border-color:#00d4aa; }
+.modal select option { background:#1a1f2e; }
+.modal-btns { display:flex; gap:10px; margin-top:20px; justify-content:flex-end; }
+.btn-cancel { background:#2a3050; color:#aaa; border:none; padding:9px 18px; border-radius:8px; cursor:pointer; }
+
+/* LOGS */
+.log-item { padding:10px 16px; border-bottom:1px solid #111; font-size:12px; display:flex; justify-content:space-between; }
+.log-dot { width:7px; height:7px; border-radius:50%; display:inline-block; margin-right:8px; vertical-align:middle; }
+.c-green{background:#2ecc71} .c-red{background:#e74c3c} .c-blue{background:#3498db} .c-yellow{background:#f39c12}
+.log-time { color:#666; font-size:11px; }
+
+.hidden { display:none; }
+.nav { display:flex; gap:6px; }
+.nav-btn { background:#2a3050; color:#aaa; border:none; padding:8px 16px; border-radius:8px; cursor:pointer; font-size:13px; }
+.nav-btn.active { background:#00d4aa; color:#000; font-weight:700; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginWrap">
+  <div class="loginBox">
+    <h1>🔐 EA Bot Admin</h1>
+    <p>HashSalman License Management</p>
+    <input type="text" id="uname" placeholder="Username" value="admin">
+    <input type="password" id="upass" placeholder="Password" value="admin123">
+    <button class="btn-teal" onclick="doLogin()">Login</button>
+    <div class="err" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <h1>🔐 EA Bot Admin &nbsp;|&nbsp; HashSalman</h1>
+    <div class="topbar-right">
+      <div class="nav">
+        <button class="nav-btn active" onclick="showTab('bots',this)">🤖 Bots</button>
+        <button class="nav-btn" onclick="showTab('logs',this)">📋 Logs</button>
+      </div>
+      <button class="btn-danger-big" onclick="disableAll()">⛔ DISABLE ALL BOTS</button>
+      <button class="btn-sm btn-off" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- BOTS TAB -->
+    <div id="tab-bots">
+
+      <!-- STATS -->
+      <div class="stats">
+        <div class="stat s1"><h3>Total Bots</h3><div class="num" id="st-total">0</div></div>
+        <div class="stat s2"><h3>Active</h3><div class="num" id="st-active">0</div></div>
+        <div class="stat s3"><h3>Disabled</h3><div class="num" id="st-disabled">0</div></div>
+        <div class="stat s4"><h3>Expired</h3><div class="num" id="st-expired">0</div></div>
+      </div>
+
+      <!-- ADD BOT -->
+      <div class="addForm">
+        <h2>➕ Add New Bot</h2>
+        <div class="formRow">
+          <div>
+            <label>Client Name *</label>
+            <input id="f-name" placeholder="Ali Hassan">
+          </div>
+          <div>
+            <label>MT5 Account * </label>
+            <input id="f-account" placeholder="429036798">
+          </div>
+          <div>
+            <label>Server</label>
+            <input id="f-server" value="MT5Real18">
+          </div>
+          <div>
+            <label>Expiry Date *</label>
+            <input type="date" id="f-expiry">
+          </div>
+          <div>
+            <label>&nbsp;</label>
+            <button class="btn-add" onclick="addBot()">Add Bot</button>
+          </div>
+        </div>
+        <div class="addErr" id="addErr"></div>
+      </div>
+
+      <!-- BOTS TABLE -->
+      <div class="tableWrap">
+        <div class="tableHead">
+          <h2>All Bots</h2>
+          <input class="search" placeholder="Search name or account..." oninput="filterBots(this.value)">
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Client Name</th>
+              <th>MT5 Account</th>
+              <th>Server</th>
+              <th>Expiry</th>
+              <th>Status</th>
+              <th>Last Check</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="botsTable"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- LOGS TAB -->
+    <div id="tab-logs" class="hidden">
+      <div class="tableWrap">
+        <div class="tableHead">
+          <h2>Activity Logs</h2>
+          <button class="btn-add" onclick="loadLogs()">Refresh</button>
+        </div>
+        <div id="logsList"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="overlay" id="editOverlay">
+  <div class="modal">
+    <h2>✏️ Edit Bot</h2>
+    <input type="hidden" id="e-id">
+    <label>Client Name</label>
+    <input id="e-name">
+    <label>Server</label>
+    <input id="e-server">
+    <label>Expiry Date</label>
+    <input type="date" id="e-expiry">
+    <label>Status</label>
+    <select id="e-status">
+      <option>ACTIVE</option>
+      <option>DISABLED</option>
+      <option>EXPIRED</option>
+    </select>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeEdit()">Cancel</button>
+      <button class="btn-teal" style="width:auto;padding:9px 22px" onclick="saveEdit()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var TOKEN = localStorage.getItem('ea_tok') || '';
+var ALL_BOTS = [];
+
+if (TOKEN) showApp();
+
+function doLogin() {
+  var u = document.getElementById('uname').value;
+  var p = document.getElementById('upass').value;
+  fetch('/api/login', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({username:u, password:p})
+  }).then(function(r){return r.json();}).then(function(d){
+    if (d.token) {
+      TOKEN = d.token;
+      localStorage.setItem('ea_tok', TOKEN);
+      showApp();
+    } else {
+      document.getElementById('loginErr').textContent = d.error || 'Login failed';
+    }
+  }).catch(function(){
+    document.getElementById('loginErr').textContent = 'Server error';
+  });
+}
+
+function showApp() {
+  document.getElementById('loginWrap').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  loadBots();
+}
+
+function doLogout() {
+  TOKEN = '';
+  localStorage.removeItem('ea_tok');
+  location.reload();
+}
+
+function api(url, opts) {
+  opts = opts || {};
+  opts.headers = opts.headers || {};
+  opts.headers['Authorization'] = 'Bearer ' + TOKEN;
+  opts.headers['Content-Type'] = 'application/json';
+  return fetch(url, opts).then(function(r){return r.json();});
+}
+
+function showTab(tab, btn) {
+  document.getElementById('tab-bots').classList.add('hidden');
+  document.getElementById('tab-logs').classList.add('hidden');
+  document.getElementById('tab-' + tab).classList.remove('hidden');
+  var btns = document.querySelectorAll('.nav-btn');
+  for (var i=0;i<btns.length;i++) btns[i].classList.remove('active');
+  btn.classList.add('active');
+  if (tab === 'logs') loadLogs();
+}
+
+function loadBots() {
+  api('/api/bots').then(function(bots){
+    ALL_BOTS = bots;
+    updateStats(bots);
+    renderTable(bots);
+  });
+}
+
+function updateStats(bots) {
+  document.getElementById('st-total').textContent = bots.length;
+  document.getElementById('st-active').textContent = bots.filter(function(b){return b.status==='ACTIVE';}).length;
+  document.getElementById('st-disabled').textContent = bots.filter(function(b){return b.status==='DISABLED';}).length;
+  document.getElementById('st-expired').textContent = bots.filter(function(b){return b.status==='EXPIRED';}).length;
+}
+
+function timeAgo(d) {
+  if (!d) return '-';
+  var s = Math.floor((Date.now() - new Date(d).getTime()) / 1000);
+  if (s < 60) return s + 's ago';
+  if (s < 3600) return Math.floor(s/60) + 'm ago';
+  if (s < 86400) return Math.floor(s/3600) + 'h ago';
+  return Math.floor(s/86400) + 'd ago';
+}
+
+function renderTable(bots) {
+  var html = '';
+  for (var i=0;i<bots.length;i++) {
+    var b = bots[i];
+    var activBtn = b.status === 'ACTIVE'
+      ? '<button class="btn-sm btn-off" onclick="disableBot('+b.id+')">Disable</button>'
+      : '<button class="btn-sm btn-on" onclick="activateBot('+b.id+')">Activate</button>';
+    html += '<tr>'
+      + '<td>' + (i+1) + '</td>'
+      + '<td>' + b.name + '</td>'
+      + '<td><b>' + b.account + '</b></td>'
+      + '<td>' + b.server + '</td>'
+      + '<td>' + b.expiry + '</td>'
+      + '<td><span class="badge ' + b.status + '">' + b.status + '</span></td>'
+      + '<td>' + timeAgo(b.lastCheck) + '</td>'
+      + '<td><div class="acts">'
+      + '<button class="btn-sm btn-edit" onclick="openEdit('+b.id+')">Edit</button>'
+      + activBtn
+      + '<button class="btn-sm btn-del" onclick="deleteBot('+b.id+')">Delete</button>'
+      + '</div></td>'
+      + '</tr>';
+  }
+  document.getElementById('botsTable').innerHTML = html || '<tr><td colspan="8" style="text-align:center;color:#666;padding:24px">No bots yet — add one above!</td></tr>';
+}
+
+function filterBots(v) {
+  var f = ALL_BOTS.filter(function(b){
+    return b.name.toLowerCase().indexOf(v.toLowerCase()) >= 0 || b.account.indexOf(v) >= 0;
+  });
+  renderTable(f);
+}
+
+function addBot() {
+  var name = document.getElementById('f-name').value.trim();
+  var account = document.getElementById('f-account').value.trim();
+  var server = document.getElementById('f-server').value.trim();
+  var expiry = document.getElementById('f-expiry').value;
+  if (!name || !account || !expiry) {
+    document.getElementById('addErr').textContent = 'Name, Account and Expiry are required!';
+    return;
+  }
+  document.getElementById('addErr').textContent = '';
+  api('/api/bots/add', {method:'POST', body:JSON.stringify({name:name,account:account,server:server,expiry:expiry})}).then(function(r){
+    if (r.ok) {
+      document.getElementById('f-name').value = '';
+      document.getElementById('f-account').value = '';
+      document.getElementById('f-expiry').value = '';
+      loadBots();
+    } else {
+      document.getElementById('addErr').textContent = r.error || 'Failed';
+    }
+  });
+}
+
+function activateBot(id) {
+  api('/api/bots/activate/' + id, {method:'POST'}).then(function(){loadBots();});
+}
+
+function disableBot(id) {
+  if (!confirm('Disable this bot? EA will stop trading!')) return;
+  api('/api/bots/disable/' + id, {method:'POST'}).then(function(){loadBots();});
+}
+
+function deleteBot(id) {
+  if (!confirm('Delete permanently?')) return;
+  api('/api/bots/delete/' + id, {method:'POST'}).then(function(){loadBots();});
+}
+
+function disableAll() {
+  if (!confirm('DISABLE ALL BOTS? All EAs will stop trading immediately!')) return;
+  api('/api/bots/disable-all', {method:'POST'}).then(function(){loadBots();});
+}
+
+function openEdit(id) {
+  var b = null;
+  for (var i=0;i<ALL_BOTS.length;i++) { if (ALL_BOTS[i].id === id) { b = ALL_BOTS[i]; break; } }
+  if (!b) return;
+  document.getElementById('e-id').value = b.id;
+  document.getElementById('e-name').value = b.name;
+  document.getElementById('e-server').value = b.server;
+  document.getElementById('e-expiry').value = b.expiry;
+  document.getElementById('e-status').value = b.status;
+  document.getElementById('editOverlay').classList.add('show');
+}
+
+function closeEdit() {
+  document.getElementById('editOverlay').classList.remove('show');
+}
+
+function saveEdit() {
+  var id = document.getElementById('e-id').value;
+  var data = {
+    name: document.getElementById('e-name').value,
+    server: document.getElementById('e-server').value,
+    expiry: document.getElementById('e-expiry').value,
+    status: document.getElementById('e-status').value
+  };
+  api('/api/bots/edit/' + id, {method:'POST', body:JSON.stringify(data)}).then(function(){
+    closeEdit();
+    loadBots();
+  });
+}
+
+function loadLogs() {
+  api('/api/logs').then(function(logs){
+    var html = '';
+    for (var i=0;i<logs.length;i++) {
+      var l = logs[i];
+      var dc = l.action.indexOf('DISABLED') >= 0 ? 'c-red' : l.action.indexOf('ACTIV') >= 0 ? 'c-green' : l.action.indexOf('ADD') >= 0 ? 'c-blue' : 'c-yellow';
+      var t = new Date(l.time).toLocaleString();
+      html += '<div class="log-item"><span><span class="log-dot '+dc+'"></span>' + l.action.replace(/_/g,' ') + ' — ' + (l.name||'') + ' (' + (l.account||'') + ')</span><span class="log-time">' + t + '</span></div>';
+    }
+    document.getElementById('logsList').innerHTML = html || '<div class="log-item" style="color:#666">No logs yet</div>';
+  });
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeEdit();
+  if (e.key === 'Enter' && document.getElementById('loginWrap').style.display !== 'none') doLogin();
+});
+</script>
+</body>
+</html>
