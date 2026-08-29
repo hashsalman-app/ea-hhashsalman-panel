@@ -11,7 +11,6 @@ const DB = '/tmp/db.json';
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ── DB ──────────────────────────────────────────────
 function getDB() {
   if (!fs.existsSync(DB)) {
     const init = {
@@ -30,7 +29,6 @@ function log(db, action, name, account) {
   if (db.logs.length > 300) db.logs = db.logs.slice(0, 300);
 }
 
-// ── AUTH ─────────────────────────────────────────────
 function auth(req, res, next) {
   try {
     const t = req.headers.authorization.split(' ')[1];
@@ -39,6 +37,7 @@ function auth(req, res, next) {
   } catch(e) { res.status(401).json({ error: 'Unauthorized' }); }
 }
 
+// ── AUTH ─────────────────────────────────────────────
 app.post('/api/login', function(req, res) {
   const db = getDB();
   const { username, password } = req.body;
@@ -61,7 +60,11 @@ app.post('/api/bots/add', auth, function(req, res) {
   if (db.bots.find(function(b) { return b.account === account; })) {
     return res.status(400).json({ error: 'Account already exists' });
   }
-  const bot = { id: Date.now(), name, account, server: server || 'MT5Real18', expiry, status: 'ACTIVE', lastCheck: null, addedAt: new Date().toISOString() };
+  const bot = {
+    id: Date.now(), name, account, server: server || 'MT5Real18',
+    expiry, status: 'ACTIVE', lastCheck: null, addedAt: new Date().toISOString(),
+    stats: { daily: 0, weekly: 0, monthly: 0, total: 0, wins: 0, losses: 0, balance: 0, bot: '' }
+  };
   db.bots.push(bot);
   log(db, 'BOT_ADDED', name, account);
   saveDB(db);
@@ -112,7 +115,6 @@ app.post('/api/bots/edit/:id', auth, function(req, res) {
   res.json({ ok: true });
 });
 
-// CLOSE ALL BOTS IN ONE CLICK
 app.post('/api/bots/disable-all', auth, function(req, res) {
   const db = getDB();
   db.bots.forEach(function(b) { b.status = 'DISABLED'; });
@@ -121,7 +123,7 @@ app.post('/api/bots/disable-all', auth, function(req, res) {
   res.json({ ok: true });
 });
 
-// EA LICENSE CHECK - MT5 bot calls this
+// ── EA LICENSE CHECK ──────────────────────────────────
 app.get('/api/check', function(req, res) {
   const account = req.query.account;
   if (!account) return res.json({ status: 'INVALID' });
@@ -136,15 +138,39 @@ app.get('/api/check', function(req, res) {
   return res.json({ status: 'ACTIVE', name: bot.name, expiry: bot.expiry });
 });
 
+// ── EA STATS UPDATE (Bot sends data every 30 sec) ────
+app.get('/api/stats', function(req, res) {
+  const { account, daily, weekly, monthly, total, wins, losses, balance, bot } = req.query;
+  if (!account) return res.json({ ok: false });
+  const db = getDB();
+  const found = db.bots.find(function(b) { return b.account === account; });
+  if (!found) return res.json({ ok: false, msg: 'Not found' });
+  found.lastCheck = new Date().toISOString();
+  found.stats = {
+    daily:   parseFloat(daily)   || 0,
+    weekly:  parseFloat(weekly)  || 0,
+    monthly: parseFloat(monthly) || 0,
+    total:   parseFloat(total)   || 0,
+    wins:    parseInt(wins)      || 0,
+    losses:  parseInt(losses)    || 0,
+    balance: parseFloat(balance) || 0,
+    bot:     bot || '',
+    updatedAt: new Date().toISOString()
+  };
+  saveDB(db);
+  res.json({ ok: true });
+});
+
+// ── LOGS ─────────────────────────────────────────────
 app.get('/api/logs', auth, function(req, res) {
   res.json(getDB().logs.slice(0, 100));
 });
 
-// ── FRONTEND ──────────────────────────────────────────
+// ── FRONTEND ─────────────────────────────────────────
 app.get('*', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
 app.listen(PORT, function() {
-  console.log('Panel running on port ' + PORT);
+  console.log('Hash Legend Panel running on port ' + PORT);
 });
