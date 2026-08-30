@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 function getDB() {
   if (!fs.existsSync(DB)) {
     const init = {
-      admin: { username: 'admin', password: bcrypt.hashSync('admin123', 10) },
+      admin: { username: 'admin', password: bcrypt.hashSync('HasH@@143', 10) },
       bots: [],
       logs: []
     };
