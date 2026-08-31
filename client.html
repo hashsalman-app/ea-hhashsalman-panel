@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hash Legend — Client Portal</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:#0a0d14;color:#ddd;min-height:100vh}
+#loginWrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.loginBox{background:#1a1f2e;border:2px solid #00d4aa;border-radius:16px;padding:36px;width:100%;max-width:380px;text-align:center}
+.logo{width:64px;height:64px;margin:0 auto 14px;background:#0d3d3a;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #00d4aa}
+.logo svg{width:30px;height:30px;fill:none;stroke:#00d4aa;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.loginBox h1{color:#00d4aa;font-size:20px;margin-bottom:4px}
+.loginBox p{color:#888;margin-bottom:24px;font-size:13px}
+.loginBox input{width:100%;padding:12px;background:#0a0d14;border:1px solid #333;border-radius:8px;color:#fff;font-size:14px;margin-bottom:12px;display:block}
+.loginBox input:focus{outline:none;border-color:#00d4aa}
+.btn-main{background:#00d4aa;color:#000;border:none;padding:12px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;width:100%}
+.btn-main:hover{background:#00b894}
+.err{color:#ff6b6b;font-size:13px;margin-top:8px}
+#app{display:none;max-width:480px;margin:0 auto;padding:16px}
+.topbar{background:#1a1f2e;border-bottom:2px solid #00d4aa;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.topbar h1{color:#00d4aa;font-size:15px;font-weight:700}
+.btn-logout{background:none;border:1px solid #444;color:#aaa;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:12px}
+.card{background:#1a1f2e;border:1px solid #2a3050;border-radius:12px;padding:16px;margin-bottom:12px}
+.client-info{display:flex;align-items:center;gap:12px;margin-bottom:0}
+.avatar{width:42px;height:42px;border-radius:50%;background:#0d3d3a;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#00d4aa;border:2px solid #00d4aa;flex-shrink:0}
+.client-name{font-size:15px;font-weight:600;color:#fff}
+.client-acc{font-size:12px;color:#888;margin-top:2px}
+.status-badge{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700}
+.status-badge.ACTIVE{background:#0d3d2a;color:#2ecc71}
+.status-badge.DISABLED{background:#3d1515;color:#e74c3c}
+.status-badge.EXPIRED{background:#2a2a2a;color:#888}
+.pnl-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.pnl-card{background:#0f1320;border-radius:10px;padding:12px;text-align:center}
+.pnl-label{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.pnl-val{font-size:20px;font-weight:700}
+.pnl-val.pos{color:#2ecc71}
+.pnl-val.neg{color:#e74c3c}
+.pnl-val.zero{color:#888}
+.btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn-activate{padding:12px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:2px solid #2ecc71;background:#0d3d2a;color:#2ecc71}
+.btn-activate:hover{background:#164d2e}
+.btn-disable{padding:12px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:2px solid #e74c3c;background:#3d1515;color:#e74c3c}
+.btn-disable:hover{background:#4d1a1a}
+.detail-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2a3050;font-size:13px}
+.detail-row:last-child{border:none}
+.detail-label{color:#888}
+.detail-val{font-weight:600;color:#fff}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;z-index:999;display:none}
+.toast.success{background:#0d3d2a;color:#2ecc71;border:1px solid #2ecc71}
+.toast.danger{background:#3d1515;color:#e74c3c;border:1px solid #e74c3c}
+.expired-banner{background:#3d1515;border:1px solid #e74c3c;border-radius:10px;padding:14px;text-align:center;margin-bottom:12px}
+.expired-banner h3{color:#e74c3c;margin-bottom:4px}
+.expired-banner p{color:#aaa;font-size:13px}
+.expired-banner a{color:#00d4aa}
+</style>
+</head>
+<body>
+
+<div id="loginWrap">
+  <div class="loginBox">
+    <div class="logo">
+      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <h1>Hash Legend</h1>
+    <p>Client portal — sign in to manage your bot</p>
+    <input type="text" id="uname" placeholder="Username" autocomplete="username">
+    <input type="password" id="upass" placeholder="Password" autocomplete="current-password">
+    <button class="btn-main" onclick="doLogin()">Sign in</button>
+    <div class="err" id="loginErr"></div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <h1>Hash Legend Client</h1>
+    <button class="btn-logout" onclick="doLogout()">Sign out</button>
+  </div>
+  <div style="padding:16px">
+
+    <div class="card">
+      <div class="client-info">
+        <div class="avatar" id="clientAvatar">S</div>
+        <div style="flex:1">
+          <div class="client-name" id="clientName">—</div>
+          <div class="client-acc" id="clientAcc">Account #—</div>
+        </div>
+        <span class="status-badge" id="statusBadge">—</span>
+      </div>
+    </div>
+
+    <div id="expiredBanner" class="expired-banner hidden">
+      <h3>License Expired</h3>
+      <p>Contact Hash Salman to renew.<br>
+      <a href="https://wa.me/923023464786">WhatsApp: +923023464786</a></p>
+    </div>
+
+    <div class="card">
+      <div class="pnl-grid">
+        <div class="pnl-card"><div class="pnl-label">Daily P/L</div><div class="pnl-val" id="pDaily">+$0.00</div></div>
+        <div class="pnl-card"><div class="pnl-label">Weekly P/L</div><div class="pnl-val" id="pWeekly">+$0.00</div></div>
+        <div class="pnl-card"><div class="pnl-label">Monthly P/L</div><div class="pnl-val" id="pMonthly">+$0.00</div></div>
+        <div class="pnl-card"><div class="pnl-label">Balance</div><div class="pnl-val" id="pBalance" style="color:#fff">$0.00</div></div>
+      </div>
+      <div class="btn-grid" id="botBtns">
+        <button class="btn-activate" id="activateBtn" onclick="activateBot()" style="display:none">▶ Activate Bot</button>
+        <button class="btn-disable" id="disableBtn" onclick="disableBot()">⏸ Disable Bot</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="detail-row"><span class="detail-label">Bot version</span><span class="detail-val" id="dBot">—</span></div>
+      <div class="detail-row"><span class="detail-label">Expiry date</span><span class="detail-val" id="dExpiry">—</span></div>
+      <div class="detail-row"><span class="detail-label">Win trades</span><span class="detail-val" style="color:#2ecc71" id="dWins">0</span></div>
+      <div class="detail-row"><span class="detail-label">Loss trades</span><span class="detail-val" style="color:#e74c3c" id="dLosses">0</span></div>
+      <div class="detail-row"><span class="detail-label">Win rate</span><span class="detail-val" style="color:#60a5fa" id="dWinRate">0%</span></div>
+      <div class="detail-row"><span class="detail-label">Last update</span><span class="detail-val" style="color:#888;font-size:11px" id="dUpdated">—</span></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var TOKEN = localStorage.getItem('hl_client_tok') || '';
+if (TOKEN) { showApp(); loadBot(); }
+
+function doLogin() {
+  var u = document.getElementById('uname').value.trim();
+  var p = document.getElementById('upass').value;
+  if (!u || !p) { document.getElementById('loginErr').textContent = 'Username aur password daalo!'; return; }
+  fetch('/api/client/login', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({username: u, password: p})
+  }).then(function(r){ return r.json(); }).then(function(d) {
+    if (d.token) {
+      TOKEN = d.token;
+      localStorage.setItem('hl_client_tok', TOKEN);
+      showApp(); loadBot();
+    } else {
+      document.getElementById('loginErr').textContent = d.error || 'Login failed';
+    }
+  }).catch(function() {
+    document.getElementById('loginErr').textContent = 'Server error. Try again.';
+  });
+}
+
+function showApp() {
+  document.getElementById('loginWrap').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+}
+
+function doLogout() {
+  TOKEN = ''; localStorage.removeItem('hl_client_tok'); location.reload();
+}
+
+function api(url, opts) {
+  opts = opts || {}; opts.headers = opts.headers || {};
+  opts.headers['Authorization'] = 'Bearer ' + TOKEN;
+  opts.headers['Content-Type'] = 'application/json';
+  return fetch(url, opts).then(function(r) { return r.json(); });
+}
+
+function fmtPnl(v) {
+  v = parseFloat(v) || 0;
+  return (v >= 0 ? '+$' : '-$') + Math.abs(v).toFixed(2);
+}
+
+function setPnlColor(el, v) {
+  v = parseFloat(v) || 0;
+  el.className = 'pnl-val ' + (v > 0 ? 'pos' : v < 0 ? 'neg' : 'zero');
+}
+
+function loadBot() {
+  api('/api/client/bot').then(function(b) {
+    if (b.error) { doLogout(); return; }
+    var name = b.name || 'Client';
+    document.getElementById('clientAvatar').textContent = name[0].toUpperCase();
+    document.getElementById('clientName').textContent = name;
+    document.getElementById('clientAcc').textContent = 'Account #' + b.account;
+    document.getElementById('dExpiry').textContent = b.expiry || '—';
+    document.getElementById('dBot').textContent = (b.stats && b.stats.bot) ? b.stats.bot : '—';
+
+    var badge = document.getElementById('statusBadge');
+    badge.textContent = b.status;
+    badge.className = 'status-badge ' + b.status;
+
+    var isExpired = b.status === 'EXPIRED';
+    document.getElementById('expiredBanner').classList.toggle('hidden', !isExpired);
+
+    var s = b.stats || {};
+    var dEl = document.getElementById('pDaily'); dEl.textContent = fmtPnl(s.daily); setPnlColor(dEl, s.daily);
+    var wEl = document.getElementById('pWeekly'); wEl.textContent = fmtPnl(s.weekly); setPnlColor(wEl, s.weekly);
+    var mEl = document.getElementById('pMonthly'); mEl.textContent = fmtPnl(s.monthly); setPnlColor(mEl, s.monthly);
+    document.getElementById('pBalance').textContent = '$' + (parseFloat(s.balance)||0).toFixed(2);
+
+    var wins = parseInt(s.wins)||0; var losses = parseInt(s.losses)||0;
+    document.getElementById('dWins').textContent = wins;
+    document.getElementById('dLosses').textContent = losses;
+    document.getElementById('dWinRate').textContent = wins+losses>0 ? Math.round(wins/(wins+losses)*100)+'%' : '0%';
+    document.getElementById('dUpdated').textContent = s.updatedAt ? new Date(s.updatedAt).toLocaleString() : 'No data yet';
+
+    var isActive = b.status === 'ACTIVE';
+    document.getElementById('activateBtn').style.display = isActive ? 'none' : 'block';
+    document.getElementById('disableBtn').style.display = isActive ? 'block' : 'none';
+    if (isExpired) {
+      document.getElementById('activateBtn').style.display = 'none';
+      document.getElementById('disableBtn').style.display = 'none';
+    }
+  }).catch(function() {
+    showToast('Connection error', 'danger');
+  });
+}
+
+function activateBot() {
+  api('/api/client/activate', {method:'POST'}).then(function(r) {
+    if (r.ok) { showToast('Bot activated!', 'success'); loadBot(); }
+    else showToast(r.error || 'Failed', 'danger');
+  });
+}
+
+function disableBot() {
+  if (!confirm('Bot disable karna chahte ho?')) return;
+  api('/api/client/disable', {method:'POST'}).then(function(r) {
+    if (r.ok) { showToast('Bot disabled.', 'danger'); loadBot(); }
+    else showToast(r.error || 'Failed', 'danger');
+  });
+}
+
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type;
+  t.style.display = 'block';
+  setTimeout(function() { t.style.display = 'none'; }, 3000);
+}
+
+setInterval(loadBot, 30000);
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && document.getElementById('loginWrap').style.display !== 'none') doLogin();
+});
+</script>
+</body>
+</html>
