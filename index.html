@@ -123,10 +123,9 @@ tr:hover td{background:#1e2535}
           <div><label>Expiry Date *</label><input type="date" id="f-expiry"></div>
         </div>
         <hr class="divider">
-        <p style="font-size:12px;color:#888;margin-bottom:8px">Client portal login:</p>
+        <p style="font-size:12px;color:#888;margin-bottom:8px">Client portal login: <span style="color:#00d4aa">(Username = MT5 Account Number)</span></p>
         <div class="frow">
-          <div><label>Client Username *</label><input id="f-cuser" placeholder="ali123"></div>
-          <div><label>Client Password *</label><input type="password" id="f-cpass" placeholder="password"></div>
+          <div><label>Client Password *</label><input type="password" id="f-cpass" placeholder="Set client password"></div>
         </div>
         <button class="btn-teal" style="width:auto;padding:9px 24px;margin-top:4px" onclick="addBot()">Add Bot</button>
         <div class="addErr" id="addErr"></div>
@@ -137,7 +136,7 @@ tr:hover td{background:#1e2535}
           <input class="search" placeholder="Search..." oninput="filterBots(this.value)">
         </div>
         <table>
-          <thead><tr><th>#</th><th>Name</th><th>Account</th><th>Client User</th><th>Expiry</th><th>Status</th><th>Last Check</th><th>Actions</th></tr></thead>
+          <thead><tr><th>#</th><th>Name</th><th>Account</th><th>Expiry</th><th>Status</th><th>Last Check</th><th>Actions</th></tr></thead>
           <tbody id="botsTable"></tbody>
         </table>
       </div>
@@ -161,8 +160,7 @@ tr:hover td{background:#1e2535}
     <label>Status</label>
     <select id="e-status"><option>ACTIVE</option><option>DISABLED</option><option>EXPIRED</option></select>
     <hr class="divider">
-    <p style="font-size:12px;color:#888">Client portal login:</p>
-    <label>Client Username</label><input id="e-cuser">
+    <p style="font-size:12px;color:#888">Client portal: <span style="color:#00d4aa">Login = Account Number</span></p>
     <label>New Password (khali chodo agar change nahi karna)</label><input type="password" id="e-cpass" placeholder="New password...">
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeOverlay('editOverlay')">Cancel</button>
@@ -251,9 +249,9 @@ function renderTable(bots) {
   for(var i=0;i<bots.length;i++) {
     var b=bots[i];
     var btn=b.status==='ACTIVE'?'<button class="btn-sm btn-off" onclick="disableBot('+b.id+')">Disable</button>':'<button class="btn-sm btn-on" onclick="activateBot('+b.id+')">Activate</button>';
-    html+='<tr><td>'+(i+1)+'</td><td>'+b.name+'</td><td><b>'+b.account+'</b></td><td style="color:#888">'+b.clientUsername+'</td><td>'+b.expiry+'</td><td><span class="'+b.status+'">'+b.status+'</span></td><td style="color:#666">'+timeAgo(b.lastCheck)+'</td><td><div class="acts"><button class="btn-sm btn-detail" onclick="showDetails('+b.id+')">Details</button><button class="btn-sm btn-edit" onclick="openEdit('+b.id+')">Edit</button>'+btn+'<button class="btn-sm btn-del" onclick="deleteBot('+b.id+')">Del</button></div></td></tr>';
+    html+='<tr><td>'+(i+1)+'</td><td>'+b.name+'</td><td><b>'+b.account+'</b></td><td>'+b.expiry+'</td><td><span class="'+b.status+'">'+b.status+'</span></td><td style="color:#666">'+timeAgo(b.lastCheck)+'</td><td><div class="acts"><button class="btn-sm btn-detail" onclick="showDetails('+b.id+')">Details</button><button class="btn-sm btn-edit" onclick="openEdit('+b.id+')">Edit</button>'+btn+'<button class="btn-sm btn-del" onclick="deleteBot('+b.id+')">Del</button></div></td></tr>';
   }
-  document.getElementById('botsTable').innerHTML=html||'<tr><td colspan="8" style="text-align:center;color:#666;padding:20px">No bots yet</td></tr>';
+  document.getElementById('botsTable').innerHTML=html||'<tr><td colspan="7" style="text-align:center;color:#666;padding:20px">No bots yet</td></tr>';
 }
 function filterBots(v) {
   renderTable(ALL_BOTS.filter(function(b){ return b.name.toLowerCase().indexOf(v.toLowerCase())>=0||b.account.indexOf(v)>=0; }));
@@ -283,18 +281,16 @@ function addBot() {
   var account=document.getElementById('f-account').value.trim();
   var server=document.getElementById('f-server').value.trim();
   var expiry=document.getElementById('f-expiry').value;
-  var clientUsername=document.getElementById('f-cuser').value.trim();
   var clientPassword=document.getElementById('f-cpass').value;
-  if(!name||!account||!expiry||!clientUsername||!clientPassword){
+  if(!name||!account||!expiry||!clientPassword){
     document.getElementById('addErr').textContent='Sab fields zaroori hain!';return;
   }
   document.getElementById('addErr').textContent='';
-  api('/api/bots/add',{method:'POST',body:JSON.stringify({name,account,server,expiry,clientUsername,clientPassword})}).then(function(r){
+  api('/api/bots/add',{method:'POST',body:JSON.stringify({name:name,account:account,server:server,expiry:expiry,clientPassword:clientPassword})}).then(function(r){
     if(r.ok){
       document.getElementById('f-name').value='';
       document.getElementById('f-account').value='';
       document.getElementById('f-expiry').value='';
-      document.getElementById('f-cuser').value='';
       document.getElementById('f-cpass').value='';
       loadBots();
     } else document.getElementById('addErr').textContent=r.error||'Failed';
@@ -309,14 +305,13 @@ function openEdit(id) {
   document.getElementById('e-server').value=b.server;
   document.getElementById('e-expiry').value=b.expiry;
   document.getElementById('e-status').value=b.status;
-  document.getElementById('e-cuser').value=b.clientUsername||'';
   document.getElementById('e-cpass').value='';
   document.getElementById('editOverlay').classList.add('show');
 }
 function closeOverlay(id){document.getElementById(id).classList.remove('show');}
 function saveEdit() {
   var id=document.getElementById('e-id').value;
-  var data={name:document.getElementById('e-name').value,server:document.getElementById('e-server').value,expiry:document.getElementById('e-expiry').value,status:document.getElementById('e-status').value,clientUsername:document.getElementById('e-cuser').value};
+  var data={name:document.getElementById('e-name').value,server:document.getElementById('e-server').value,expiry:document.getElementById('e-expiry').value,status:document.getElementById('e-status').value};
   var newPass=document.getElementById('e-cpass').value;
   if(newPass) data.clientPassword=newPass;
   api('/api/bots/edit/'+id,{method:'POST',body:JSON.stringify(data)}).then(function(){closeOverlay('editOverlay');loadBots();});
