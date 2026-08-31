@@ -66,7 +66,8 @@ app.post('/api/admin/login', function(req, res) {
 app.post('/api/client/login', function(req, res) {
   const db = getDB();
   const { username, password } = req.body;
-  const bot = db.bots.find(function(b) { return b.clientUsername === username; });
+  // username = MT5 account number
+  const bot = db.bots.find(function(b) { return b.account === username; });
   if (!bot || !bcrypt.compareSync(password, bot.clientPassword)) {
     return res.status(401).json({ error: 'Wrong credentials' });
   }
@@ -82,8 +83,8 @@ app.get('/api/bots', adminAuth, function(req, res) {
 app.post('/api/bots/add', adminAuth, function(req, res) {
   const db = getDB();
   const { name, account, server, expiry, clientUsername, clientPassword } = req.body;
-  if (!name || !account || !expiry || !clientUsername || !clientPassword) {
-    return res.status(400).json({ error: 'All fields required' });
+  if (!name || !account || !expiry || !clientPassword) {
+    return res.status(400).json({ error: 'Name, Account, Expiry and Password required' });
   }
   if (db.bots.find(function(b) { return b.account === account; })) {
     return res.status(400).json({ error: 'Account already exists' });
@@ -91,7 +92,8 @@ app.post('/api/bots/add', adminAuth, function(req, res) {
   const bot = {
     id: Date.now(), name, account, server: server || 'MT5Real18',
     expiry, status: 'ACTIVE', lastCheck: null, addedAt: new Date().toISOString(),
-    clientUsername, clientPassword: bcrypt.hashSync(clientPassword, 10),
+    clientUsername: account, // username = account number automatically
+    clientPassword: bcrypt.hashSync(clientPassword, 10),
     stats: { daily: 0, weekly: 0, monthly: 0, total: 0, wins: 0, losses: 0, balance: 0, bot: '', updatedAt: null }
   };
   db.bots.push(bot);
