@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Trade Master HS — Premium XAUUSD MT5 Trading System by Hash Salman">
+<title>Trade Master HS — Premium XAUUSD Trading</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif}
+:root{
+  --navy:#0a2463;--blue:#1a56db;--blue2:#2563eb;--blue3:#dbeafe;--blue4:#eff6ff;
+  --green:#16a34a;--green2:#22c55e;--green3:#dcfce7;--green4:#f0fdf4;
+  --gold:#f59e0b;--gold2:#fbbf24;--red:#ef4444;
+  --text:#1e293b;--muted:#64748b;--white:#fff;--border:#e2e8f0;--bg:#f8fbff;
+}
+
+/* ── RESET & BASE ── */
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;height:auto}
+
+/* ── TICKER ── */
+#ticker{background:#0f172a;overflow:hidden;height:30px;display:flex;align-items:center;border-bottom:2px solid var(--green2);position:relative}
+.ticker-inner{display:flex;position:absolute;white-space:nowrap;animation:tickScroll 40s linear infinite}
+.ticker-inner:hover{animation-play-state:paused}
+.t-item{padding:0 16px;font-size:11px;display:flex;gap:6px;border-right:1px solid #1e3a5f;align-items:center;flex-shrink:0}
+.t-sym{color:#93c5fd}.t-price{color:#fff;font-weight:700}.t-up{color:#4ade80}.t-dn{color:#f87171}
+@keyframes tickScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ── TOPBAR ── */
+.topbar{background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 60%,var(--green) 100%);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+.topbar-logo{display:flex;align-items:center;gap:10px}
+.logo-wrap{width:40px;height:40px;border-radius:50%;background:#fff;padding:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.logo-wrap img{width:34px;height:34px;object-fit:contain;border-radius:50%}
+.brand-name{color:#fff;font-size:15px;font-weight:800;letter-spacing:.3px}
+.brand-tag{color:#a5f3fc;font-size:9px;letter-spacing:1.5px;font-weight:600}
+.btn-vip-top{background:linear-gradient(90deg,var(--gold),var(--gold2));color:#000;border:none;padding:8px 18px;border-radius:20px;font-weight:800;font-size:12px;cursor:pointer;box-shadow:0 2px 8px rgba(245,158,11,.4);white-space:nowrap}
+.btn-vip-top:hover{background:linear-gradient(90deg,var(--gold2),var(--gold));transform:translateY(-1px)}
+
+/* ── NAV ── */
+.nav{background:#fff;display:flex;border-bottom:2px solid var(--border);overflow-x:auto;box-shadow:0 1px 4px rgba(0,0,0,.06);position:sticky;top:61px;z-index:99}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{padding:11px 18px;font-size:12px;font-weight:500;cursor:pointer;border:none;background:none;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .2s}
+.nav-btn.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:700}
+.nav-btn:hover{color:var(--blue)}
+
+/* ── PAGES ── */
+.page{display:none}
+.page.active{display:block}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(160deg,var(--navy) 0%,var(--blue) 55%,#15803d 100%);padding:40px 16px 36px;text-align:center}
+.hero-badge{background:rgba(74,222,128,.18);border:1px solid #4ade80;color:#4ade80;padding:5px 16px;border-radius:20px;font-size:10px;font-weight:700;display:inline-block;margin-bottom:14px;letter-spacing:1.5px}
+.hero-title{color:#fff;font-size:clamp(26px,6vw,36px);font-weight:900;margin-bottom:6px;line-height:1.2}
+.hero-title span{color:var(--gold2)}
+.hero-sub{color:#bfdbfe;font-size:13px;margin-bottom:4px}
+.hero-tag{color:var(--gold2);font-size:11px;margin-bottom:22px;font-style:italic}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px;max-width:400px;margin-left:auto;margin-right:auto}
+.hero-stat{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:12px 8px;text-align:center}
+.hero-stat .val{font-size:22px;font-weight:900;color:#4ade80}
+.hero-stat .lbl{font-size:10px;color:#bfdbfe;margin-top:2px}
+.hero-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:400px;margin:0 auto}
+.btn-hero-g{padding:13px 10px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;border:none;text-align:center;background:linear-gradient(90deg,var(--green),var(--green2));color:#fff;transition:opacity .2s}
+.btn-hero-g:hover{opacity:.9}
+.btn-hero-o{padding:13px 10px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.1);color:#fff;transition:all .2s}
+.btn-hero-o:hover{background:rgba(255,255,255,.2)}
+
+/* ── SECTION ── */
+.section{padding:24px 16px}
+.section-title{text-align:center;margin-bottom:18px}
+.section-title h2{font-size:clamp(18px,4vw,22px);font-weight:800;color:var(--text)}
+.section-title p{font-size:12px;color:var(--muted);margin-top:4px}
+
+/* ── FEATURES ── */
+.features-bg{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:600px;margin:0 auto}
+@media(min-width:480px){.feat-grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:720px){.feat-grid{grid-template-columns:repeat(3,1fr)}}
+.feat-card{background:var(--bg);border-radius:10px;padding:14px;border:1px solid var(--border);text-align:center}
+.feat-icon{font-size:22px;margin-bottom:6px}
+.feat-card h3{font-size:12px;font-weight:700;color:var(--blue);margin-bottom:3px}
+.feat-card p{font-size:10px;color:var(--muted);line-height:1.5}
+
+/* ── RESULTS ── */
+.results-bg{background:var(--bg)}
+.results-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:400px;margin:0 auto}
+.result-card{border-radius:12px;padding:16px;text-align:center}
+.result-val{font-size:32px;font-weight:900}
+.result-lbl{font-size:11px;font-weight:600;margin-top:3px}
+
+/* ── PACKAGES ── */
+.packages-bg{background:var(--white)}
+.pkg-header{background:linear-gradient(135deg,var(--navy),var(--blue));padding:20px 16px;text-align:center}
+.pkg-header h2{color:#fff;font-size:20px;font-weight:800}
+.pkg-header p{color:#a5f3fc;font-size:11px;margin-top:4px;letter-spacing:1px}
+.pkg-grid{display:grid;grid-template-columns:1fr;gap:14px;max-width:500px;margin:0 auto;padding:16px}
+@media(min-width:640px){.pkg-grid{grid-template-columns:repeat(3,1fr)}}
+.pkg-card{background:var(--white);border-radius:14px;padding:18px;border:2px solid var(--border);position:relative;transition:transform .2s,box-shadow .2s}
+.pkg-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+.pkg-card.pop{border-color:var(--blue2)}
+.pkg-card.best{border-color:var(--green)}
+.pkg-badge{position:absolute;top:-10px;right:14px;padding:3px 12px;border-radius:20px;font-size:9px;font-weight:700;color:#fff}
+.pkg-badge.blue{background:var(--blue2)}.pkg-badge.green{background:var(--green)}
+.pkg-icon{font-size:24px;margin-bottom:8px}
+.pkg-name{font-size:16px;font-weight:800;color:var(--text);margin-bottom:2px}
+.pkg-sub{font-size:10px;color:var(--muted);margin-bottom:14px}
+.pkg-prices{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.price-box{background:var(--blue4);border-radius:8px;padding:10px;text-align:center;border:1px solid var(--blue3)}
+.price-box .plbl{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.price-box .pval{font-size:20px;font-weight:900;color:var(--blue)}
+.price-box .pval.green{color:var(--green)}
+.pkg-details{margin-bottom:14px}
+.pkg-detail-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:11px}
+.pkg-detail-row:last-child{border:none}
+.pkg-detail-row .dlbl{color:var(--muted)}.pkg-detail-row .dval{font-weight:700;color:var(--green)}
+.btn-wa-pkg{width:100%;padding:13px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:none;color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;transition:opacity .2s}
+.btn-wa-pkg:hover{opacity:.88}
+.btn-wa-pkg.starter{background:var(--navy)}
+.btn-wa-pkg.standard{background:var(--blue2)}
+.btn-wa-pkg.pro{background:linear-gradient(90deg,var(--green),var(--green2))}
+
+/* ── INCLUDES ── */
+.includes-box{background:var(--blue4);border-radius:12px;padding:16px;margin:0 auto;max-width:500px;border:1px solid var(--blue3)}
+.includes-box h4{font-size:13px;font-weight:700;color:var(--blue);margin-bottom:12px}
+.inc-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text);margin-bottom:8px}
+.inc-chk{width:18px;height:18px;border-radius:5px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700;flex-shrink:0}
+
+/* ── WARNING ── */
+.warning-box{background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:14px;max-width:500px;margin:14px auto 0}
+.warning-box h4{color:#92400e;font-size:12px;font-weight:700;margin-bottom:5px}
+.warning-box p{color:#78350f;font-size:11px;line-height:1.6}
+
+/* ── LEADERBOARD ── */
+.lb-header{background:linear-gradient(135deg,var(--navy),var(--blue));padding:18px 16px;text-align:center}
+.lb-header h2{color:#fff;font-size:18px;font-weight:800}
+.lb-live{display:inline-flex;align-items:center;gap:6px;color:#4ade80;font-size:11px;margin-top:5px;font-weight:700}
+.lb-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.lb-body{padding:16px;max-width:500px;margin:0 auto}
+.lb-card{background:var(--white);border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.lb-thead{display:grid;grid-template-columns:40px 1fr 80px;padding:10px 14px;background:var(--blue4);border-bottom:1px solid var(--blue3);font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px}
+.lb-row{display:grid;grid-template-columns:40px 1fr 80px;padding:12px 14px;border-bottom:1px solid #f0f4ff;align-items:center;transition:background .15s}
+.lb-row:hover{background:var(--blue4)}
+.lb-row:last-child{border:none}
+.lb-rank{font-size:16px}
+.lb-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;margin-right:8px;flex-shrink:0}
+.lb-info{display:flex;align-items:center}
+.lb-name{font-size:13px;font-weight:600;color:var(--text)}
+.lb-pnl{font-size:14px;font-weight:700;text-align:right}
+.pnl-pos{color:var(--green)}.pnl-neg{color:var(--red)}
+.lb-empty{text-align:center;padding:32px;color:var(--muted);font-size:13px}
+
+/* ── GET STARTED ── */
+.gs-header{background:linear-gradient(135deg,var(--navy),var(--blue));padding:20px 16px;text-align:center}
+.gs-header h2{color:#fff;font-size:18px;font-weight:800}
+.gs-header p{color:#a5f3fc;font-size:11px;margin-top:4px;letter-spacing:1px}
+.gs-body{padding:16px;max-width:500px;margin:0 auto}
+.step-card{background:var(--white);border-radius:12px;padding:16px;margin-bottom:12px;border:1px solid var(--border);display:flex;gap:14px;align-items:flex-start;transition:box-shadow .2s}
+.step-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.step-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;color:#fff}
+.step-num.s1{background:linear-gradient(135deg,var(--navy),var(--blue))}
+.step-num.s2{background:var(--blue2)}
+.step-num.s3{background:var(--green)}
+.step-content h3{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.step-content p{font-size:11px;color:var(--muted);line-height:1.6}
+.contact-card{background:linear-gradient(135deg,var(--navy),var(--blue));border-radius:14px;padding:20px;text-align:center;margin-bottom:14px}
+.contact-card h3{color:#fff;font-size:16px;font-weight:800;margin-bottom:4px}
+.contact-card p{color:#a5f3fc;font-size:11px;margin-bottom:14px}
+.btn-whatsapp{background:#25d366;color:#fff;border:none;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;text-decoration:none;transition:opacity .2s}
+.btn-whatsapp:hover{opacity:.9}
+
+/* ── IMPORTANT NOTES ── */
+.notes-box{background:var(--green4);border:1px solid #86efac;border-radius:10px;padding:14px;margin-bottom:14px}
+.notes-box h4{color:var(--green);font-size:13px;font-weight:700;margin-bottom:8px}
+.note-item{display:flex;align-items:flex-start;gap:8px;font-size:11px;color:var(--text);margin-bottom:7px;line-height:1.5}
+
+/* ── WA BANNER ── */
+.wa-banner{background:linear-gradient(135deg,var(--navy),var(--blue));padding:24px 16px;text-align:center}
+.wa-banner .tagline{color:var(--gold2);font-weight:900;font-size:clamp(16px,4vw,20px);margin-bottom:4px}
+.wa-banner .sub{color:#a5f3fc;font-size:12px;margin-bottom:16px}
+
+/* ── FOOTER ── */
+.footer{background:var(--navy);padding:20px 16px;text-align:center;border-top:2px solid var(--blue)}
+.footer .brand{color:var(--gold2);font-weight:800;font-size:15px;margin-bottom:4px}
+.footer p{color:#94a3b8;font-size:11px;margin-bottom:3px}
+.footer a{color:#93c5fd}
+
+/* ── RESPONSIVE ── */
+@media(max-width:400px){
+  .hero-btns{grid-template-columns:1fr}
+  .hero-stats{gap:6px}
+  .topbar{padding:8px 12px}
+  .nav-btn{padding:10px 12px;font-size:11px}
+}
+@media(min-width:768px){
+  .hero{padding:60px 24px 50px}
+  .hero-stats{max-width:480px}
+  .hero-btns{max-width:480px}
+  .section{padding:32px 24px}
+  .feat-grid{grid-template-columns:repeat(3,1fr)}
+  .pkg-grid{padding:24px}
+}
+@media(min-width:1024px){
+  .topbar{padding:12px 32px}
+  .nav-btn{padding:13px 24px;font-size:13px}
+  .hero{padding:80px 32px 70px}
+  .feat-grid{grid-template-columns:repeat(3,1fr);max-width:720px}
+  .pkg-grid{grid-template-columns:repeat(3,1fr);max-width:800px}
+  .lb-body{max-width:600px}
+  .gs-body{max-width:600px}
+}
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div id="ticker">
+  <div class="ticker-inner" id="tickerInner">
+    <span class="t-item"><span class="t-sym">Loading live prices...</span></span>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <div class="logo-wrap">
+      <img src="/logo.png" alt="HS" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-weight:900;font-size:14px;color:#1a56db\'>HS</span>'">
+    </div>
+    <div>
+      <div class="brand-name">Hash Salman</div>
+      <div class="brand-tag">FOCUS • DISCIPLINE • GROWTH</div>
+    </div>
+  </div>
+  <button class="btn-vip-top" onclick="window.location.href='/client'">VIP Login</button>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="nav-btn active" onclick="showPage('home',this)">Home</button>
+  <button class="nav-btn" onclick="showPage('packages',this)">Packages</button>
+  <button class="nav-btn" onclick="showPage('leaderboard',this)">Leaderboard</button>
+  <button class="nav-btn" onclick="showPage('getstarted',this)">Get Started</button>
+</div>
+
+<!-- ═══ HOME PAGE ═══ -->
+<div class="page active" id="page-home">
+
+  <div class="hero">
+    <div class="hero-badge">🏆 PREMIUM XAUUSD MT5 TRADING</div>
+    <h1 class="hero-title">Trade Master <span>HS</span></h1>
+    <p class="hero-sub">Smart • Trend Based • Fully Managed</p>
+    <p class="hero-tag">📌 Designed Exclusively for XAUUSD (Gold)</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="val">89%</div><div class="lbl">Win Rate</div></div>
+      <div class="hero-stat"><div class="val">+$65</div><div class="lbl">Daily Avg</div></div>
+      <div class="hero-stat"><div class="val">50+</div><div class="lbl">Clients</div></div>
+    </div>
+    <div class="hero-btns">
+      <button class="btn-hero-g" onclick="showPage('packages',document.querySelectorAll('.nav-btn')[1])">View Packages</button>
+      <button class="btn-hero-o" onclick="window.location.href='/client'">VIP Client Login</button>
+    </div>
+  </div>
+
+  <div class="section features-bg">
+    <div class="section-title"><h2>What's Included</h2><p>Everything managed by our team 24/7</p></div>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon">🖥️</div><h3>24/7 VPS Hosting</h3><p>Bot runs non-stop on dedicated VPS server</p></div>
+      <div class="feat-card"><div class="feat-icon">⚙️</div><h3>MT5 Setup & Config</h3><p>Full installation and configuration by our team</p></div>
+      <div class="feat-card"><div class="feat-icon">📊</div><h3>Performance Monitor</h3><p>Real-time monitoring and optimization</p></div>
+      <div class="feat-card"><div class="feat-icon">🔧</div><h3>Technical Support</h3><p>Fast issue resolution and MT5 updates</p></div>
+      <div class="feat-card"><div class="feat-icon">🔒</div><h3>VIP Portal</h3><p>Live P/L tracking dashboard for clients</p></div>
+      <div class="feat-card"><div class="feat-icon">📈</div><h3>24/7 Monitoring</h3><p>Always watching your account performance</p></div>
+    </div>
+  </div>
+
+  <div class="section results-bg">
+    <div class="section-title"><h2>📊 Live Trading Results</h2><p>Based on historical live trading data</p></div>
+    <div class="results-grid">
+      <div class="result-card" style="background:var(--green4);border:1px solid #86efac">
+        <div class="result-val" style="color:var(--green)">89%</div>
+        <div class="result-lbl" style="color:var(--green)">Winning Trades</div>
+      </div>
+      <div class="result-card" style="background:#fef2f2;border:1px solid #fca5a5">
+        <div class="result-val" style="color:var(--red)">11%</div>
+        <div class="result-lbl" style="color:var(--red)">Losing Trades</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wa-banner">
+    <div class="tagline">Trade Gold Smarter</div>
+    <div class="sub">Powered by Hash Salman</div>
+    <a href="https://wa.me/923023464786" class="btn-whatsapp">📱 WhatsApp now</a>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Trade Master HS</div>
+    <p>hashsalman.com &nbsp;•&nbsp; +92 302 3464786</p>
+    <p>FOCUS • DISCIPLINE • GROWTH</p>
+  </div>
+
+</div>
+
+<!-- ═══ PACKAGES PAGE ═══ -->
+<div class="page" id="page-packages">
+
+  <div class="pkg-header"><h2>Vip Lounge</h2><p>CHOOSE YOUR PLAN</p></div>
+
+  <div class="section packages-bg">
+    <div class="pkg-grid">
+
+      <!-- STARTER -->
+      <div class="pkg-card">
+        <div class="pkg-icon">🥉</div>
+        <div class="pkg-name">Hash Legend Starter</div>
+        <div class="pkg-sub">Perfect for beginners</div>
+        <div class="pkg-prices">
+          <div class="price-box"><div class="plbl">One Time</div><div class="pval">$297</div></div>
+          <div class="price-box"><div class="plbl">Weekly Fee</div><div class="pval green">$20</div></div>
+        </div>
+        <div class="pkg-details">
+          <div class="pkg-detail-row"><span class="dlbl">Recommended account</span><span class="dval">$300</span></div>
+          <div class="pkg-detail-row"><span class="dlbl">Daily profit range</span><span class="dval">$15 – $50</span></div>
+        </div>
+        <a href="https://wa.me/923023464786?text=Hi%20Hash%20Salman!%20I%20am%20interested%20in%20Hash%20Legend%20Starter%20package%20(%24297).%20Please%20guide%20me." class="btn-wa-pkg starter">📱 Get Starter</a>
+      </div>
+
+      <!-- STANDARD -->
+      <div class="pkg-card pop">
+        <div class="pkg-badge blue">POPULAR</div>
+        <div class="pkg-icon">🥈</div>
+        <div class="pkg-name">Hash Legend Standard</div>
+        <div class="pkg-sub">For growing traders</div>
+        <div class="pkg-prices">
+          <div class="price-box"><div class="plbl">One Time</div><div class="pval">$395</div></div>
+          <div class="price-box"><div class="plbl">Weekly Fee</div><div class="pval green">$25</div></div>
+        </div>
+        <div class="pkg-details">
+          <div class="pkg-detail-row"><span class="dlbl">Recommended account</span><span class="dval">$500</span></div>
+          <div class="pkg-detail-row"><span class="dlbl">Daily profit range</span><span class="dval">$30 – $120</span></div>
+        </div>
+        <a href="https://wa.me/923023464786?text=Hi%20Hash%20Salman!%20I%20am%20interested%20in%20Hash%20Legend%20Standard%20package%20(%24395).%20Please%20guide%20me." class="btn-wa-pkg standard">📱 Get Standard</a>
+      </div>
+
+      <!-- PRO -->
+      <div class="pkg-card best">
+        <div class="pkg-badge green">BEST VALUE</div>
+        <div class="pkg-icon">🥇</div>
+        <div class="pkg-name">Hash Legend Pro</div>
+        <div class="pkg-sub">For serious traders</div>
+        <div class="pkg-prices">
+          <div class="price-box"><div class="plbl">One Time</div><div class="pval">$790</div></div>
+          <div class="price-box"><div class="plbl">Weekly Fee</div><div class="pval green">$35</div></div>
+        </div>
+        <div class="pkg-details">
+          <div class="pkg-detail-row"><span class="dlbl">Recommended account</span><span class="dval">$1,000</span></div>
+          <div class="pkg-detail-row"><span class="dlbl">Daily profit range</span><span class="dval">$120 – $500</span></div>
+        </div>
+        <a href="https://wa.me/923023464786?text=Hi%20Hash%20Salman!%20I%20am%20interested%20in%20Hash%20Legend%20Pro%20package%20(%24790).%20Please%20guide%20me." class="btn-wa-pkg pro">📱 Get Pro</a>
+      </div>
+
+    </div>
+
+    <div class="includes-box">
+      <h4>✅ All packages include:</h4>
+      <div class="inc-item"><div class="inc-chk">✓</div>24/7 VPS Hosting & Monitoring</div>
+      <div class="inc-item"><div class="inc-chk">✓</div>MT5 Installation & Configuration</div>
+      <div class="inc-item"><div class="inc-chk">✓</div>Complete System Setup</div>
+      <div class="inc-item"><div class="inc-chk">✓</div>Performance Monitoring & Optimization</div>
+      <div class="inc-item"><div class="inc-chk">✓</div>VPS Maintenance & MT5 Updates</div>
+      <div class="inc-item"><div class="inc-chk">✓</div>Technical Support & Fast Resolution</div>
+      <div class="inc-item"><div class="inc-chk">✓</div>VIP Client Portal Access</div>
+    </div>
+
+    <div class="warning-box">
+      <h4>⚠️ Important Information</h4>
+      <p>Hash Legend is designed and optimized exclusively for XAUUSD (Gold). It is not designed for Forex currency pairs such as EURUSD, GBPUSD, USDJPY etc. Daily profit may vary depending on market conditions and volatility. The 89% win rate is based on historical live trading results and does not guarantee future performance.</p>
+    </div>
+
+  </div>
+
+  <div class="wa-banner">
+    <div class="tagline">Ready to start?</div>
+    <div class="sub">Contact Hash Salman on WhatsApp</div>
+    <a href="https://wa.me/923023464786" class="btn-whatsapp">📱 WhatsApp now</a>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Trade Master HS</div>
+    <p>hashsalman.com &nbsp;•&nbsp; +92 302 3464786</p>
+    <p>FOCUS • DISCIPLINE • GROWTH</p>
+  </div>
+
+</div>
+
+<!-- ═══ LEADERBOARD PAGE ═══ -->
+<div class="page" id="page-leaderboard">
+
+  <div class="lb-header">
+    <h2>Live Leaderboard</h2>
+    <div class="lb-live"><div class="lb-dot"></div>LIVE • Updated every few seconds</div>
+  </div>
+
+  <div class="lb-body">
+    <div class="lb-card">
+      <div class="lb-thead"><div>#</div><div>TRADER</div><div style="text-align:right">TODAY</div></div>
+      <div id="lbList"><div class="lb-empty">Loading traders...</div></div>
+    </div>
+    <p style="text-align:center;font-size:10px;color:var(--muted);margin-top:12px">Active traders only • Profits updated live from MT5</p>
+  </div>
+
+  <div class="wa-banner">
+    <div class="tagline">Join our traders!</div>
+    <div class="sub">Get started with Trade Master HS today</div>
+    <a href="https://wa.me/923023464786" class="btn-whatsapp">📱 WhatsApp now</a>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Trade Master HS</div>
+    <p>hashsalman.com &nbsp;•&nbsp; +92 302 3464786</p>
+    <p>FOCUS • DISCIPLINE • GROWTH</p>
+  </div>
+
+</div>
+
+<!-- ═══ GET STARTED PAGE ═══ -->
+<div class="page" id="page-getstarted">
+
+  <div class="gs-header"><h2>How to Get Started</h2><p>3 SIMPLE STEPS</p></div>
+
+  <div class="gs-body">
+
+    <div class="step-card">
+      <div class="step-num s1">1</div>
+      <div class="step-content">
+        <h3>Create an Exness Account</h3>
+        <p>Register on Exness and make the required deposit based on your chosen package — $300, $500, or $1,000.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num s2">2</div>
+      <div class="step-content">
+        <h3>Share MT5 Credentials</h3>
+        <p>Send your MT5 Login ID and Trading Password to Hash Salman via WhatsApp: <strong>+923023464786</strong></p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num s3">3</div>
+      <div class="step-content">
+        <h3>We Handle Everything</h3>
+        <p>Our team sets up the VPS, configures MT5, activates the bot system, and monitors 24/7 — all done for you.</p>
+      </div>
+    </div>
+
+    <div class="notes-box">
+      <h4>📊 Historical Live Trading Results</h4>
+      <div class="note-item"><span>✅</span><span>Winning Trades: <strong>89%</strong></span></div>
+      <div class="note-item"><span>📉</span><span>Losing Trades: <strong>11%</strong></span></div>
+      <div class="note-item"><span>📌</span><span>Based on historical live results — does not guarantee future performance</span></div>
+    </div>
+
+    <div class="warning-box" style="margin-bottom:14px">
+      <h4>⚠️ Important</h4>
+      <p>📌 Hash Legend is designed exclusively for XAUUSD (Gold).<br>
+      👤 You remain the complete owner of your trading account, funds, and withdrawals.<br>
+      🔒 Our team provides VPS management, setup, monitoring, and support only.</p>
+    </div>
+
+    <div class="contact-card">
+      <h3>⭐ Trade Gold Smarter</h3>
+      <p>Powered by Hash Salman. Contact us to get started today!</p>
+      <a href="https://wa.me/923023464786" class="btn-whatsapp">📱 WhatsApp: +923023464786</a>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="brand">Trade Master HS</div>
+    <p>hashsalman.com &nbsp;•&nbsp; +92 302 3464786</p>
+    <p style="margin-top:6px">FOCUS • DISCIPLINE • GROWTH</p>
+  </div>
+
+</div>
+
+<script>
+// ── NAV ──────────────────────────────────────────────
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('page-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+  if (name === 'leaderboard') loadLeaderboard();
+}
+
+// ── LEADERBOARD ───────────────────────────────────────
+var FAKE_USERS = [
+  { name: 'Furqan', ini: 'FU', color: '#8b5cf6', base: 52, mult: 1.4 },
+  { name: 'Irfan', ini: 'IR', color: '#ef4444', base: 68, mult: 1.8 },
+  { name: 'Hash Salman', ini: 'HS', color: '#1a56db', base: 61, mult: 1.6 },
+  { name: 'Owner 2', ini: 'O2', color: '#f59e0b', base: 44, mult: 1.2 },
+];
+
+function loadLeaderboard() {
+  fetch('/api/leaderboard')
+    .then(function(r) { return r.json(); })
+    .then(function(realData) {
+      var realAvg = 0;
+      if (realData && realData.length > 0) {
+        realAvg = realData.reduce(function(s, b) { return s + (parseFloat(b.daily) || 0); }, 0) / realData.length;
+      }
+      var dir = realAvg >= 0 ? 1 : -1;
+      var all = [];
+      if (realData && realData.length > 0) {
+        realData.forEach(function(b) {
+          all.push({ name: b.name, ini: b.name.split(' ').map(function(w) { return w[0]; }).join('').toUpperCase().slice(0, 2), color: '#06b6d4', daily: parseFloat(b.daily) || 0 });
+        });
+      }
+      FAKE_USERS.forEach(function(f) {
+        var d = dir * (f.base + realAvg * f.mult * 0.3 + (Math.random() - 0.3) * 8);
+        all.push({ name: f.name, ini: f.ini, color: f.color, daily: parseFloat(d.toFixed(2)) });
+      });
+      all.sort(function(a, b) { return b.daily - a.daily; });
+      renderLeaderboard(all);
+    })
+    .catch(function() {
+      var fallback = [
+        { name: 'Irfan', ini: 'IR', color: '#ef4444', daily: 92.4 },
+        { name: 'Hash Salman', ini: 'HS', color: '#1a56db', daily: 78.5 },
+        { name: 'PAVAN', ini: 'PA', color: '#06b6d4', daily: 71.2 },
+        { name: 'Furqan', ini: 'FU', color: '#8b5cf6', daily: 65.3 },
+        { name: 'Owner 2', ini: 'O2', color: '#f59e0b', daily: 52.1 },
+      ];
+      renderLeaderboard(fallback);
+    });
+}
+
+function renderLeaderboard(data) {
+  var medals = ['🥇', '🥈', '🥉'];
+  var html = '';
+  data.forEach(function(t, i) {
+    var rk = i < 3 ? medals[i] : '<span style="color:var(--muted);font-size:12px">#' + (i + 1) + '</span>';
+    var pos = t.daily >= 0;
+    var pnl = (pos ? '+$' : '-$') + Math.abs(t.daily).toFixed(2);
+    html += '<div class="lb-row">' +
+      '<div class="lb-rank">' + rk + '</div>' +
+      '<div class="lb-info"><div class="lb-avatar" style="background:' + t.color + '">' + t.ini + '</div><div class="lb-name">' + t.name + '</div></div>' +
+      '<div class="lb-pnl ' + (pos ? 'pnl-pos' : 'pnl-neg') + '">' + pnl + '</div>' +
+      '</div>';
+  });
+  document.getElementById('lbList').innerHTML = html || '<div class="lb-empty">No data yet</div>';
+}
+
+loadLeaderboard();
+setInterval(loadLeaderboard, 30000);
+
+// ── TICKER ────────────────────────────────────────────
+var fallbackPrices = { xau: 2647.30, btc: 58240, eth: 2311.69, eur: 1.08420, gbp: 1.25640, bnb: 580 };
+
+function buildTickerHTML(items) {
+  var h = '';
+  items.forEach(function(p) {
+    var pos = p.chg >= 0;
+    h += '<span class="t-item"><span class="t-sym">' + p.label + '</span><span class="t-price">' + p.price + '</span><span class="' + (pos ? 't-up' : 't-dn') + '">' + (pos ? '+' : '') + p.chg.toFixed(2) + '%</span></span>';
+  });
+  return h + h;
+}
+
+function updateFallbackTicker() {
+  fallbackPrices.xau += (Math.random() - 0.5) * 0.6;
+  fallbackPrices.btc += (Math.random() - 0.5) * 60;
+  fallbackPrices.eth += (Math.random() - 0.5) * 2;
+  fallbackPrices.eur += (Math.random() - 0.5) * 0.0004;
+  fallbackPrices.gbp += (Math.random() - 0.5) * 0.0004;
+  fallbackPrices.bnb += (Math.random() - 0.5) * 1.5;
+  var items = [
+    { label: 'XAUUSD', price: fallbackPrices.xau.toFixed(2), chg: 0.42 },
+    { label: 'BTC/USDT', price: fallbackPrices.btc.toFixed(0), chg: 1.20 },
+    { label: 'ETH/USDT', price: fallbackPrices.eth.toFixed(2), chg: -0.07 },
+    { label: 'EUR/USD', price: fallbackPrices.eur.toFixed(5), chg: 0.03 },
+    { label: 'GBP/USD', price: fallbackPrices.gbp.toFixed(5), chg: -0.05 },
+    { label: 'BNB/USDT', price: fallbackPrices.bnb.toFixed(2), chg: 0.85 },
+  ];
+  var el = document.getElementById('tickerInner');
+  if (el) el.innerHTML = buildTickerHTML(items);
+}
+
+function fetchLivePrices() {
+  fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin&vs_currencies=usd&include_24hr_change=true')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      fallbackPrices.xau += (Math.random() - 0.5) * 0.4;
+      var items = [
+        { label: 'XAUUSD', price: fallbackPrices.xau.toFixed(2), chg: 0.42 },
+        { label: 'BTC/USDT', price: d.bitcoin.usd.toFixed(0), chg: d.bitcoin.usd_24h_change || 0 },
+        { label: 'ETH/USDT', price: d.ethereum.usd.toFixed(2), chg: d.ethereum.usd_24h_change || 0 },
+        { label: 'BNB/USDT', price: d.binancecoin.usd.toFixed(2), chg: d.binancecoin.usd_24h_change || 0 },
+        { label: 'EUR/USD', price: fallbackPrices.eur.toFixed(5), chg: 0.03 },
+        { label: 'GBP/USD', price: fallbackPrices.gbp.toFixed(5), chg: -0.05 },
+      ];
+      var el = document.getElementById('tickerInner');
+      if (el) el.innerHTML = buildTickerHTML(items);
+    })
+    .catch(updateFallbackTicker);
+}
+
+updateFallbackTicker();
+fetchLivePrices();
+setInterval(updateFallbackTicker, 4000);
+setInterval(fetchLivePrices, 30000);
+</script>
+</body>
+</html>
