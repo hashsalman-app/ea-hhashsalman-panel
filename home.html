@@ -105,8 +105,12 @@ img{max-width:100%;height:auto}
 .lb-body{padding:16px;max-width:500px;margin:0 auto}
 .lb-card{background:var(--white);border-radius:12px;overflow:hidden;border:1px solid var(--border)}
 .lb-thead{display:grid;grid-template-columns:40px 1fr 80px;padding:10px 14px;background:var(--blue4);border-bottom:1px solid var(--blue3);font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px}
+.lb-scroll-wrap{height:420px;overflow:hidden;position:relative}
+.lb-scroll-track{position:absolute;width:100%;animation:lbScroll 25s linear infinite}
+.lb-scroll-track:hover{animation-play-state:paused}
+@keyframes lbScroll{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}
 .lb-row{display:grid;grid-template-columns:40px 1fr 80px;padding:12px 14px;border-bottom:1px solid #f0f4ff;align-items:center;transition:background .15s}
-.lb-row:hover{background:var(--blue4)}.lb-row:last-child{border:none}
+.lb-row:hover{background:var(--blue4)}
 .lb-rank{font-size:16px}
 .lb-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;margin-right:8px;flex-shrink:0}
 .lb-info{display:flex;align-items:center}
@@ -256,13 +260,15 @@ img{max-width:100%;height:auto}
 </div>
 
 <div class="page" id="page-leaderboard">
-  <div class="lb-header"><h2>Live Leaderboard</h2><div class="lb-live"><div class="lb-dot"></div>LIVE • Updated every few seconds</div></div>
+  <div class="lb-header"><h2>Live Leaderboard</h2><div class="lb-live"><div class="lb-dot"></div>LIVE • Scroll to see all traders</div></div>
   <div class="lb-body">
     <div class="lb-card">
       <div class="lb-thead"><div>#</div><div>TRADER</div><div style="text-align:right">TODAY</div></div>
-      <div id="lbList"><div class="lb-empty">Loading traders...</div></div>
+      <div class="lb-scroll-wrap">
+        <div class="lb-scroll-track" id="lbList"></div>
+      </div>
     </div>
-    <p style="text-align:center;font-size:10px;color:var(--muted);margin-top:12px">Active traders only • Profits updated live from MT5</p>
+    <p style="text-align:center;font-size:10px;color:var(--muted);margin-top:12px">Active traders only • Hover to pause scroll</p>
   </div>
   <div class="wa-banner"><div class="tagline">Join our traders!</div><div class="sub">Get started with Trade Master HS today</div><a href="https://wa.me/923023464786" class="btn-whatsapp">📱 WhatsApp now</a></div>
   <div class="footer"><div class="brand">Trade Master HS</div><p>hashsalman.com • +92 302 3464786</p><p>FOCUS • DISCIPLINE • GROWTH</p></div>
@@ -290,43 +296,37 @@ img{max-width:100%;height:auto}
 </div>
 
 <script>
-function showPage(name, btn) {
-  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('page-' + name).classList.add('active');
-  if (btn) btn.classList.add('active');
-  window.scrollTo(0, 0);
-  if (name === 'leaderboard') loadLeaderboard();
+function showPage(name,btn){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('page-'+name).classList.add('active');
+  if(btn)btn.classList.add('active');
+  window.scrollTo(0,0);
+  if(name==='leaderboard')loadLeaderboard();
 }
 
-var FAKE_USERS = [
-  { name: 'Furqan Ahmed', ini: 'FA', color: '#8b5cf6', base: 72, mult: 1.4 },
-  { name: 'Irfan Khan', ini: 'IK', color: '#ef4444', base: 68, mult: 1.8 },
-  { name: 'Hash Salman', ini: 'HS', color: '#1a56db', base: 61, mult: 1.6 },
-  { name: 'Owner 2', ini: 'O2', color: '#f59e0b', base: 44, mult: 1.2 },
-  { name: 'Rahul Sharma', ini: 'RS', color: '#06b6d4', base: 58, mult: 1.3 },
-  { name: 'Bilal Sheikh', ini: 'BS', color: '#16a34a', base: 45, mult: 1.5 },
-  { name: 'Priya Patel', ini: 'PP', color: '#ec4899', base: 38, mult: 1.2 },
-  { name: 'Usman Ali', ini: 'UA', color: '#f97316', base: 63, mult: 1.7 },
-  { name: 'Amit Verma', ini: 'AV', color: '#6366f1', base: 31, mult: 1.1 },
-  { name: 'Zara Malik', ini: 'ZM', color: '#14b8a6', base: 55, mult: 1.4 },
-  { name: 'Arjun Singh', ini: 'AS', color: '#84cc16', base: 42, mult: 1.3 },
-  { name: 'Hina Baig', ini: 'HB', color: '#a855f7', base: 29, mult: 1.0 },
-  { name: 'Vikram Nair', ini: 'VN', color: '#f43f5e', base: 48, mult: 1.2 },
-  { name: 'Sana Qureshi', ini: 'SQ', color: '#0ea5e9', base: 35, mult: 1.1 },
-  { name: 'Danish Raza', ini: 'DR', color: '#fb923c', base: 67, mult: 1.6 },
+var FAKE_USERS=[
+  {name:'Furqan Ahmed',ini:'FA',color:'#8b5cf6',base:72,mult:1.4},
+  {name:'Irfan Khan',ini:'IK',color:'#ef4444',base:68,mult:1.8},
+  {name:'Hash Salman',ini:'HS',color:'#1a56db',base:61,mult:1.6},
+  {name:'Owner 2',ini:'O2',color:'#f59e0b',base:44,mult:1.2},
+  {name:'Rahul Sharma',ini:'RS',color:'#06b6d4',base:58,mult:1.3},
+  {name:'Bilal Sheikh',ini:'BS',color:'#16a34a',base:45,mult:1.5},
+  {name:'Priya Patel',ini:'PP',color:'#ec4899',base:38,mult:1.2},
+  {name:'Usman Ali',ini:'UA',color:'#f97316',base:63,mult:1.7},
+  {name:'Amit Verma',ini:'AV',color:'#6366f1',base:31,mult:1.1},
+  {name:'Zara Malik',ini:'ZM',color:'#14b8a6',base:55,mult:1.4},
+  {name:'Arjun Singh',ini:'AS',color:'#84cc16',base:42,mult:1.3},
+  {name:'Hina Baig',ini:'HB',color:'#a855f7',base:29,mult:1.0},
+  {name:'Vikram Nair',ini:'VN',color:'#f43f5e',base:48,mult:1.2},
+  {name:'Sana Qureshi',ini:'SQ',color:'#0ea5e9',base:35,mult:1.1},
+  {name:'Danish Raza',ini:'DR',color:'#fb923c',base:67,mult:1.6},
 ];
 
-function getDailySeed() {
-  var d = new Date();
-  return d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
-}
-function seededRand(seed, idx) {
-  var x = Math.sin(seed + idx * 9301 + 49297) * 233280;
-  return x - Math.floor(x);
-}
+function getDailySeed(){var d=new Date();return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();}
+function seededRand(seed,idx){var x=Math.sin(seed+idx*9301+49297)*233280;return x-Math.floor(x);}
 
-function loadLeaderboard() {
+function loadLeaderboard(){
   fetch('/api/leaderboard').then(function(r){return r.json();}).then(function(realData){
     var realAvg=0;
     if(realData&&realData.length>0) realAvg=realData.reduce(function(s,b){return s+(parseFloat(b.daily)||0);},0)/realData.length;
@@ -357,7 +357,7 @@ function loadLeaderboard() {
   });
 }
 
-function renderLeaderboard(data) {
+function renderLeaderboard(data){
   var medals=['🥇','🥈','🥉'];
   var html='';
   data.forEach(function(t,i){
@@ -366,10 +366,11 @@ function renderLeaderboard(data) {
     var pnl=(pos?'+$':'-$')+Math.abs(t.daily).toFixed(2);
     html+='<div class="lb-row"><div class="lb-rank">'+rk+'</div><div class="lb-info"><div class="lb-avatar" style="background:'+t.color+'">'+t.ini+'</div><div class="lb-name">'+t.name+'</div></div><div class="lb-pnl '+(pos?'pnl-pos':'pnl-neg')+'">'+pnl+'</div></div>';
   });
-  document.getElementById('lbList').innerHTML=html||'<div class="lb-empty">No data yet</div>';
+  // Double for seamless scroll
+  document.getElementById('lbList').innerHTML=html+html;
 }
 
-function loadTotalProfit() {
+function loadTotalProfit(){
   fetch('/api/total-profit').then(function(r){return r.json();}).then(function(d){
     var el=document.getElementById('totalProfitVal');
     if(el&&d.total!==undefined){
