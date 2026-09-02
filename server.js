@@ -614,7 +614,16 @@ app.get('/api/check', (req, res) => {
     return res.json({ status: 'EXPIRED' });
   }
   if (bot.status !== 'ACTIVE') return res.json({ status: bot.status });
-  return res.json({ status: 'ACTIVE', name: bot.name, expiry: bot.expiry, signal: db.signal || { type: 'NORMAL' } });
+  
+  // ✅ FIX: CLOSE_NOW signal — send once then immediately reset to NORMAL
+  const sig = db.signal || { type: 'NORMAL' };
+  if (sig.type === 'CLOSE_NOW') {
+    db.signal = { type: 'NORMAL', time: null };
+    saveDB(db);
+    return res.json({ status: 'ACTIVE', name: bot.name, expiry: bot.expiry, signal: { type: 'CLOSE_NOW' } });
+  }
+  
+  return res.json({ status: 'ACTIVE', name: bot.name, expiry: bot.expiry, signal: sig });
 });
 
 // ── EA STATS ──────────────────────────────────────────
