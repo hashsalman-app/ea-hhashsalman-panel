@@ -3,361 +3,257 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hash Salman — VIP Client Portal</title>
+<title>Trade Master HS — VIP Client Portal</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
-body{min-height:100vh;transition:background .3s,color .3s}
-
-/* LIGHT THEME */
-body.light{background:#f8fafc;color:#1e293b}
-body.light .topbar{background:#0a2463;border-bottom:2px solid #39d353}
-body.light .card{background:#fff;border:1px solid #e2e8f0}
-body.light .card-blue{border-top:3px solid #1e90ff}
-body.light .stat-card{background:#f0f7ff;border:1px solid #bfdbfe}
-body.light .detail-row{border-bottom:1px solid #f1f5f9}
-body.light .detail-val{color:#0a2463}
-body.light input{background:#f0f7ff;border:2px solid #bfdbfe;color:#0a2463}
-body.light .navbar{background:#fff;border-top:2px solid #e2e8f0}
-body.light .nav-item.active{background:#0a2463}
-body.light .nav-item.active i,.nav-item.active span{color:#39d353}
-body.light .nav-item:not(.active) i,.nav-item:not(.active) span{color:#64748b}
-body.light .lb-row{border-bottom:1px solid #f1f5f9}
-body.light .ticker{background:#0d1b4b;border-bottom:2px solid #39d353}
-
-/* DARK THEME */
-body.dark{background:#080b18;color:#e2e8f0}
-body.dark .topbar{background:#0a0d1a;border-bottom:2px solid #f59e0b}
-body.dark .card{background:#0f1322;border:1px solid #1e2440}
-body.dark .card-blue{border-top:3px solid #f59e0b}
-body.dark .stat-card{background:#0a0d14;border:1px solid #1e2440}
-body.dark .stat-val.green{color:#39d353}
-body.dark .stat-val.blue{color:#00d4ff}
-body.dark .detail-row{border-bottom:1px solid #1e2440}
-body.dark .detail-val{color:#e2e8f0}
-body.dark input{background:#0a0d14;border:2px solid #1e2440;color:#fff}
-body.dark input:focus{border-color:#f59e0b}
-body.dark .navbar{background:#0a0d1a;border-top:2px solid #1e2440}
-body.dark .nav-item.active{background:#0f1322}
-body.dark .nav-item.active i,.dark .nav-item.active span{color:#f59e0b}
-body.dark .nav-item:not(.active) i,.dark .nav-item:not(.active) span{color:#4a5568}
-body.dark .lb-row{border-bottom:1px solid #1e2440}
-body.dark .lb-daily{color:#39d353}
-body.dark .ticker{background:#050810;border-bottom:2px solid #f59e0b}
-
-/* COMMON */
-.topbar{padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
-.topbar-left{display:flex;align-items:center;gap:10px}
-.logo{width:38px;height:38px;border-radius:50%;background:#1e90ff;display:flex;align-items:center;justify-content:center;border:2px solid #39d353;flex-shrink:0}
-.logo span{color:#fff;font-size:11px;font-weight:700}
-.brand-name{color:#fff;font-size:14px;font-weight:700}
-.brand-tag{font-size:9px;color:#39d353;letter-spacing:.8px}
-.btn-theme{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;padding:5px 10px;border-radius:6px;font-size:11px;cursor:pointer;font-weight:600}
-
-@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
-.ticker{overflow:hidden;padding:5px 0}
-.ticker-inner{display:inline-flex;gap:40px;animation:ticker 20s linear infinite;white-space:nowrap}
-.ticker-item{font-size:12px;font-weight:600;color:#fff}
-
-#loginView{padding:24px 16px}
-.login-card{background:#fff;border-radius:14px;padding:24px;max-width:380px;margin:0 auto;border:1px solid #e2e8f0}
-body.dark .login-card{background:#0f1322;border-color:#1e2440}
-.login-icon{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#f59e0b,#d97706);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;border:3px solid #0a2463}
-.login-icon i{font-size:28px;color:#fff}
-.login-title{text-align:center;font-size:16px;font-weight:700;margin-bottom:4px}
-body.light .login-title{color:#0a2463}
-body.dark .login-title{color:#fff}
-.login-sub{text-align:center;font-size:12px;color:#64748b;margin-bottom:20px}
-.form-label{display:block;font-size:12px;font-weight:600;margin-bottom:4px}
-body.light .form-label{color:#0a2463}
-body.dark .form-label{color:#94a3b8}
-.form-input{width:100%;padding:10px 12px;border-radius:8px;font-size:14px;box-sizing:border-box;margin-bottom:12px;outline:none}
-body.light .form-input:focus{border-color:#0a2463}
-.btn-vip{width:100%;background:linear-gradient(135deg,#f59e0b,#d97706);border:none;color:#fff;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer}
-.err-msg{color:#dc2626;font-size:12px;margin:0 0 10px;display:none}
-
-#appView{display:none}
-.app-content{padding:14px 16px;padding-bottom:80px}
-
-.card{border-radius:12px;padding:14px;margin-bottom:12px}
-.vip-badge{font-size:10px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;padding:2px 8px;border-radius:20px;font-weight:700}
-.status-badge{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px}
-.status-badge.ACTIVE{background:#dcfce7;color:#16a34a;border:1px solid #86efac}
-.status-badge.DISABLED{background:#fef2f2;color:#dc2626;border:1px solid #fca5a5}
-.status-badge.EXPIRED{background:#f1f5f9;color:#94a3b8;border:1px solid #cbd5e1}
-
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.stat-card{border-radius:8px;padding:10px;text-align:center}
-.stat-label{font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin:0 0 3px}
-.stat-val{font-size:18px;font-weight:700;margin:0}
-.stat-val.green{color:#16a34a}
-.stat-val.blue{color:#1e90ff}
-.stat-val.red{color:#dc2626}
-
-.btn-activate{width:100%;padding:11px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:2px solid #16a34a;background:#dcfce7;color:#16a34a}
-.btn-disable{width:100%;padding:11px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:2px solid #dc2626;background:#fef2f2;color:#dc2626}
-
-.detail-row{display:flex;justify-content:space-between;padding:8px 0;font-size:13px}
-.detail-label{color:#64748b}
-.detail-val{font-weight:600}
-
-/* EXPIRED BANNER */
-.expired-banner{background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;padding:14px;text-align:center;margin-bottom:12px}
-body.dark .expired-banner{background:#2d0a0a;border-color:#ef4444}
-.expired-banner h3{color:#dc2626;margin-bottom:4px;font-size:14px}
-.expired-banner p{color:#64748b;font-size:12px}
-.expired-banner a{color:#0a2463;font-weight:600}
-body.dark .expired-banner a{color:#f59e0b}
-
-/* LEADERBOARD */
-.lb-header{display:grid;grid-template-columns:auto 2fr 1fr;gap:8px;padding:8px 0;border-bottom:2px solid #e2e8f0;margin:0 14px}
-body.dark .lb-header{border-color:#1e2440}
-.lb-header span{font-size:10px;font-weight:700;text-transform:uppercase}
-body.light .lb-header span{color:#0a2463}
-body.dark .lb-header span{color:#f59e0b}
-.lb-scroll{height:300px;overflow:hidden;position:relative;padding:0 14px}
-.lb-track{position:absolute;width:calc(100% - 28px)}
-.lb-row{display:grid;grid-template-columns:auto 2fr 1fr;gap:8px;padding:9px 0;align-items:center}
-.lb-rank{font-size:11px;font-weight:700;color:#94a3b8;min-width:18px}
-.lb-name-wrap{display:flex;align-items:center;gap:8px}
-.lb-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
-.lb-name{font-size:12px;font-weight:600}
-body.light .lb-name{color:#0a2463}
-body.dark .lb-name{color:#e2e8f0}
-.lb-daily{text-align:right;font-size:13px;font-weight:700;color:#16a34a}
-
-/* SETTINGS */
-.settings-card{border-radius:12px;padding:14px;margin-bottom:12px}
-.settings-title{font-size:14px;font-weight:700;margin-bottom:4px}
-body.light .settings-title{color:#0a2463}
-body.dark .settings-title{color:#fff}
-.settings-sub{font-size:12px;color:#64748b;margin-bottom:12px}
-.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.theme-opt{border-radius:8px;padding:12px;text-align:center;cursor:pointer;border:2px solid transparent}
-.theme-opt.selected-light{border-color:#0a2463}
-.theme-opt.selected-dark{border-color:#f59e0b}
-.theme-dot{width:24px;height:24px;border-radius:50%;margin:0 auto 6px}
-.theme-name{font-size:12px;font-weight:700}
-
-/* NAVBAR */
-.navbar{position:fixed;bottom:0;left:0;right:0;display:grid;grid-template-columns:1fr 1fr 1fr;max-width:480px;margin:0 auto}
-.nav-item{padding:10px 0;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px}
-.nav-item i{font-size:18px}
-.nav-item span{font-size:10px;font-weight:600}
-
-.toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:999;display:none;white-space:nowrap}
-.toast.success{background:#dcfce7;color:#16a34a;border:1px solid #86efac}
-.toast.danger{background:#fef2f2;color:#dc2626;border:1px solid #fca5a5}
-
-.btn-logout{width:100%;background:transparent;padding:10px;border-radius:8px;font-size:13px;cursor:pointer;font-weight:600}
-body.light .btn-logout{border:2px solid #e2e8f0;color:#64748b}
-body.dark .btn-logout{border:2px solid #1e2440;color:#64748b}
+:root{--navy:#0a2463;--blue:#1a56db;--blue2:#2563eb;--blue3:#dbeafe;--blue4:#eff6ff;--green:#16a34a;--green2:#22c55e;--green3:#dcfce7;--green4:#f0fdf4;--gold:#f59e0b;--gold2:#fbbf24;--red:#ef4444;--text:#1e293b;--muted:#64748b;--white:#fff;--border:#e2e8f0;--bg:#f8fbff}
+html,body{height:100%;overflow-x:hidden}
+body{background:var(--bg);color:var(--text)}
+#ticker{background:#0f172a;overflow:hidden;height:28px;display:flex;align-items:center;border-bottom:2px solid var(--green2)}
+.ticker-wrap{overflow:hidden;position:relative;flex:1;height:28px}
+.ticker-inner{display:flex;position:absolute;white-space:nowrap;animation:tickScroll 40s linear infinite}
+.t-item{padding:0 14px;font-size:10px;display:flex;gap:5px;border-right:1px solid #1e3a5f;align-items:center;flex-shrink:0}
+.ts{color:#93c5fd}.tp{color:#fff;font-weight:700}.tu{color:#4ade80}.td{color:#f87171}
+@keyframes tickScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.topbar{background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 60%,var(--green) 100%);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.topbar-logo{display:flex;align-items:center;gap:10px}
+.logo-wrap{width:38px;height:38px;border-radius:50%;background:#fff;padding:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.logo-wrap img{width:34px;height:34px;object-fit:contain;border-radius:50%}
+.brand-name{color:#fff;font-size:14px;font-weight:800}
+.brand-tag{color:#a5f3fc;font-size:9px;letter-spacing:1px}
+.btn-home{background:linear-gradient(90deg,var(--gold),var(--gold2));color:#000;border:none;padding:7px 16px;border-radius:20px;font-weight:800;font-size:11px;cursor:pointer}
+#loginPage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
+.login-box{background:var(--white);border-radius:16px;padding:32px 24px;width:100%;max-width:380px;border:2px solid var(--blue3);box-shadow:0 8px 32px rgba(26,86,219,.1)}
+.login-logo{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--green));display:flex;align-items:center;justify-content:center;margin:0 auto 14px;border:3px solid var(--gold2);overflow:hidden}
+.login-logo img{width:66px;height:66px;object-fit:contain;border-radius:50%}
+.login-box h1{text-align:center;color:var(--text);font-size:20px;font-weight:800;margin-bottom:4px}
+.login-box .sub{text-align:center;color:var(--blue);font-size:12px;margin-bottom:24px;font-weight:600}
+.form-label{display:block;font-size:11px;font-weight:600;color:var(--text);margin-bottom:4px}
+.form-input{width:100%;padding:12px 14px;border:1.5px solid var(--blue3);border-radius:9px;font-size:13px;margin-bottom:14px;background:var(--white);color:var(--text)}
+.form-input:focus{outline:none;border-color:var(--blue)}
+.btn-login{width:100%;padding:13px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:none;background:linear-gradient(90deg,var(--gold),var(--gold2));color:#000;margin-bottom:10px}
+.login-err{color:var(--red);font-size:12px;text-align:center;margin-top:4px;font-weight:600}
+.login-hint{background:var(--blue4);border-radius:8px;padding:8px 12px;font-size:10px;color:var(--muted);text-align:center}
+#app{display:none}
+.tabs{background:var(--white);display:flex;border-bottom:2px solid var(--border);overflow-x:auto}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{flex:1;padding:10px 8px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;min-width:80px;text-align:center}
+.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:700}
+.tab-page{display:none;padding:14px;max-width:520px;margin:0 auto}
+.tab-page.active{display:block}
+.card{background:var(--white);border-radius:12px;padding:16px;margin-bottom:14px;border:1px solid var(--border)}
+.card.gold-border{border:2px solid var(--gold2)}
+.client-info{display:flex;align-items:center;gap:12px}
+.client-avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--green));display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:#fff;flex-shrink:0;border:2px solid var(--gold2)}
+.client-name{font-size:16px;font-weight:800;color:var(--text)}
+.client-acc{font-size:11px;color:var(--muted);margin-top:2px}
+.status-badge{padding:4px 12px;border-radius:20px;font-size:10px;font-weight:700}
+.badge-active{background:var(--green3);color:var(--green);border:1px solid #86efac}
+.badge-disabled{background:#fee2e2;color:var(--red);border:1px solid #fca5a5}
+.badge-expired{background:#f1f5f9;color:var(--muted);border:1px solid var(--border)}
+.badge-vip{background:linear-gradient(90deg,var(--gold),var(--gold2));color:#000;padding:3px 9px;border-radius:10px;font-size:9px;font-weight:800;margin-right:4px}
+.pnl-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+.pnl-box{background:var(--blue4);border-radius:10px;padding:12px;text-align:center;border:1px solid var(--blue3)}
+.pnl-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.pnl-value{font-size:19px;font-weight:900}
+.pnl-pos{color:var(--green)}.pnl-neg{color:var(--red)}.pnl-blue{color:var(--blue)}
+.bot-ctrl{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.btn-activate{padding:12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #86efac;background:var(--green3);color:var(--green)}
+.btn-disable{padding:12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #fca5a5;background:#fee2e2;color:var(--red)}
+.pnl-note{font-size:9px;color:var(--green);text-align:center;background:var(--green4);padding:5px;border-radius:6px;border:1px solid #86efac}
+.detail-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--blue3);font-size:12px}
+.detail-row:last-child{border:none}
+.detail-label{color:var(--muted)}.detail-val{font-weight:600;color:var(--text)}
+.expired-banner{background:#fee2e2;border:2px solid #fca5a5;border-radius:10px;padding:14px;text-align:center;margin-bottom:14px}
+.expired-banner h3{color:var(--red);font-size:14px;font-weight:700;margin-bottom:6px}
+.expired-banner p{color:#7f1d1d;font-size:12px;line-height:1.6}
+.lb-thead{display:grid;grid-template-columns:38px 1fr 76px;padding:10px 14px;background:var(--blue4);border-bottom:1px solid var(--blue3);font-size:9px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px}
+.lb-row{display:grid;grid-template-columns:38px 1fr 76px;padding:11px 14px;border-bottom:1px solid #f0f4ff;align-items:center}
+.lb-row:hover{background:var(--blue4)}.lb-row:last-child{border:none}
+.lb-rank{font-size:15px}
+.lb-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;margin-right:8px;flex-shrink:0}
+.lb-info{display:flex;align-items:center}
+.lb-name{font-size:12px;font-weight:600;color:var(--text)}
+.lb-pnl{font-size:13px;font-weight:700;text-align:right}
+.email-row{display:flex;gap:8px;margin-bottom:8px}
+.email-input{flex:1;padding:10px 12px;border:1.5px solid var(--blue3);border-radius:8px;font-size:12px;background:var(--blue4);color:var(--text)}
+.email-input:focus{outline:none;border-color:var(--blue)}
+.btn-save-email{background:var(--green);color:#fff;border:none;padding:10px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.btn-signout{width:100%;padding:11px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--muted);margin-top:6px}
+.wa-card{background:linear-gradient(135deg,var(--navy),var(--blue));border-radius:12px;padding:16px;text-align:center}
+.wa-card h3{color:#fff;font-size:14px;font-weight:700;margin-bottom:4px}
+.wa-card p{color:#a5f3fc;font-size:11px;margin-bottom:12px}
+.btn-wa{background:#25d366;color:#fff;border:none;padding:11px 20px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:10px;font-size:13px;font-weight:600;z-index:999;display:none;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.toast-success{background:var(--green3);color:var(--green);border:1px solid #86efac}
+.toast-error{background:#fee2e2;color:var(--red);border:1px solid #fca5a5}
+.toast-info{background:var(--blue4);color:var(--blue);border:1px solid var(--blue3)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@media(min-width:600px){.tab-page{padding:20px}}
+@media(min-width:768px){.pnl-grid{grid-template-columns:repeat(4,1fr)}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.40.0/iconfont/tabler-icons.min.css">
 </head>
-<body class="light">
+<body>
 
-<!-- TOPBAR -->
+<div id="ticker">
+  <div class="ticker-wrap">
+    <div class="ticker-inner" id="tickerInner">
+      <span class="t-item"><span class="ts">Loading prices...</span></span>
+    </div>
+  </div>
+</div>
+
 <div class="topbar">
-  <div class="topbar-left">
-    <div class="logo"><span>HS</span></div>
+  <div class="topbar-logo">
+    <div class="logo-wrap">
+      <img src="/logo.png" alt="HS" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-weight:900;font-size:15px;color:#1a56db\'>HS</span>'">
+    </div>
     <div>
       <div class="brand-name">Hash Salman</div>
       <div class="brand-tag">FOCUS • DISCIPLINE • GROWTH</div>
     </div>
   </div>
-  <button class="btn-theme" onclick="toggleTheme()">🌙 Dark</button>
+  <button class="btn-home" onclick="window.location.href='/'">🏠 Home</button>
 </div>
 
-<!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-inner">
-    <span class="ticker-item" id="t1">XAUUSD &nbsp;<span style="color:#39d353">$2,647.30 +0.42%</span></span>
-    <span class="ticker-item" id="t2">BTCUSDT &nbsp;<span style="color:#39d353">$58,240.00 +1.20%</span></span>
-    <span class="ticker-item" id="t3">ETHUSDT &nbsp;<span style="color:#dc2626">$2,310.50 -0.38%</span></span>
-    <span class="ticker-item">XAUUSD &nbsp;<span style="color:#39d353">$2,647.30 +0.42%</span></span>
-    <span class="ticker-item">BTCUSDT &nbsp;<span style="color:#39d353">$58,240.00 +1.20%</span></span>
-    <span class="ticker-item">ETHUSDT &nbsp;<span style="color:#dc2626">$2,310.50 -0.38%</span></span>
-  </div>
-</div>
-
-<!-- LOGIN -->
-<div id="loginView">
-  <div class="login-card">
-    <div class="login-icon"><i class="ti ti-crown"></i></div>
-    <div class="login-title">VIP Login</div>
-    <div class="login-sub">hashsalman.com/client</div>
+<div id="loginPage">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="/logo.png" alt="HS" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-size:28px;font-weight:900;color:#fff\'>👑</span>'">
+    </div>
+    <h1>VIP Login</h1>
+    <div class="sub">hashsalman.com/client</div>
     <label class="form-label">MT5 Account Number</label>
-    <input class="form-input" id="cAcc" type="text" placeholder="450091152" autocomplete="username">
+    <input class="form-input" id="loginAcc" placeholder="Enter your MT5 account number" autocomplete="username">
     <label class="form-label">Password</label>
-    <input class="form-input" id="cPass" type="password" placeholder="••••••••" autocomplete="current-password">
-    <p class="err-msg" id="cErr">Wrong account or password.</p>
-    <button class="btn-vip" onclick="doLogin()">Sign in to VIP portal</button>
+    <input class="form-input" id="loginPass" placeholder="Enter your password" type="password" autocomplete="current-password">
+    <button class="btn-login" onclick="doLogin()">Sign in to VIP Portal</button>
+    <div class="login-err" id="loginErr"></div>
+    <div class="login-hint">Need help? WhatsApp: +92 302 3464786</div>
   </div>
 </div>
 
-<!-- APP -->
-<div id="appView">
+<div id="app">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('mybot',this)">📊 My Bot</button>
+    <button class="tab-btn" onclick="showTab('leaderboard',this)">🏆 Leaderboard</button>
+    <button class="tab-btn" onclick="showTab('settings',this)">⚙️ Settings</button>
+  </div>
 
-  <!-- BOT TAB -->
-  <div id="vtab-bot" class="app-content">
-
-    <div class="card card-blue">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div id="clientAvatar" style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#f59e0b,#d97706);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;border:2px solid #0a2463">A</div>
-          <div>
-            <div id="clientName" style="font-size:13px;font-weight:700">Client</div>
-            <div style="font-size:11px;color:#64748b">Trade Master HS • <span id="clientAcc">#---</span></div>
-          </div>
-        </div>
-        <div style="display:flex;gap:5px;align-items:center">
-          <span class="vip-badge">VIP</span>
-          <span class="status-badge" id="statusBadge">ACTIVE</span>
-        </div>
-      </div>
-
-      <div id="expiredBanner" class="expired-banner" style="display:none">
-        <h3>License Expired</h3>
-        <p>Contact Hash Salman to renew your subscription.<br>
-        <a href="https://wa.me/923023464786">WhatsApp: +923023464786</a></p>
-      </div>
-
-      <div class="stat-grid">
-        <div class="stat-card"><p class="stat-label">Daily P/L</p><p class="stat-val green" id="pDaily">+$0.00</p></div>
-        <div class="stat-card"><p class="stat-label">Balance</p><p class="stat-val blue" id="pBalance">$0.00</p></div>
-        <div class="stat-card"><p class="stat-label">Weekly P/L</p><p class="stat-val green" id="pWeekly">+$0.00</p></div>
-        <div class="stat-card"><p class="stat-label">Monthly P/L</p><p class="stat-val green" id="pMonthly">+$0.00</p></div>
-      </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <button class="btn-activate" id="activateBtn" onclick="activateBot()" style="display:none">▶ Activate Bot</button>
-        <button class="btn-disable" id="disableBtn" onclick="disableBot()">⏸ Disable Bot</button>
-      </div>
+  <div class="tab-page active" id="tab-mybot">
+    <div class="expired-banner" id="expiredBanner" style="display:none">
+      <h3>⚠️ License Expired</h3>
+      <p>Your license has expired. Please contact Hash Salman to renew.<br>
+      <a href="https://wa.me/923023464786" style="color:#1a56db;font-weight:700">📱 WhatsApp: +92 302 3464786</a></p>
     </div>
-
+    <div class="card gold-border">
+      <div class="client-info">
+        <div class="client-avatar" id="clientAvatar">A</div>
+        <div style="flex:1">
+          <div class="client-name" id="clientName">Loading...</div>
+          <div class="client-acc" id="clientAcc">Account #—</div>
+        </div>
+        <div>
+          <span class="badge-vip">VIP</span>
+          <span class="status-badge badge-active" id="statusBadge">ACTIVE</span>
+        </div>
+      </div>
+      <div class="pnl-grid">
+        <div class="pnl-box"><div class="pnl-label">Daily P/L</div><div class="pnl-value pnl-pos" id="pDaily">+$0.00</div></div>
+        <div class="pnl-box"><div class="pnl-label">Balance</div><div class="pnl-value pnl-blue" id="pBalance">$0.00</div></div>
+        <div class="pnl-box"><div class="pnl-label">Weekly P/L</div><div class="pnl-value pnl-pos" id="pWeekly">+$0.00</div></div>
+        <div class="pnl-box"><div class="pnl-label">Monthly P/L</div><div class="pnl-value pnl-pos" id="pMonthly">+$0.00</div></div>
+      </div>
+      <div class="bot-ctrl" id="botCtrl">
+        <button class="btn-activate" id="btnActivate" onclick="activateBot()" style="display:none">▶ Activate Bot</button>
+        <button class="btn-disable" id="btnDisable" onclick="disableBot()">⏸ Disable Bot</button>
+      </div>
+      <div class="pnl-note">✅ Profits are permanent — on/off does not reset your P/L history</div>
+    </div>
     <div class="card">
-      <div class="detail-row"><span class="detail-label">Bot version</span><span class="detail-val" id="dBot">—</span></div>
-      <div class="detail-row"><span class="detail-label">Expiry date</span><span class="detail-val" id="dExpiry">—</span></div>
-      <div class="detail-row"><span class="detail-label">Win trades</span><span class="detail-val" style="color:#16a34a" id="dWins">0</span></div>
-      <div class="detail-row"><span class="detail-label">Loss trades</span><span class="detail-val" style="color:#dc2626" id="dLosses">0</span></div>
-      <div class="detail-row"><span class="detail-label">Win rate</span><span class="detail-val" style="color:#1e90ff" id="dWinRate">0%</span></div>
-      <div class="detail-row" style="border:none"><span class="detail-label">Last update</span><span class="detail-val" style="font-size:11px;color:#94a3b8" id="dUpdated">—</span></div>
+      <div class="detail-row"><span class="detail-label">Bot Version</span><span class="detail-val" id="dBot">—</span></div>
+      <div class="detail-row"><span class="detail-label">Server</span><span class="detail-val" id="dServer">—</span></div>
+      <div class="detail-row"><span class="detail-label">License Expiry</span><span class="detail-val" style="color:var(--gold)" id="dExpiry">—</span></div>
+      <div class="detail-row"><span class="detail-label">Win Trades</span><span class="detail-val" style="color:var(--green)" id="dWins">0</span></div>
+      <div class="detail-row"><span class="detail-label">Loss Trades</span><span class="detail-val" style="color:var(--red)" id="dLosses">0</span></div>
+      <div class="detail-row"><span class="detail-label">Win Rate</span><span class="detail-val" style="color:var(--blue)" id="dWinRate">0%</span></div>
+      <div class="detail-row"><span class="detail-label">Last Update</span><span class="detail-val" style="font-size:10px;color:var(--muted)" id="dUpdated">—</span></div>
     </div>
-
   </div>
 
-  <!-- LEADERBOARD TAB -->
-  <div id="vtab-lb" class="app-content" style="display:none">
+  <div class="tab-page" id="tab-leaderboard">
     <div class="card" style="padding:0;overflow:hidden">
-      <div style="padding:12px 14px;border-bottom:1px solid;display:flex;justify-content:space-between;align-items:center" id="lbCardHeader">
-        <span style="font-size:13px;font-weight:700">Live leaderboard</span>
-        <div style="display:flex;align-items:center;gap:4px">
-          <div style="width:6px;height:6px;border-radius:50%;background:#39d353;animation:pulse 1.5s infinite"></div>
-          <span style="font-size:10px;color:#39d353;font-weight:700">LIVE</span>
+      <div style="background:linear-gradient(135deg,var(--navy),var(--blue));padding:14px;text-align:center">
+        <div style="color:#fff;font-size:15px;font-weight:800">🏆 Live Leaderboard</div>
+        <div style="display:inline-flex;align-items:center;gap:5px;color:#4ade80;font-size:10px;margin-top:4px;font-weight:700">
+          <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block;animation:pulse 1.5s infinite"></span>LIVE
         </div>
       </div>
-      <div class="lb-header">
-        <span>#</span><span>Trader</span><span style="text-align:right">Today</span>
-      </div>
-      <div class="lb-scroll">
-        <div class="lb-track" id="lbTrack"></div>
-      </div>
+      <div class="lb-thead"><div>#</div><div>TRADER</div><div style="text-align:right">TODAY</div></div>
+      <div id="lbList"><div style="padding:24px;text-align:center;color:var(--muted);font-size:12px">Loading traders...</div></div>
     </div>
+    <p style="text-align:center;font-size:10px;color:var(--muted)">Active traders only • Updated from MT5</p>
   </div>
 
-  <!-- SETTINGS TAB -->
-  <div id="vtab-set" class="app-content" style="display:none">
-    <div class="card settings-card">
-      <div class="settings-title">Email alerts</div>
-      <div class="settings-sub">Get notified when your bot status changes</div>
-      <label class="form-label">Your email address</label>
-      <input class="form-input" type="email" id="emailInput" placeholder="yourname@gmail.com" style="margin-bottom:10px">
-      <button onclick="saveEmail()" style="width:100%;padding:10px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;background:#0a2463;color:#fff">Save email</button>
-    </div>
-
-    <div class="card settings-card">
-      <div class="settings-title">Choose theme</div>
-      <div class="settings-sub">Select your preferred look</div>
-      <div class="theme-grid">
-        <div class="theme-opt selected-light" id="opt-light" onclick="setTheme('light')">
-          <div class="theme-dot" style="background:#0a2463;border:2px solid #39d353"></div>
-          <div class="theme-name" style="color:#0a2463">Light Blue</div>
-          <div style="font-size:10px;color:#64748b;margin-top:2px" id="light-label">Active</div>
-        </div>
-        <div class="theme-opt" id="opt-dark" onclick="setTheme('dark')">
-          <div class="theme-dot" style="background:#080b18;border:2px solid #f59e0b"></div>
-          <div class="theme-name" style="color:#94a3b8">Dark Gold</div>
-          <div style="font-size:10px;color:#64748b;margin-top:2px" id="dark-label">Tap to switch</div>
-        </div>
+  <div class="tab-page" id="tab-settings">
+    <div class="card">
+      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:4px">📧 Email Notifications</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Get notified when bot status changes</div>
+      <div class="email-row">
+        <input class="email-input" id="emailInput" type="email" placeholder="your@email.com">
+        <button class="btn-save-email" onclick="saveEmail()">Save</button>
       </div>
     </div>
-
-    <div class="card settings-card">
-      <button class="btn-logout" onclick="doLogout()">Sign out</button>
+    <div class="card">
+      <div class="detail-row"><span class="detail-label">Account #</span><span class="detail-val" id="sAccount">—</span></div>
+      <div class="detail-row"><span class="detail-label">Server</span><span class="detail-val" id="sServer">—</span></div>
+      <div class="detail-row"><span class="detail-label">License Expiry</span><span class="detail-val" style="color:var(--gold)" id="sExpiry">—</span></div>
+      <div class="detail-row"><span class="detail-label">Status</span><span class="detail-val" id="sStatus">—</span></div>
+    </div>
+    <div class="wa-card">
+      <h3>Need Help or Renewal?</h3>
+      <p>Contact Hash Salman on WhatsApp</p>
+      <a href="https://wa.me/923023464786" class="btn-wa">📱 WhatsApp: +92 302 3464786</a>
+    </div>
+    <div class="card" style="text-align:center">
+      <button class="btn-signout" onclick="doLogout()">Sign Out</button>
     </div>
   </div>
-
-  <!-- NAVBAR -->
-  <div class="navbar">
-    <button class="nav-item active" id="vnav-bot" onclick="vTab('bot')">
-      <i class="ti ti-robot"></i><span>My Bot</span>
-    </button>
-    <button class="nav-item" id="vnav-lb" onclick="vTab('lb')">
-      <i class="ti ti-trophy"></i><span>Leaderboard</span>
-    </button>
-    <button class="nav-item" id="vnav-set" onclick="vTab('set')">
-      <i class="ti ti-settings"></i><span>Settings</span>
-    </button>
-  </div>
-
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-var TOKEN=localStorage.getItem('hl_client_tok')||'';
-var currentTheme=localStorage.getItem('hl_theme')||'light';
-var lbBuilt=false;
-
-var traders=[
-  {n:'Irfan',av:'IR',c:'#7c3aed',d:92.40},
-  {n:'PAVAN',av:'PA',c:'#059669',d:76.30},
-  {n:'Furqan',av:'FU',c:'#dc2626',d:71.50},
-  {n:'Hash Salman 1',av:'H1',c:'#1e90ff',d:63.80},
-  {n:'Bilal',av:'BI',c:'#39d353',d:52.10},
-  {n:'Hash Salman XM',av:'HX',c:'#0891b2',d:58.40},
-  {n:'Zain',av:'ZA',c:'#d97706',d:44.20},
-  {n:'Usman',av:'US',c:'#6366f1',d:48.75},
+var TOKEN=localStorage.getItem('hs_client_tok')||'';
+var FAKE_USERS=[
+  {name:'Furqan',ini:'FU',color:'#8b5cf6',base:52,mult:1.4},
+  {name:'Irfan',ini:'IR',color:'#ef4444',base:68,mult:1.8},
+  {name:'Hash Salman',ini:'HS',color:'#1a56db',base:61,mult:1.6},
+  {name:'Owner 2',ini:'O2',color:'#f59e0b',base:44,mult:1.2},
 ];
-
-applyTheme(currentTheme);
 if(TOKEN){showApp();loadBot();}
 
-function applyTheme(t){
-  document.body.className=t;
-  var btn=document.querySelector('.btn-theme');
-  if(btn) btn.textContent=t==='light'?'🌙 Dark':'☀️ Light';
-  var lh=document.getElementById('lbCardHeader');
-  if(lh) lh.style.borderColor=t==='light'?'#e2e8f0':'#1e2440';
+function doLogin(){
+  var acc=document.getElementById('loginAcc').value.trim();
+  var pass=document.getElementById('loginPass').value;
+  var errEl=document.getElementById('loginErr');
+  errEl.textContent='';
+  if(!acc||!pass){errEl.textContent='Account number aur password daalo!';return;}
+  fetch('/api/client/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:acc,password:pass})})
+  .then(function(r){return r.json();}).then(function(d){
+    if(d.token){TOKEN=d.token;localStorage.setItem('hs_client_tok',TOKEN);showApp();loadBot();}
+    else errEl.textContent=d.error||'Login failed. Check credentials.';
+  }).catch(function(){errEl.textContent='Server error. Try again.';});
 }
 
-function toggleTheme(){setTheme(currentTheme==='light'?'dark':'light');}
+function showApp(){
+  document.getElementById('loginPage').style.display='none';
+  document.getElementById('app').style.display='block';
+  startTicker();loadLeaderboard();
+}
 
-function setTheme(t){
-  currentTheme=t;
-  localStorage.setItem('hl_theme',t);
-  applyTheme(t);
-  var ol=document.getElementById('opt-light'),od=document.getElementById('opt-dark');
-  var ll=document.getElementById('light-label'),dl=document.getElementById('dark-label');
-  if(t==='light'){
-    ol.className='theme-opt selected-light';od.className='theme-opt';
-    ll.textContent='Active';dl.textContent='Tap to switch';
-  } else {
-    od.className='theme-opt selected-dark';ol.className='theme-opt';
-    dl.textContent='Active';ll.textContent='Tap to switch';
-  }
+function doLogout(){
+  TOKEN='';localStorage.removeItem('hs_client_tok');location.reload();
 }
 
 function api(url,opts){
@@ -367,185 +263,142 @@ function api(url,opts){
   return fetch(url,opts).then(function(r){return r.json();});
 }
 
-function doLogin(){
-  var acc=document.getElementById('cAcc').value.trim();
-  var pass=document.getElementById('cPass').value;
-  var err=document.getElementById('cErr');
-  if(!acc||!pass){err.style.display='block';err.textContent='Please enter account and password.';return;}
-  fetch('/api/client/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:acc,password:pass})})
-  .then(function(r){return r.json();}).then(function(d){
-    if(d.token){
-      TOKEN=d.token;localStorage.setItem('hl_client_tok',TOKEN);
-      err.style.display='none';showApp();loadBot();
-    } else {err.style.display='block';err.textContent=d.error||'Wrong credentials.';}
-  }).catch(function(){err.style.display='block';err.textContent='Server error. Try again.';});
+function showTab(name,btn){
+  document.querySelectorAll('.tab-page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+  if(name==='leaderboard')loadLeaderboard();
 }
 
-function showApp(){
-  document.getElementById('loginView').style.display='none';
-  document.getElementById('appView').style.display='block';
-}
-
-function doLogout(){
-  TOKEN='';localStorage.removeItem('hl_client_tok');
-  document.getElementById('appView').style.display='none';
-  document.getElementById('loginView').style.display='block';
-  document.getElementById('cAcc').value='';document.getElementById('cPass').value='';
-  vTab('bot');
-}
-
-function fmtPnl(v){
-  v=parseFloat(v)||0;
-  return(v>=0?'+$':'-$')+Math.abs(v).toFixed(2);
-}
-
-function setPnlColor(el,v){
-  v=parseFloat(v)||0;
-  el.className='stat-val '+(v>0?'green':v<0?'red':'blue');
-}
+function fmtPnl(v){v=parseFloat(v)||0;return(v>=0?'+$':'-$')+Math.abs(v).toFixed(2);}
+function setPnlClass(el,v){el.className='pnl-value '+(v>=0?'pnl-pos':'pnl-neg');}
 
 function loadBot(){
   api('/api/client/bot').then(function(b){
     if(b.error){doLogout();return;}
     var name=b.name||'Client';
-    document.getElementById('clientAvatar').textContent=name[0].toUpperCase();
+    var initials=name.split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
+    document.getElementById('clientAvatar').textContent=initials;
     document.getElementById('clientName').textContent=name;
-    document.getElementById('clientAcc').textContent='#'+b.account;
-    document.getElementById('dExpiry').textContent=b.expiry||'—';
-    if(b.clientEmail) document.getElementById('emailInput').value=b.clientEmail;
-
+    document.getElementById('clientAcc').textContent='Account #'+b.account;
+    document.getElementById('sAccount').textContent=b.account;
+    document.getElementById('sServer').textContent=b.server||'—';
+    document.getElementById('sExpiry').textContent=b.expiry||'—';
+    document.getElementById('sStatus').textContent=b.status||'—';
+    if(b.clientEmail)document.getElementById('emailInput').value=b.clientEmail;
     var badge=document.getElementById('statusBadge');
     badge.textContent=b.status;
-    badge.className='status-badge '+b.status;
-
+    badge.className='status-badge '+(b.status==='ACTIVE'?'badge-active':b.status==='DISABLED'?'badge-disabled':'badge-expired');
+    document.getElementById('expiredBanner').style.display=b.status==='EXPIRED'?'block':'none';
+    var isActive=b.status==='ACTIVE';
     var isExpired=b.status==='EXPIRED';
-    document.getElementById('expiredBanner').style.display=isExpired?'block':'none';
-
+    document.getElementById('btnActivate').style.display=(!isActive&&!isExpired)?'block':'none';
+    document.getElementById('btnDisable').style.display=isActive?'block':'none';
+    document.getElementById('botCtrl').style.display=isExpired?'none':'grid';
     var s=b.stats||{};
-    var dEl=document.getElementById('pDaily');dEl.textContent=fmtPnl(s.daily);setPnlColor(dEl,s.daily);
-    var wEl=document.getElementById('pWeekly');wEl.textContent=fmtPnl(s.weekly);setPnlColor(wEl,s.weekly);
-    var mEl=document.getElementById('pMonthly');mEl.textContent=fmtPnl(s.monthly);setPnlColor(mEl,s.monthly);
+    var dEl=document.getElementById('pDaily');dEl.textContent=fmtPnl(s.daily);setPnlClass(dEl,s.daily);
+    var wEl=document.getElementById('pWeekly');wEl.textContent=fmtPnl(s.weekly);setPnlClass(wEl,s.weekly);
+    var mEl=document.getElementById('pMonthly');mEl.textContent=fmtPnl(s.monthly);setPnlClass(mEl,s.monthly);
     document.getElementById('pBalance').textContent='$'+(parseFloat(s.balance)||0).toFixed(2);
-
     var wins=parseInt(s.wins)||0,losses=parseInt(s.losses)||0;
     document.getElementById('dWins').textContent=wins;
     document.getElementById('dLosses').textContent=losses;
-    document.getElementById('dWinRate').textContent=wins+losses>0?Math.round(wins/(wins+losses)*100)+'%':'0%';
+    document.getElementById('dWinRate').textContent=(wins+losses>0?Math.round(wins/(wins+losses)*100):0)+'%';
     document.getElementById('dBot').textContent=s.bot||'—';
+    document.getElementById('dServer').textContent=b.server||'—';
+    document.getElementById('dExpiry').textContent=b.expiry||'—';
     document.getElementById('dUpdated').textContent=s.updatedAt?new Date(s.updatedAt).toLocaleString():'No data yet';
-
-    var isActive=b.status==='ACTIVE';
-    document.getElementById('activateBtn').style.display=isActive?'none':'block';
-    document.getElementById('disableBtn').style.display=isActive?'block':'none';
-    if(isExpired){
-      document.getElementById('activateBtn').style.display='none';
-      document.getElementById('disableBtn').style.display='none';
-    }
-
-    // Load real leaderboard data
-    fetch('/api/leaderboard').then(function(r){return r.json();}).then(function(real){
-      real.forEach(function(r){
-        var found=traders.find(function(t){return t.n===r.name;});
-        if(found) found.d=parseFloat(r.daily)||found.d;
-        else if(parseFloat(r.daily)>0) traders.push({n:r.name,av:r.name[0],c:'#0a2463',d:parseFloat(r.daily)});
-      });
-      traders.sort(function(a,b){return b.d-a.d;});
-      if(lbBuilt) rebuildLB();
-    }).catch(function(){});
-
-  }).catch(function(){showToast('Connection error','danger');});
+  }).catch(function(){showToast('Connection error','error');});
 }
 
 function activateBot(){
   api('/api/client/activate',{method:'POST'}).then(function(r){
-    if(r.ok){showToast('Bot activated!','success');loadBot();}
-    else showToast(r.error||'Failed','danger');
+    if(r.ok){showToast('✅ Bot activated!','success');loadBot();}
+    else showToast(r.error||'Failed','error');
   });
 }
 
 function disableBot(){
-  if(!confirm('Disable your bot?'))return;
+  if(!confirm('Bot disable karna chahte ho?'))return;
   api('/api/client/disable',{method:'POST'}).then(function(r){
-    if(r.ok){showToast('Bot disabled.','danger');loadBot();}
-    else showToast(r.error||'Failed','danger');
+    if(r.ok){showToast('⏸ Bot disabled.','info');loadBot();}
+    else showToast(r.error||'Failed','error');
   });
 }
 
 function saveEmail(){
   var email=document.getElementById('emailInput').value.trim();
-  if(!email||!email.includes('@')){showToast('Valid email required','danger');return;}
-  api('/api/client/email',{method:'POST',body:JSON.stringify({email})}).then(function(r){
-    if(r.ok) showToast('Email saved!','success');
-    else showToast(r.error||'Failed','danger');
+  if(!email){showToast('Email daalo!','error');return;}
+  api('/api/client/email',{method:'POST',body:JSON.stringify({email:email})}).then(function(r){
+    if(r.ok)showToast('📧 Email saved!','success');
+    else showToast(r.error||'Failed','error');
   });
 }
 
-function vTab(tab){
-  ['bot','lb','set'].forEach(function(t){
-    document.getElementById('vtab-'+t).style.display='none';
-    var nb=document.getElementById('vnav-'+t);
-    nb.classList.remove('active');
+function loadLeaderboard(){
+  fetch('/api/leaderboard').then(function(r){return r.json();}).then(function(realData){
+    var realAvg=0;
+    if(realData&&realData.length>0) realAvg=realData.reduce(function(s,b){return s+(parseFloat(b.daily)||0);},0)/realData.length;
+    var dir=realAvg>=0?1:-1;
+    var all=[];
+    if(realData&&realData.length>0) realData.forEach(function(b){var ini=b.name.split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);all.push({name:b.name,ini:ini,color:'#06b6d4',daily:parseFloat(b.daily)||0});});
+    FAKE_USERS.forEach(function(f){var d=dir*(f.base+realAvg*f.mult*0.3+(Math.random()-0.3)*8);all.push({name:f.name,ini:f.ini,color:f.color,daily:parseFloat(d.toFixed(2))});});
+    all.sort(function(a,b){return b.daily-a.daily;});
+    renderLeaderboard(all);
+  }).catch(function(){
+    renderLeaderboard([
+      {name:'Irfan',ini:'IR',color:'#ef4444',daily:92.4},
+      {name:'Hash Salman',ini:'HS',color:'#1a56db',daily:78.5},
+      {name:'Furqan',ini:'FU',color:'#8b5cf6',daily:65.3},
+      {name:'Owner 2',ini:'O2',color:'#f59e0b',daily:52.1},
+    ]);
   });
-  document.getElementById('vtab-'+tab).style.display='block';
-  document.getElementById('vnav-'+tab).classList.add('active');
-  if(tab==='lb'&&!lbBuilt) buildLB();
 }
 
-function buildLB(){
-  lbBuilt=true;
-  var track=document.getElementById('lbTrack');
-  track.innerHTML='';
-  var all=traders.concat(traders);
-  all.forEach(function(t,i){
-    var rank=(i%traders.length)+1;
-    var row=document.createElement('div');
-    row.className='lb-row';
-    var rk=document.createElement('span');rk.className='lb-rank';rk.textContent='#'+rank;
-    var nc=document.createElement('div');nc.className='lb-name-wrap';
-    var av=document.createElement('div');av.className='lb-avatar';
-    av.style.background=t.c;av.textContent=t.av;
-    var nm=document.createElement('span');nm.className='lb-name';nm.textContent=t.n;
-    nc.appendChild(av);nc.appendChild(nm);
-    var dc=document.createElement('div');dc.className='lb-daily';dc.textContent='+$'+t.d.toFixed(2);
-    row.appendChild(rk);row.appendChild(nc);row.appendChild(dc);
-    track.appendChild(row);
+function renderLeaderboard(data){
+  var medals=['🥇','🥈','🥉'];
+  var html='';
+  data.forEach(function(t,i){
+    var rk=i<3?medals[i]:'<span style="color:var(--muted);font-size:11px">#'+(i+1)+'</span>';
+    var pos=t.daily>=0;
+    var pnl=(pos?'+$':'-$')+Math.abs(t.daily).toFixed(2);
+    html+='<div class="lb-row"><div class="lb-rank">'+rk+'</div><div class="lb-info"><div class="lb-av" style="background:'+t.color+'">'+t.ini+'</div><div class="lb-name">'+t.name+'</div></div><div class="lb-pnl '+(pos?'pnl-pos':'pnl-neg')+'">'+pnl+'</div></div>';
   });
-  var pos=0,paused=false,rowH=48,totalH=traders.length*rowH;
-  track.addEventListener('mouseenter',function(){paused=true;});
-  track.addEventListener('mouseleave',function(){paused=false;});
-  track.addEventListener('touchstart',function(){paused=true;});
-  track.addEventListener('touchend',function(){paused=false;});
-  (function anim(){if(!paused){pos+=0.5;if(pos>=totalH)pos=0;track.style.transform='translateY(-'+pos+'px)';}requestAnimationFrame(anim);})();
+  document.getElementById('lbList').innerHTML=html||'<div style="padding:24px;text-align:center;color:var(--muted);font-size:12px">No active traders yet</div>';
 }
 
-function rebuildLB(){
-  lbBuilt=false;
-  document.getElementById('lbTrack').innerHTML='';
-  buildLB();
+var fp={xau:2647.30,btc:58240,eth:2311.69,eur:1.08420,gbp:1.25640,bnb:580};
+function buildTicker(items){
+  var h='';
+  items.forEach(function(p){var pos=p.chg>=0;h+='<span class="t-item"><span class="ts">'+p.label+'</span><span class="tp">'+p.price+'</span><span class="'+(pos?'tu':'td')+'">'+(pos?'+':'')+p.chg.toFixed(2)+'%</span></span>';});
+  var el=document.getElementById('tickerInner');if(el)el.innerHTML=h+h;
+}
+function updateTicker(){
+  fp.xau+=(Math.random()-.5)*.5;fp.btc+=(Math.random()-.5)*50;fp.eth+=(Math.random()-.5)*1.5;fp.eur+=(Math.random()-.5)*.0003;fp.gbp+=(Math.random()-.5)*.0003;fp.bnb+=(Math.random()-.5)*1;
+  buildTicker([{label:'XAUUSD',price:fp.xau.toFixed(2),chg:0.42},{label:'BTC/USDT',price:fp.btc.toFixed(0),chg:1.20},{label:'ETH/USDT',price:fp.eth.toFixed(2),chg:-0.07},{label:'EUR/USD',price:fp.eur.toFixed(5),chg:0.03},{label:'GBP/USD',price:fp.gbp.toFixed(5),chg:-0.05},{label:'BNB/USDT',price:fp.bnb.toFixed(2),chg:0.85}]);
+}
+function startTicker(){
+  updateTicker();
+  fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin&vs_currencies=usd&include_24hr_change=true').then(function(r){return r.json();}).then(function(d){
+    buildTicker([{label:'XAUUSD',price:fp.xau.toFixed(2),chg:0.42},{label:'BTC/USDT',price:d.bitcoin.usd.toFixed(0),chg:d.bitcoin.usd_24h_change||0},{label:'ETH/USDT',price:d.ethereum.usd.toFixed(2),chg:d.ethereum.usd_24h_change||0},{label:'BNB/USDT',price:d.binancecoin.usd.toFixed(2),chg:d.binancecoin.usd_24h_change||0},{label:'EUR/USD',price:fp.eur.toFixed(5),chg:0.03},{label:'GBP/USD',price:fp.gbp.toFixed(5),chg:-0.05}]);
+  }).catch(updateTicker);
+  setInterval(updateTicker,4000);
+  setInterval(function(){
+    fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin&vs_currencies=usd&include_24hr_change=true').then(function(r){return r.json();}).then(function(d){
+      buildTicker([{label:'XAUUSD',price:fp.xau.toFixed(2),chg:0.42},{label:'BTC/USDT',price:d.bitcoin.usd.toFixed(0),chg:d.bitcoin.usd_24h_change||0},{label:'ETH/USDT',price:d.ethereum.usd.toFixed(2),chg:d.ethereum.usd_24h_change||0},{label:'BNB/USDT',price:d.binancecoin.usd.toFixed(2),chg:d.binancecoin.usd_24h_change||0},{label:'EUR/USD',price:fp.eur.toFixed(5),chg:0.03},{label:'GBP/USD',price:fp.gbp.toFixed(5),chg:-0.05}]);
+    }).catch(updateTicker);
+  },30000);
 }
 
 function showToast(msg,type){
   var t=document.getElementById('toast');
-  t.textContent=msg;t.className='toast '+type;t.style.display='block';
+  t.textContent=msg;t.className='toast toast-'+(type||'info');t.style.display='block';
   setTimeout(function(){t.style.display='none';},3000);
 }
 
-// Ticker update
-setInterval(function(){
-  [{id:'t1',name:'XAUUSD',base:2647,range:5},{id:'t2',name:'BTCUSDT',base:58240,range:200},{id:'t3',name:'ETHUSDT',base:2310,range:15}].forEach(function(p){
-    var ch=(Math.random()*p.range*2-p.range);
-    var pr=(p.base+ch).toFixed(2);
-    var pct=(ch/p.base*100).toFixed(2);
-    var el=document.getElementById(p.id);
-    if(el) el.innerHTML=p.name+'&nbsp;&nbsp;<span style="color:'+(ch>=0?'#39d353':'#dc2626')+'">'+(ch>=0?'+':'')+pct+'% $'+pr+'</span>';
-  });
-},3000);
-
-setInterval(loadBot,30000);
-
-document.addEventListener('keydown',function(e){
-  if(e.key==='Enter'&&document.getElementById('loginView').style.display!=='none')doLogin();
-});
+setInterval(function(){if(TOKEN){loadBot();loadLeaderboard();}},30000);
+document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.getElementById('loginPage').style.display!=='none')doLogin();});
 </script>
 </body>
 </html>
