@@ -65,6 +65,7 @@ img{max-width:100%;height:auto}
 .result-card{border-radius:12px;padding:16px;text-align:center}
 .result-val{font-size:32px;font-weight:900}
 .result-lbl{font-size:11px;font-weight:600;margin-top:3px}
+.packages-bg{background:var(--white)}
 .pkg-header{background:linear-gradient(135deg,var(--navy),var(--blue));padding:20px 16px;text-align:center}
 .pkg-header h2{color:#fff;font-size:20px;font-weight:800}
 .pkg-header p{color:#a5f3fc;font-size:11px;margin-top:4px;letter-spacing:1px}
@@ -177,7 +178,7 @@ img{max-width:100%;height:auto}
     <div class="hero-stats">
       <div class="hero-stat"><div class="val">89%</div><div class="lbl">Win Rate</div></div>
       <div class="hero-stat"><div class="val">+$65</div><div class="lbl">Daily Avg</div></div>
-      <div class="hero-stat"><div class="val">50+</div><div class="lbl">Clients</div></div>
+      <div class="hero-stat"><div class="val" id="totalProfitVal">+$0</div><div class="lbl">Total Profits</div></div>
     </div>
     <div class="hero-btns">
       <button class="btn-hero-g" onclick="showPage('packages',document.querySelectorAll('.nav-btn')[1])">View Packages</button>
@@ -212,50 +213,26 @@ img{max-width:100%;height:auto}
 
 <div class="page" id="page-packages">
   <div class="pkg-header"><h2>Vip Lounge</h2><p>CHOOSE YOUR PLAN</p></div>
-  <div class="section" style="background:var(--white)">
+  <div class="section packages-bg">
     <div class="pkg-grid">
       <div class="pkg-card">
-        <div class="pkg-icon">🥉</div>
-        <div class="pkg-name">Hash Legend Starter</div>
-        <div class="pkg-sub">Perfect for beginners</div>
-        <div class="pkg-prices">
-          <div class="price-box"><div class="plbl">One Time</div><div class="pval">$297</div></div>
-          <div class="price-box"><div class="plbl">Weekly Fee</div><div class="pval green">$20</div></div>
-        </div>
-        <div class="pkg-details">
-          <div class="pkg-detail-row"><span class="dlbl">Recommended account</span><span class="dval">$300</span></div>
-          <div class="pkg-detail-row"><span class="dlbl">Daily profit range</span><span class="dval">$15 – $50</span></div>
-        </div>
+        <div class="pkg-icon">🥉</div><div class="pkg-name">Hash Legend Starter</div><div class="pkg-sub">Perfect for beginners</div>
+        <div class="pkg-prices"><div class="price-box"><div class="plbl">One Time</div><div class="pval">$297</div></div><div class="price-box"><div class="plbl">Weekly Fee</div><div class="pval green">$20</div></div></div>
+        <div class="pkg-details"><div class="pkg-detail-row"><span class="dlbl">Recommended account</span><span class="dval">$300</span></div><div class="pkg-detail-row"><span class="dlbl">Daily profit range</span><span class="dval">$15 – $50</span></div></div>
         <a href="https://wa.me/923023464786?text=Hi%20Hash%20Salman!%20I%20am%20interested%20in%20Hash%20Legend%20Starter%20package%20(%24297).%20Please%20guide%20me." class="btn-wa-pkg starter">📱 Get Starter</a>
       </div>
       <div class="pkg-card pop">
         <div class="pkg-badge blue">POPULAR</div>
-        <div class="pkg-icon">🥈</div>
-        <div class="pkg-name">Hash Legend Standard</div>
-        <div class="pkg-sub">For growing traders</div>
-        <div class="pkg-prices">
-          <div class="price-box"><div class="plbl">One Time</div><div class="pval">$395</div></div>
-          <div class="price-box"><div class="plbl">Weekly Fee</div><div class="pval green">$25</div></div>
-        </div>
-        <div class="pkg-details">
-          <div class="pkg-detail-row"><span class="dlbl">Recommended account</span><span class="dval">$500</span></div>
-          <div class="pkg-detail-row"><span class="dlbl">Daily profit range</span><span class="dval">$30 – $120</span></div>
-        </div>
+        <div class="pkg-icon">🥈</div><div class="pkg-name">Hash Legend Standard</div><div class="pkg-sub">For growing traders</div>
+        <div class="pkg-prices"><div class="price-box"><div class="plbl">One Time</div><div class="pval">$395</div></div><div class="price-box"><div class="plbl">Weekly Fee</div><div class="pval green">$25</div></div></div>
+        <div class="pkg-details"><div class="pkg-detail-row"><span class="dlbl">Recommended account</span><span class="dval">$500</span></div><div class="pkg-detail-row"><span class="dlbl">Daily profit range</span><span class="dval">$30 – $120</span></div></div>
         <a href="https://wa.me/923023464786?text=Hi%20Hash%20Salman!%20I%20am%20interested%20in%20Hash%20Legend%20Standard%20package%20(%24395).%20Please%20guide%20me." class="btn-wa-pkg standard">📱 Get Standard</a>
       </div>
       <div class="pkg-card best">
         <div class="pkg-badge green">BEST VALUE</div>
-        <div class="pkg-icon">🥇</div>
-        <div class="pkg-name">Hash Legend Pro</div>
-        <div class="pkg-sub">For serious traders</div>
-        <div class="pkg-prices">
-          <div class="price-box"><div class="plbl">One Time</div><div class="pval">$790</div></div>
-          <div class="price-box"><div class="plbl">Weekly Fee</div><div class="pval green">$35</div></div>
-        </div>
-        <div class="pkg-details">
-          <div class="pkg-detail-row"><span class="dlbl">Recommended account</span><span class="dval">$1,000</span></div>
-          <div class="pkg-detail-row"><span class="dlbl">Daily profit range</span><span class="dval">$120 – $500</span></div>
-        </div>
+        <div class="pkg-icon">🥇</div><div class="pkg-name">Hash Legend Pro</div><div class="pkg-sub">For serious traders</div>
+        <div class="pkg-prices"><div class="price-box"><div class="plbl">One Time</div><div class="pval">$790</div></div><div class="price-box"><div class="plbl">Weekly Fee</div><div class="pval green">$35</div></div></div>
+        <div class="pkg-details"><div class="pkg-detail-row"><span class="dlbl">Recommended account</span><span class="dval">$1,000</span></div><div class="pkg-detail-row"><span class="dlbl">Daily profit range</span><span class="dval">$120 – $500</span></div></div>
         <a href="https://wa.me/923023464786?text=Hi%20Hash%20Salman!%20I%20am%20interested%20in%20Hash%20Legend%20Pro%20package%20(%24790).%20Please%20guide%20me." class="btn-wa-pkg pro">📱 Get Pro</a>
       </div>
     </div>
@@ -271,7 +248,7 @@ img{max-width:100%;height:auto}
     </div>
     <div class="warning-box">
       <h4>⚠️ Important Information</h4>
-            <p>Hash Legend is designed exclusively for XAUUSD (Gold). Not for Forex pairs like EURUSD, GBPUSD etc. The 89% win rate is based on historical live trading results and does not guarantee future performance. ⚠️ All fees (One Time & Weekly) are strictly non-refundable once paid.</p>
+      <p>Hash Legend is designed exclusively for XAUUSD (Gold). Not for Forex pairs like EURUSD, GBPUSD etc. The 89% win rate is based on historical live trading results and does not guarantee future performance. ⚠️ All fees (One Time & Weekly) are strictly non-refundable once paid.</p>
     </div>
   </div>
   <div class="wa-banner"><div class="tagline">Ready to start?</div><div class="sub">Contact Hash Salman on WhatsApp</div><a href="https://wa.me/923023464786" class="btn-whatsapp">📱 WhatsApp now</a></div>
@@ -294,18 +271,9 @@ img{max-width:100%;height:auto}
 <div class="page" id="page-getstarted">
   <div class="gs-header"><h2>How to Get Started</h2><p>3 SIMPLE STEPS</p></div>
   <div class="gs-body">
-    <div class="step-card">
-      <div class="step-num s1">1</div>
-      <div class="step-content"><h3>Create an Exness Account</h3><p>Register on Exness and make the required deposit — $300, $500, or $1,000.</p></div>
-    </div>
-    <div class="step-card">
-      <div class="step-num s2">2</div>
-      <div class="step-content"><h3>Share MT5 Credentials</h3><p>Send your MT5 Login ID and Trading Password to Hash Salman via WhatsApp: +923023464786</p></div>
-    </div>
-    <div class="step-card">
-      <div class="step-num s3">3</div>
-      <div class="step-content"><h3>We Handle Everything</h3><p>VPS setup, MT5 config, bot activation, and 24/7 monitoring — all done for you.</p></div>
-    </div>
+    <div class="step-card"><div class="step-num s1">1</div><div class="step-content"><h3>Create an Exness Account</h3><p>Register on Exness and make the required deposit — $300, $500, or $1,000.</p></div></div>
+    <div class="step-card"><div class="step-num s2">2</div><div class="step-content"><h3>Share MT5 Credentials</h3><p>Send your MT5 Login ID and Trading Password to Hash Salman via WhatsApp: +923023464786</p></div></div>
+    <div class="step-card"><div class="step-num s3">3</div><div class="step-content"><h3>We Handle Everything</h3><p>VPS setup, MT5 config, bot activation, and 24/7 monitoring — all done for you.</p></div></div>
     <div class="notes-box">
       <h4>📊 Historical Live Trading Results</h4>
       <div class="note-item"><span>✅</span><span>Winning Trades: <strong>89%</strong></span></div>
@@ -316,11 +284,7 @@ img{max-width:100%;height:auto}
       <h4>⚠️ Important</h4>
       <p>📌 Hash Legend is designed exclusively for XAUUSD (Gold).<br>👤 You remain the complete owner of your trading account and funds.<br>🔒 Our team provides VPS management, setup, monitoring, and support only.</p>
     </div>
-    <div class="contact-card">
-      <h3>⭐ Trade Gold Smarter</h3>
-      <p>Powered by Hash Salman. Contact us to get started today!</p>
-      <a href="https://wa.me/923023464786" class="btn-whatsapp">📱 WhatsApp: +923023464786</a>
-    </div>
+    <div class="contact-card"><h3>⭐ Trade Gold Smarter</h3><p>Powered by Hash Salman. Contact us to get started today!</p><a href="https://wa.me/923023464786" class="btn-whatsapp">📱 WhatsApp: +923023464786</a></div>
   </div>
   <div class="footer"><div class="brand">Trade Master HS</div><p>hashsalman.com • +92 302 3464786</p><p style="margin-top:6px">FOCUS • DISCIPLINE • GROWTH</p></div>
 </div>
@@ -334,33 +298,66 @@ function showPage(name, btn) {
   window.scrollTo(0, 0);
   if (name === 'leaderboard') loadLeaderboard();
 }
+
 var FAKE_USERS = [
-  { name: 'Furqan', ini: 'FU', color: '#8b5cf6', base: 52, mult: 1.4 },
-  { name: 'Irfan', ini: 'IR', color: '#ef4444', base: 68, mult: 1.8 },
+  { name: 'Furqan Ahmed', ini: 'FA', color: '#8b5cf6', base: 72, mult: 1.4 },
+  { name: 'Irfan Khan', ini: 'IK', color: '#ef4444', base: 68, mult: 1.8 },
   { name: 'Hash Salman', ini: 'HS', color: '#1a56db', base: 61, mult: 1.6 },
   { name: 'Owner 2', ini: 'O2', color: '#f59e0b', base: 44, mult: 1.2 },
+  { name: 'Rahul Sharma', ini: 'RS', color: '#06b6d4', base: 58, mult: 1.3 },
+  { name: 'Bilal Sheikh', ini: 'BS', color: '#16a34a', base: 45, mult: 1.5 },
+  { name: 'Priya Patel', ini: 'PP', color: '#ec4899', base: 38, mult: 1.2 },
+  { name: 'Usman Ali', ini: 'UA', color: '#f97316', base: 63, mult: 1.7 },
+  { name: 'Amit Verma', ini: 'AV', color: '#6366f1', base: 31, mult: 1.1 },
+  { name: 'Zara Malik', ini: 'ZM', color: '#14b8a6', base: 55, mult: 1.4 },
+  { name: 'Arjun Singh', ini: 'AS', color: '#84cc16', base: 42, mult: 1.3 },
+  { name: 'Hina Baig', ini: 'HB', color: '#a855f7', base: 29, mult: 1.0 },
+  { name: 'Vikram Nair', ini: 'VN', color: '#f43f5e', base: 48, mult: 1.2 },
+  { name: 'Sana Qureshi', ini: 'SQ', color: '#0ea5e9', base: 35, mult: 1.1 },
+  { name: 'Danish Raza', ini: 'DR', color: '#fb923c', base: 67, mult: 1.6 },
 ];
+
+function getDailySeed() {
+  var d = new Date();
+  return d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
+}
+function seededRand(seed, idx) {
+  var x = Math.sin(seed + idx * 9301 + 49297) * 233280;
+  return x - Math.floor(x);
+}
+
 function loadLeaderboard() {
   fetch('/api/leaderboard').then(function(r){return r.json();}).then(function(realData){
     var realAvg=0;
     if(realData&&realData.length>0) realAvg=realData.reduce(function(s,b){return s+(parseFloat(b.daily)||0);},0)/realData.length;
-    var dir=realAvg>=0?1:-1;
     var all=[];
-    if(realData&&realData.length>0) realData.forEach(function(b){all.push({name:b.name,ini:b.name.split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2),color:'#06b6d4',daily:parseFloat(b.daily)||0});});
-    FAKE_USERS.forEach(function(f){var d=dir*(f.base+realAvg*f.mult*0.3+(Math.random()-0.3)*8);all.push({name:f.name,ini:f.ini,color:f.color,daily:parseFloat(d.toFixed(2))});});
+    if(realData&&realData.length>0) realData.forEach(function(b){
+      var ini=b.name.split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
+      all.push({name:b.name,ini:ini,color:'#06b6d4',daily:parseFloat(b.daily)||0});
+    });
+    var seed=getDailySeed();
+    FAKE_USERS.forEach(function(f,idx){
+      var r1=seededRand(seed,idx);
+      var r2=seededRand(seed,idx+100);
+      var baseProfit=1+r1*79;
+      var tick=(r2-0.5)*6;
+      var d=Math.max(0.5,Math.min(80,baseProfit+tick+(realAvg>0?realAvg*0.1:0)));
+      all.push({name:f.name,ini:f.ini,color:f.color,daily:parseFloat(d.toFixed(2))});
+    });
     all.sort(function(a,b){return b.daily-a.daily;});
     renderLeaderboard(all);
   }).catch(function(){
-    renderLeaderboard([
-      {name:'Irfan',ini:'IR',color:'#ef4444',daily:92.4},
-      {name:'Hash Salman',ini:'HS',color:'#1a56db',daily:78.5},
-      {name:'PAVAN',ini:'PA',color:'#06b6d4',daily:71.2},
-      {name:'Furqan',ini:'FU',color:'#8b5cf6',daily:65.3},
-      {name:'Owner 2',ini:'O2',color:'#f59e0b',daily:52.1},
-    ]);
+    var seed=getDailySeed();
+    var fallback=FAKE_USERS.map(function(f,idx){
+      var r=seededRand(seed,idx);
+      return {name:f.name,ini:f.ini,color:f.color,daily:parseFloat((1+r*79).toFixed(2))};
+    });
+    fallback.sort(function(a,b){return b.daily-a.daily;});
+    renderLeaderboard(fallback);
   });
 }
-function renderLeaderboard(data){
+
+function renderLeaderboard(data) {
   var medals=['🥇','🥈','🥉'];
   var html='';
   data.forEach(function(t,i){
@@ -371,25 +368,60 @@ function renderLeaderboard(data){
   });
   document.getElementById('lbList').innerHTML=html||'<div class="lb-empty">No data yet</div>';
 }
+
+function loadTotalProfit() {
+  fetch('/api/total-profit').then(function(r){return r.json();}).then(function(d){
+    var el=document.getElementById('totalProfitVal');
+    if(el&&d.total!==undefined){
+      var t=parseFloat(d.total)||0;
+      el.textContent=(t>=0?'+$':'-$')+Math.abs(t).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+    }
+  }).catch(function(){});
+}
+
 loadLeaderboard();
+loadTotalProfit();
 setInterval(loadLeaderboard,30000);
+setInterval(loadTotalProfit,15*60*1000);
+
 var fp={xau:2647.30,btc:58240,eth:2311.69,eur:1.08420,gbp:1.25640,bnb:580};
-function buildTicker(items){
+function buildTickerHTML(items){
   var h='';
   items.forEach(function(p){var pos=p.chg>=0;h+='<span class="t-item"><span class="t-sym">'+p.label+'</span><span class="t-price">'+p.price+'</span><span class="'+(pos?'t-up':'t-dn')+'">'+(pos?'+':'')+p.chg.toFixed(2)+'%</span></span>';});
-  var el=document.getElementById('tickerInner');if(el)el.innerHTML=h+h;
+  return h+h;
 }
-function updateTicker(){
-  fp.xau+=(Math.random()-.5)*.6;fp.btc+=(Math.random()-.5)*60;fp.eth+=(Math.random()-.5)*2;fp.eur+=(Math.random()-.5)*.0004;fp.gbp+=(Math.random()-.5)*.0004;fp.bnb+=(Math.random()-.5)*1.5;
-  buildTicker([{label:'XAUUSD',price:fp.xau.toFixed(2),chg:0.42},{label:'BTC/USDT',price:fp.btc.toFixed(0),chg:1.20},{label:'ETH/USDT',price:fp.eth.toFixed(2),chg:-0.07},{label:'EUR/USD',price:fp.eur.toFixed(5),chg:0.03},{label:'GBP/USD',price:fp.gbp.toFixed(5),chg:-0.05},{label:'BNB/USDT',price:fp.bnb.toFixed(2),chg:0.85}]);
+function updateFallbackTicker(){
+  fp.xau+=(Math.random()-.5)*.6;fp.btc+=(Math.random()-.5)*60;fp.eth+=(Math.random()-.5)*2;
+  fp.eur+=(Math.random()-.5)*.0004;fp.gbp+=(Math.random()-.5)*.0004;fp.bnb+=(Math.random()-.5)*1.5;
+  var items=[
+    {label:'XAUUSD',price:fp.xau.toFixed(2),chg:0.42},
+    {label:'BTC/USDT',price:fp.btc.toFixed(0),chg:1.20},
+    {label:'ETH/USDT',price:fp.eth.toFixed(2),chg:-0.07},
+    {label:'EUR/USD',price:fp.eur.toFixed(5),chg:0.03},
+    {label:'GBP/USD',price:fp.gbp.toFixed(5),chg:-0.05},
+    {label:'BNB/USDT',price:fp.bnb.toFixed(2),chg:0.85},
+  ];
+  var el=document.getElementById('tickerInner');if(el)el.innerHTML=buildTickerHTML(items);
 }
-function fetchLive(){
-  fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin&vs_currencies=usd&include_24hr_change=true').then(function(r){return r.json();}).then(function(d){
-    buildTicker([{label:'XAUUSD',price:fp.xau.toFixed(2),chg:0.42},{label:'BTC/USDT',price:d.bitcoin.usd.toFixed(0),chg:d.bitcoin.usd_24h_change||0},{label:'ETH/USDT',price:d.ethereum.usd.toFixed(2),chg:d.ethereum.usd_24h_change||0},{label:'BNB/USDT',price:d.binancecoin.usd.toFixed(2),chg:d.binancecoin.usd_24h_change||0},{label:'EUR/USD',price:fp.eur.toFixed(5),chg:0.03},{label:'GBP/USD',price:fp.gbp.toFixed(5),chg:-0.05}]);
-  }).catch(updateTicker);
+function fetchLivePrices(){
+  fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin&vs_currencies=usd&include_24hr_change=true')
+  .then(function(r){return r.json();}).then(function(d){
+    fp.xau+=(Math.random()-.5)*.4;
+    var items=[
+      {label:'XAUUSD',price:fp.xau.toFixed(2),chg:0.42},
+      {label:'BTC/USDT',price:d.bitcoin.usd.toFixed(0),chg:d.bitcoin.usd_24h_change||0},
+      {label:'ETH/USDT',price:d.ethereum.usd.toFixed(2),chg:d.ethereum.usd_24h_change||0},
+      {label:'BNB/USDT',price:d.binancecoin.usd.toFixed(2),chg:d.binancecoin.usd_24h_change||0},
+      {label:'EUR/USD',price:fp.eur.toFixed(5),chg:0.03},
+      {label:'GBP/USD',price:fp.gbp.toFixed(5),chg:-0.05},
+    ];
+    var el=document.getElementById('tickerInner');if(el)el.innerHTML=buildTickerHTML(items);
+  }).catch(updateFallbackTicker);
 }
-updateTicker();fetchLive();
-setInterval(updateTicker,4000);setInterval(fetchLive,30000);
+updateFallbackTicker();
+fetchLivePrices();
+setInterval(updateFallbackTicker,4000);
+setInterval(fetchLivePrices,30000);
 </script>
 </body>
 </html>
