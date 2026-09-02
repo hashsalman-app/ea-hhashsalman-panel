@@ -3,276 +3,283 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hash Salman Admin</title>
+<title>Hash Salman Admin Panel</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
-body{background:#0a0d14;color:#ddd}
-#loginWrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
-.loginBox{background:#1a1f2e;border:2px solid #00d4aa;border-radius:16px;padding:36px;width:100%;max-width:380px;text-align:center}
-.loginBox h1{color:#00d4aa;font-size:20px;margin-bottom:4px}
-.loginBox p{color:#888;margin-bottom:20px;font-size:13px}
-.loginBox input{width:100%;padding:11px;background:#0a0d14;border:1px solid #333;border-radius:8px;color:#fff;font-size:14px;margin-bottom:10px;display:block}
-.loginBox input:focus{outline:none;border-color:#00d4aa}
-.btn-main{background:#00d4aa;color:#000;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;width:100%}
-.err{color:#ff6b6b;font-size:13px;margin-top:8px}
+:root{--navy:#0a2463;--blue:#1a56db;--blue2:#2563eb;--blue3:#dbeafe;--blue4:#eff6ff;--green:#16a34a;--green2:#22c55e;--green3:#dcfce7;--green4:#f0fdf4;--gold:#f59e0b;--red:#ef4444;--text:#1e293b;--muted:#64748b;--white:#fff;--border:#e2e8f0;--bg:#f8fbff}
+body{background:var(--bg);color:var(--text);min-height:100vh}
+#loginPage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,var(--navy),var(--blue))}
+.login-box{background:var(--white);border-radius:16px;padding:32px 24px;width:100%;max-width:360px;text-align:center}
+.login-logo{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--green));display:flex;align-items:center;justify-content:center;margin:0 auto 14px;border:3px solid var(--gold);overflow:hidden}
+.login-logo img{width:64px;height:64px;object-fit:contain;border-radius:50%}
+.login-box h1{color:var(--text);font-size:20px;font-weight:800;margin-bottom:4px}
+.login-box .sub{color:var(--blue);font-size:12px;margin-bottom:24px}
+.inp{width:100%;padding:11px 13px;border:1.5px solid var(--blue3);border-radius:8px;font-size:13px;margin-bottom:12px;background:var(--white);color:var(--text)}
+.inp:focus{outline:none;border-color:var(--blue)}
+.btn-login{width:100%;padding:13px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;border:none;background:linear-gradient(90deg,var(--navy),var(--blue));color:#fff}
+.login-err{color:var(--red);font-size:12px;margin-top:8px}
 #app{display:none}
-.topbar{background:#1a1f2e;border-bottom:2px solid #00d4aa;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.topbar h1{color:#00d4aa;font-size:15px;font-weight:700}
-.topbar-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.nav-btn{background:#2a3050;color:#aaa;border:none;padding:7px 14px;border-radius:8px;cursor:pointer;font-size:12px}
-.nav-btn.active{background:#00d4aa;color:#000;font-weight:700}
-.content{padding:14px;max-width:1200px;margin:0 auto}
-.hidden{display:none}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
-@media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}}
-.stat{background:#1a1f2e;border:1px solid #2a3050;border-radius:12px;padding:14px;text-align:center}
-.stat h3{color:#888;font-size:10px;text-transform:uppercase;margin-bottom:4px}
-.stat .num{font-size:22px;font-weight:700}
-.s1 .num{color:#00d4aa}.s2 .num{color:#2ecc71}.s3 .num{color:#e74c3c}.s4 .num{color:#f39c12}
-.card{background:#1a1f2e;border:1px solid #2a3050;border-radius:12px;padding:16px;margin-bottom:14px}
-.card h2{color:#fff;font-size:14px;margin-bottom:12px}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-@media(max-width:500px){.frow{grid-template-columns:1fr}}
-.frow label{display:block;color:#888;font-size:11px;margin-bottom:3px}
-.frow input,.frow select{width:100%;padding:8px 10px;background:#0a0d14;border:1px solid #333;border-radius:8px;color:#fff;font-size:13px}
-.frow input:focus{outline:none;border-color:#00d4aa}
-.frow-err{color:#e74c3c;font-size:12px;margin-top:4px}
-.master-section{background:#0d1500;border:2px solid #f59e0b;border-radius:12px;padding:16px;margin-bottom:14px}
-.master-section h2{color:#f59e0b;font-size:14px;margin-bottom:10px}
-.master-bots{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-@media(max-width:500px){.master-bots{grid-template-columns:1fr}}
-.master-bot-card{background:#0a0d14;border:1px solid #f59e0b;border-radius:10px;padding:12px;text-align:center}
-.master-bot-card p{color:#888;font-size:11px;margin-bottom:6px}
-.master-bot-card .acc{color:#f59e0b;font-size:14px;font-weight:700}
-.signal-btns{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
-.btn-close{background:#7f1d1d;color:#fca5a5;border:1px solid #ef4444;padding:10px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700}
-.btn-dis{background:#431407;color:#fdba74;border:1px solid #f97316;padding:10px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700}
-.btn-act{background:#052e16;color:#86efac;border:1px solid #22c55e;padding:10px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700}
-.tableWrap{background:#1a1f2e;border:1px solid #2a3050;border-radius:12px;overflow:hidden;margin-bottom:14px}
-.tableHead{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #2a3050}
-.tableHead h2{color:#fff;font-size:13px}
-input.search{background:#0a0d14;border:1px solid #333;border-radius:8px;padding:6px 10px;color:#fff;font-size:12px;width:150px}
-.table-scroll{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:700px}
-th{background:#0a0d14;color:#888;font-size:10px;text-transform:uppercase;padding:8px 12px;text-align:left}
-td{padding:9px 12px;border-bottom:1px solid #111;font-size:12px}
-tr:hover td{background:#1e2535}
-.ACTIVE{background:#0d3d2a;color:#2ecc71;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700}
-.DISABLED{background:#3d1515;color:#e74c3c;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700}
-.EXPIRED{background:#2a2a2a;color:#888;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700}
-.acts{display:flex;gap:4px;flex-wrap:wrap}
-.btn-sm{padding:4px 8px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:none}
-.btn-on{background:#0d3d2a;color:#2ecc71}
-.btn-off{background:#3d1515;color:#e74c3c}
-.btn-edit{background:#2a2010;color:#f39c12}
-.btn-del{background:#3d0000;color:#ff6b6b}
-.btn-detail{background:#1a2a4a;color:#60a5fa}
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;align-items:flex-start;justify-content:center;padding:30px 16px;overflow-y:auto}
-.overlay.show{display:flex}
-.modal{background:#1a1f2e;border:2px solid #2a3050;border-radius:16px;padding:22px;width:100%;max-width:460px}
-.modal h2{color:#fff;margin-bottom:14px;font-size:15px}
-.modal label{display:block;color:#888;font-size:12px;margin-bottom:3px;margin-top:10px}
-.modal input,.modal select{width:100%;padding:9px 12px;background:#0a0d14;border:1px solid #333;border-radius:8px;color:#fff;font-size:13px}
-.modal input:focus{outline:none;border-color:#00d4aa}
-.modal-btns{display:flex;gap:10px;margin-top:14px;justify-content:flex-end}
-.btn-cancel{background:#2a3050;color:#aaa;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:13px}
-.det-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.det-card{background:#0a0d14;border:1px solid #2a3050;border-radius:10px;padding:10px;text-align:center}
-.det-card h4{color:#888;font-size:10px;text-transform:uppercase;margin-bottom:4px}
-.det-card .val{font-size:16px;font-weight:700}
-.green{color:#2ecc71}.red{color:#e74c3c}.blue{color:#60a5fa}.yellow{color:#f39c12}
-.det-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #1a1f2e;font-size:13px}
-.det-row:last-child{border:none}
-.lbl{color:#888;font-size:12px}
-.log-item{padding:8px 14px;border-bottom:1px solid #111;font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px}
-.log-dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle}
-.cg{background:#2ecc71}.cr{background:#e74c3c}.cb{background:#3498db}.cy{background:#f39c12}.co{background:#f59e0b}
-.log-time{color:#666;font-size:10px}
-.divider{border:none;border-top:1px solid #2a3050;margin:10px 0}
-.btn-danger{background:#c0392b;color:#fff;border:none;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer}
-.btn-success{background:#27ae60;color:#fff;border:none;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer}
+.topbar{background:linear-gradient(135deg,var(--navy),var(--blue));padding:10px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.topbar-logo{display:flex;align-items:center;gap:10px}
+.logo-w{width:36px;height:36px;border-radius:50%;background:#fff;padding:2px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.logo-w img{width:32px;height:32px;object-fit:contain;border-radius:50%}
+.topbar h1{color:#fff;font-size:14px;font-weight:800}
+.topbar-right{display:flex;gap:8px;align-items:center}
+.btn-sm{padding:5px 12px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;border:none;color:#fff;background:rgba(255,255,255,.2)}
+.tabs{background:var(--white);display:flex;border-bottom:2px solid var(--border);overflow-x:auto}
+.tab-btn{padding:11px 18px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap}
+.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:700}
+.page{display:none;padding:16px;max-width:900px;margin:0 auto}
+.page.active{display:block}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+@media(min-width:600px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
+.stat-box{background:var(--white);border-radius:10px;padding:14px;text-align:center;border:1px solid var(--border)}
+.stat-box h3{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.stat-box .num{font-size:24px;font-weight:900}
+.c1 .num{color:var(--blue)}.c2 .num{color:var(--green)}.c3 .num{color:var(--red)}.c4 .num{color:var(--gold)}
+.card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px}
+.card h2{color:var(--text);font-size:14px;font-weight:700;margin-bottom:12px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:500px){.form-grid{grid-template-columns:1fr}}
+.form-inp{width:100%;padding:9px 11px;background:var(--blue4);border:1.5px solid var(--blue3);border-radius:7px;color:var(--text);font-size:12px;margin-bottom:6px}
+.form-inp:focus{outline:none;border-color:var(--blue)}
+.form-label{font-size:10px;font-weight:600;color:var(--muted);margin-bottom:2px;display:block}
+.btn-add{background:var(--green);color:#fff;border:none;padding:9px 18px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;margin-top:6px}
+.form-err{color:var(--red);font-size:11px;margin-top:4px}
+.search-bar{width:100%;padding:9px 13px;border:1.5px solid var(--blue3);border-radius:8px;font-size:12px;margin-bottom:12px;background:var(--blue4);color:var(--text)}
+.search-bar:focus{outline:none;border-color:var(--blue)}
+.bot-item{background:var(--blue4);border:1px solid var(--blue3);border-radius:10px;padding:12px;margin-bottom:8px}
+.bot-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px}
+.bot-info .bot-name{font-size:13px;font-weight:700;color:var(--text)}
+.bot-info .bot-acc{font-size:10px;color:var(--muted)}
+.badge-active{background:var(--green3);color:var(--green);padding:3px 9px;border-radius:20px;font-size:9px;font-weight:700;border:1px solid #86efac}
+.badge-disabled{background:#fee2e2;color:var(--red);padding:3px 9px;border-radius:20px;font-size:9px;font-weight:700;border:1px solid #fca5a5}
+.badge-expired{background:#f1f5f9;color:var(--muted);padding:3px 9px;border-radius:20px;font-size:9px;font-weight:700}
+.bot-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+@media(max-width:400px){.bot-stats{grid-template-columns:repeat(2,1fr)}}
+.bs{background:var(--white);border-radius:6px;padding:7px;text-align:center;border:1px solid var(--border)}
+.bs .bl{font-size:8px;color:var(--muted);text-transform:uppercase;margin-bottom:2px}
+.bs .bv{font-size:13px;font-weight:700}
+.bv-pos{color:var(--green)}.bv-neg{color:var(--red)}.bv-blue{color:var(--blue)}
+.bot-actions{display:flex;gap:6px;flex-wrap:wrap}
+.bx{padding:5px 10px;border-radius:5px;font-size:10px;font-weight:700;cursor:pointer;border:none}
+.bx-det{background:var(--blue4);color:var(--blue);border:1px solid var(--blue3)}
+.bx-edit{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
+.bx-act{background:var(--green3);color:var(--green);border:1px solid #86efac}
+.bx-dis{background:#fee2e2;color:var(--red);border:1px solid #fca5a5}
+.bx-del{background:#fee2e2;color:var(--red);border:1px solid #fca5a5}
+.no-bots{text-align:center;padding:32px;color:var(--muted);font-size:13px}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.show{display:flex}
+.modal{background:var(--white);border-radius:14px;padding:20px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.modal-head h3{color:var(--blue);font-size:15px;font-weight:700}
+.btn-modal-close{background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.detail-box{background:var(--blue4);border-radius:8px;padding:10px;text-align:center;border:1px solid var(--blue3);margin-bottom:6px}
+.detail-box .dl{font-size:8px;color:var(--muted);text-transform:uppercase;margin-bottom:3px}
+.detail-box .dv{font-size:16px;font-weight:800}
+.detail-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px}
+.detail-row:last-child{border:none}
+.dr-l{color:var(--muted)}.dr-v{font-weight:600;color:var(--text)}
+.master-box{background:var(--blue4);border:2px solid var(--gold);border-radius:10px;padding:14px;margin-bottom:12px}
+.master-box h3{color:var(--text);font-size:13px;font-weight:700;margin-bottom:10px}
+.master-slots{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.mslot{background:var(--white);border:1px solid var(--gold);border-radius:8px;padding:10px;text-align:center}
+.mslot .ml{font-size:9px;color:var(--muted);margin-bottom:2px}
+.mslot .mv{font-size:12px;font-weight:700;color:var(--blue)}
+.mslot .md{font-size:8px;color:var(--muted);margin-top:2px}
+.mslot .empty{font-size:11px;color:var(--muted)}
+.sig-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+@media(max-width:480px){.sig-grid{grid-template-columns:1fr}}
+.btn-sig{padding:10px 8px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;border:none;text-align:center}
+.btn-close-all{background:#fee2e2;color:var(--red);border:1px solid #fca5a5}
+.btn-dis-all{background:#fff7ed;color:#c2410c;border:1px solid #fed7aa}
+.btn-act-all{background:var(--green3);color:var(--green);border:1px solid #86efac}
+.log-item{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:11px}
+.log-item:last-child{border:none}
+.log-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-right:8px}
+.log-text{flex:1;color:var(--text)}
+.log-time{color:var(--muted);font-size:9px;white-space:nowrap;margin-left:8px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:10px;font-size:13px;font-weight:600;z-index:999;display:none;white-space:nowrap}
+.t-success{background:var(--green3);color:var(--green);border:1px solid #86efac}
+.t-error{background:#fee2e2;color:var(--red);border:1px solid #fca5a5}
+.t-info{background:var(--blue4);color:var(--blue);border:1px solid var(--blue3)}
 </style>
 </head>
 <body>
 
-<div id="loginWrap">
-  <div class="loginBox">
-    <h1>Hash Salman Admin</h1>
-    <p>Restricted access — admin only</p>
-    <input type="text" id="uname" placeholder="Username">
-    <input type="password" id="upass" placeholder="Password">
-    <button class="btn-main" onclick="doLogin()">Login</button>
-    <div class="err" id="loginErr"></div>
+<div id="loginPage">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="/logo.png" alt="HS" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-size:26px;font-weight:900;color:#fff\'>⚡</span>'">
+    </div>
+    <h1>Admin Panel</h1>
+    <div class="sub">Trade Master HS</div>
+    <input class="inp" id="ladmin" placeholder="Username" autocomplete="username">
+    <input class="inp" id="lpass" placeholder="Password" type="password" autocomplete="current-password">
+    <button class="btn-login" onclick="doLogin()">Sign In</button>
+    <div class="login-err" id="loginErr"></div>
   </div>
 </div>
 
 <div id="app">
   <div class="topbar">
-    <h1>⚡ Hash Salman Admin</h1>
+    <div class="topbar-logo">
+      <div class="logo-w">
+        <img src="/logo.png" alt="HS" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-weight:900;font-size:13px;color:#1a56db\'>HS</span>'">
+      </div>
+      <h1>⚡ Hash Salman Admin</h1>
+    </div>
     <div class="topbar-right">
-      <button class="nav-btn active" onclick="showTab('bots',this)">Bots</button>
-      <button class="nav-btn" onclick="showTab('master',this)">Master Control</button>
-      <button class="nav-btn" onclick="showTab('logs',this)">Logs</button>
-      <button class="btn-sm btn-off" onclick="doLogout()">Logout</button>
+      <a href="/" style="color:#a5f3fc;font-size:10px">🌐 Website</a>
+      <button class="btn-sm" onclick="doLogout()">Logout</button>
     </div>
   </div>
 
-  <div class="content">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('bots',this)">🤖 Bots</button>
+    <button class="tab-btn" onclick="showTab('master',this)">📡 Master Control</button>
+    <button class="tab-btn" onclick="showTab('logs',this)">📋 Logs</button>
+  </div>
 
-    <div id="tab-bots">
-      <div class="stats">
-        <div class="stat s1"><h3>Total</h3><div class="num" id="st-total">0</div></div>
-        <div class="stat s2"><h3>Active</h3><div class="num" id="st-active">0</div></div>
-        <div class="stat s3"><h3>Disabled</h3><div class="num" id="st-disabled">0</div></div>
-        <div class="stat s4"><h3>Expired</h3><div class="num" id="st-expired">0</div></div>
-      </div>
-
-      <div class="card">
-        <h2>➕ Add New Bot</h2>
-        <div class="frow">
-          <div><label>Client Name *</label><input id="f-name" placeholder="Ali Hassan"></div>
-          <div><label>MT5 Account *</label><input id="f-account" placeholder="429036798"></div>
-        </div>
-        <div class="frow">
-          <div><label>Server</label><input id="f-server" value="MT5Real18"></div>
-          <div><label>Expiry Date *</label><input type="date" id="f-expiry"></div>
-        </div>
-        <hr class="divider">
-        <p style="font-size:12px;color:#888;margin-bottom:8px">Client login: <span style="color:#00d4aa">Username = MT5 Account Number</span></p>
-        <div class="frow">
-          <div><label>Client Password *</label><input type="password" id="f-cpass" placeholder="Set password"></div>
-          <div><label>Notes</label><input id="f-notes" placeholder="Package, payment..."></div>
-        </div>
-        <button class="btn-main" style="width:auto;padding:9px 22px;margin-top:6px" onclick="addBot()">Add Bot</button>
-        <div class="frow-err" id="addErr"></div>
-      </div>
-
-      <div class="tableWrap">
-        <div class="tableHead">
-          <h2>All Bots</h2>
-          <input class="search" placeholder="Search..." oninput="filterBots(this.value)">
-        </div>
-        <div class="table-scroll">
-          <table>
-            <thead><tr><th>#</th><th>Name</th><th>Account</th><th>Expiry</th><th>Status</th><th>Last Check</th><th>Daily P/L</th><th>Actions</th></tr></thead>
-            <tbody id="botsTable"></tbody>
-          </table>
-        </div>
-      </div>
+  <div class="page active" id="tab-bots">
+    <div class="stats-grid">
+      <div class="stat-box c1"><h3>Total</h3><div class="num" id="sTot">0</div></div>
+      <div class="stat-box c2"><h3>Active</h3><div class="num" id="sAct">0</div></div>
+      <div class="stat-box c3"><h3>Disabled</h3><div class="num" id="sDis">0</div></div>
+      <div class="stat-box c4"><h3>Expired</h3><div class="num" id="sExp">0</div></div>
     </div>
-
-    <div id="tab-master" class="hidden">
-      <div class="master-section">
-        <h2>🏆 Master Bots (Max 2)</h2>
-        <p style="font-size:12px;color:#888;margin-bottom:12px">Jab ye bots trade close karein → sab clients ke trades 3 sec mein close ho jayein</p>
-        <div class="master-bots" id="masterBotsList">
-          <div class="master-bot-card"><p>Slot 1</p><div class="acc">Empty</div></div>
-          <div class="master-bot-card"><p>Slot 2</p><div class="acc">Empty</div></div>
-        </div>
-        <div class="frow" style="margin-bottom:8px">
-          <div><label>Bot Name</label><input id="mb-name" placeholder="Hash Legend 1"></div>
-          <div><label>MT5 Account *</label><input id="mb-account" placeholder="450091152"></div>
-        </div>
-        <button class="btn-main" style="width:auto;padding:9px 16px" onclick="addMasterBot()">Add Master Bot</button>
-        <div class="frow-err" id="mbErr" style="margin-top:6px"></div>
+    <div class="card">
+      <h2>➕ Add New Bot</h2>
+      <div class="form-grid">
+        <div><label class="form-label">Client Name *</label><input class="form-inp" id="fName" placeholder="Ali Hassan"></div>
+        <div><label class="form-label">MT5 Account # *</label><input class="form-inp" id="fAcc" placeholder="429036798"></div>
+        <div><label class="form-label">Server</label><input class="form-inp" id="fServer" placeholder="MT5Real18" value="MT5Real18"></div>
+        <div><label class="form-label">Expiry Date *</label><input class="form-inp" id="fExpiry" type="date"></div>
+        <div><label class="form-label">Client Password *</label><input class="form-inp" id="fPass" type="password" placeholder="Set login password"></div>
+        <div><label class="form-label">Client Email</label><input class="form-inp" id="fEmail" type="email" placeholder="client@email.com"></div>
       </div>
-
-      <div class="card">
-        <h2>📡 Signal Control — Sab Clients Ko</h2>
-        <p style="font-size:12px;color:#888;margin-bottom:12px">Yeh signals sab client bots ko 3 sec mein bheje jayein ge</p>
-        <div class="signal-btns">
-          <button class="btn-close" onclick="setSignal('CLOSE_NOW')">🔴 Close All Client Trades</button>
-          <button class="btn-dis" onclick="setSignal('DISABLED')">⏸ Disable All Bots</button>
-          <button class="btn-act" onclick="setSignal('ACTIVE')">▶ Activate All Bots</button>
-        </div>
-        <div id="signalStatus" style="font-size:12px;color:#888;margin-top:6px">Current signal: loading...</div>
-      </div>
-
-      <div class="card">
-        <h2>⚡ Quick Actions</h2>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn-danger" onclick="disableAll()">🔴 Disable ALL Bots</button>
-          <button class="btn-success" onclick="activateAll()">🟢 Activate ALL Bots</button>
-        </div>
-      </div>
+      <label class="form-label">Notes</label>
+      <input class="form-inp" id="fNotes" placeholder="Optional notes">
+      <button class="btn-add" onclick="addBot()">Add Bot</button>
+      <div class="form-err" id="addErr"></div>
     </div>
-
-    <div id="tab-logs" class="hidden">
-      <div class="tableWrap">
-        <div class="tableHead">
-          <h2>Activity Logs</h2>
-          <button class="btn-main" style="width:auto;padding:6px 14px;font-size:12px" onclick="loadLogs()">Refresh</button>
-        </div>
-        <div id="logsList"></div>
-      </div>
+    <div class="card">
+      <h2>🤖 All Bots</h2>
+      <input class="search-bar" id="searchBar" placeholder="🔍 Search by name or account..." oninput="filterBots()">
+      <div id="botList"><div class="no-bots">No bots yet. Add one above!</div></div>
     </div>
+  </div>
 
+  <div class="page" id="tab-master">
+    <div class="master-box">
+      <h3>🏆 Master Bots (Max 2)</h3>
+      <div class="master-slots" id="masterSlots">
+        <div class="mslot"><div class="empty">Slot 1 — Empty</div></div>
+        <div class="mslot"><div class="empty">Slot 2 — Empty</div></div>
+      </div>
+      <div class="form-grid">
+        <div><label class="form-label">Bot Name</label><input class="form-inp" id="mName" placeholder="Hash Legend 1"></div>
+        <div><label class="form-label">MT5 Account</label><input class="form-inp" id="mAcc" placeholder="Account number"></div>
+      </div>
+      <button class="btn-add" onclick="addMasterBot()">Add Master Bot</button>
+      <div class="form-err" id="masterErr"></div>
+    </div>
+    <div class="card">
+      <h2>📡 Signal Control</h2>
+      <p style="font-size:11px;color:var(--muted);margin-bottom:12px">Send instant signals to all active client bots</p>
+      <div class="sig-grid">
+        <button class="btn-sig btn-close-all" onclick="sendSignal('CLOSE_NOW')">🔴 Close All Trades</button>
+        <button class="btn-sig btn-dis-all" onclick="disableAll()">⏸ Disable All Bots</button>
+        <button class="btn-sig btn-act-all" onclick="activateAll()">▶ Activate All Bots</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted)">Current signal: <span id="currentSignal" style="font-weight:700;color:var(--blue)">NORMAL</span></div>
+    </div>
+  </div>
+
+  <div class="page" id="tab-logs">
+    <div class="card">
+      <h2>📋 Activity Logs</h2>
+      <div id="logList"><div class="no-bots">Loading logs...</div></div>
+    </div>
   </div>
 </div>
 
-<div class="overlay" id="editOverlay">
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detailModal">
   <div class="modal">
-    <h2>Edit Bot</h2>
-    <input type="hidden" id="e-id">
-    <label>Name</label><input id="e-name">
-    <label>Server</label><input id="e-server">
-    <label>Expiry Date</label><input type="date" id="e-expiry">
-    <label>Status</label>
-    <select id="e-status"><option>ACTIVE</option><option>DISABLED</option><option>EXPIRED</option></select>
-    <label>Notes</label><input id="e-notes">
-    <hr class="divider">
-    <label>New Password (khali chodo agar change nahi karna)</label>
-    <input type="password" id="e-cpass" placeholder="New password...">
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeOverlay('editOverlay')">Cancel</button>
-      <button class="btn-main" style="width:auto;padding:8px 18px" onclick="saveEdit()">Save</button>
+    <div class="modal-head">
+      <h3 id="detTitle">Bot Details</h3>
+      <button class="btn-modal-close" onclick="closeModal('detailModal')">✕</button>
+    </div>
+    <div class="modal-grid">
+      <div class="detail-box"><div class="dl">Daily P/L</div><div class="dv" id="detDaily">+$0</div></div>
+      <div class="detail-box"><div class="dl">Weekly P/L</div><div class="dv" id="detWeekly">+$0</div></div>
+      <div class="detail-box"><div class="dl">Monthly P/L</div><div class="dv" id="detMonthly">+$0</div></div>
+      <div class="detail-box"><div class="dl">Balance</div><div class="dv" style="color:var(--blue)" id="detBalance">$0</div></div>
+    </div>
+    <div class="detail-row"><span class="dr-l">Account #</span><span class="dr-v" id="detAcc">—</span></div>
+    <div class="detail-row"><span class="dr-l">Server</span><span class="dr-v" id="detServer">—</span></div>
+    <div class="detail-row"><span class="dr-l">Expiry</span><span class="dr-v" id="detExpiry">—</span></div>
+    <div class="detail-row"><span class="dr-l">Email</span><span class="dr-v" id="detEmail">—</span></div>
+    <div class="detail-row"><span class="dr-l">Win Trades</span><span class="dr-v" style="color:var(--green)" id="detWins">0</span></div>
+    <div class="detail-row"><span class="dr-l">Loss Trades</span><span class="dr-v" style="color:var(--red)" id="detLosses">0</span></div>
+    <div class="detail-row"><span class="dr-l">Win Rate</span><span class="dr-v" style="color:var(--blue)" id="detWinRate">0%</span></div>
+    <div class="detail-row"><span class="dr-l">Bot Version</span><span class="dr-v" id="detBot">—</span></div>
+    <div class="detail-row"><span class="dr-l">Last Check</span><span class="dr-v" style="font-size:10px" id="detLastCheck">—</span></div>
+    <div class="detail-row"><span class="dr-l">Added On</span><span class="dr-v" style="font-size:10px" id="detAdded">—</span></div>
+    <div class="detail-row"><span class="dr-l">Notes</span><span class="dr-v" id="detNotes">—</span></div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>✏️ Edit Bot</h3>
+      <button class="btn-modal-close" onclick="closeModal('editModal')">✕</button>
+    </div>
+    <input type="hidden" id="editId">
+    <label class="form-label">Client Name</label><input class="form-inp" id="eName" placeholder="Name">
+    <label class="form-label">Server</label><input class="form-inp" id="eServer" placeholder="MT5Real18">
+    <label class="form-label">Expiry Date</label><input class="form-inp" id="eExpiry" type="date">
+    <label class="form-label">Status</label>
+    <select class="form-inp" id="eStatus"><option value="ACTIVE">ACTIVE</option><option value="DISABLED">DISABLED</option></select>
+    <label class="form-label">Client Email</label><input class="form-inp" id="eEmail" type="email" placeholder="client@email.com">
+    <label class="form-label">New Password (leave empty to keep current)</label><input class="form-inp" id="ePass" type="password" placeholder="New password...">
+    <label class="form-label">Notes</label><input class="form-inp" id="eNotes" placeholder="Optional notes">
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn-add" onclick="saveEdit()">Save Changes</button>
+      <button style="background:var(--muted);color:#fff;border:none;padding:9px 16px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:700" onclick="closeModal('editModal')">Cancel</button>
     </div>
   </div>
 </div>
 
-<div class="overlay" id="detailOverlay">
-  <div class="modal">
-    <h2 id="det-title">Bot Details</h2>
-    <div class="det-grid">
-      <div class="det-card"><h4>Daily P/L</h4><div class="val" id="det-daily">$0.00</div></div>
-      <div class="det-card"><h4>Weekly P/L</h4><div class="val" id="det-weekly">$0.00</div></div>
-      <div class="det-card"><h4>Monthly P/L</h4><div class="val" id="det-monthly">$0.00</div></div>
-      <div class="det-card"><h4>Balance</h4><div class="val yellow" id="det-balance">$0.00</div></div>
-    </div>
-    <div class="det-row"><span class="lbl">Win Trades</span><span class="green" id="det-wins">0</span></div>
-    <div class="det-row"><span class="lbl">Loss Trades</span><span class="red" id="det-losses">0</span></div>
-    <div class="det-row"><span class="lbl">Win Rate</span><span class="blue" id="det-winrate">0%</span></div>
-    <div class="det-row"><span class="lbl">Bot Version</span><span id="det-bot" style="color:#aaa">-</span></div>
-    <div class="det-row"><span class="lbl">Client Email</span><span id="det-email" style="color:#aaa">-</span></div>
-    <div class="det-row"><span class="lbl">Notes</span><span id="det-notes" style="color:#aaa">-</span></div>
-    <div class="det-row"><span class="lbl">Last Update</span><span id="det-updated" style="color:#666;font-size:11px">-</span></div>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeOverlay('detailOverlay')">Close</button>
-    </div>
-  </div>
-</div>
+<div class="toast" id="toast"></div>
 
 <script>
-var TOKEN=localStorage.getItem('hl_admin_tok')||'';
+var TOKEN=localStorage.getItem('hs_admin_tok')||'';
 var ALL_BOTS=[];
-if(TOKEN) showApp();
+if(TOKEN){showApp();loadAll();}
 
 function doLogin(){
-  var u=document.getElementById('uname').value,p=document.getElementById('upass').value;
+  var u=document.getElementById('ladmin').value.trim();
+  var p=document.getElementById('lpass').value;
+  if(!u||!p){document.getElementById('loginErr').textContent='Username aur password daalo!';return;}
   fetch('/api/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})})
   .then(function(r){return r.json();}).then(function(d){
-    if(d.token){TOKEN=d.token;localStorage.setItem('hl_admin_tok',TOKEN);showApp();}
+    if(d.token){TOKEN=d.token;localStorage.setItem('hs_admin_tok',TOKEN);showApp();loadAll();}
     else document.getElementById('loginErr').textContent=d.error||'Login failed';
   }).catch(function(){document.getElementById('loginErr').textContent='Server error';});
 }
 
 function showApp(){
-  document.getElementById('loginWrap').style.display='none';
+  document.getElementById('loginPage').style.display='none';
   document.getElementById('app').style.display='block';
-  loadBots();setInterval(loadBots,30000);setInterval(loadSignalStatus,10000);
 }
 
-function doLogout(){TOKEN='';localStorage.removeItem('hl_admin_tok');location.reload();}
+function doLogout(){TOKEN='';localStorage.removeItem('hs_admin_tok');location.reload();}
 
 function api(url,opts){
   opts=opts||{};opts.headers=opts.headers||{};
@@ -281,163 +288,245 @@ function api(url,opts){
   return fetch(url,opts).then(function(r){return r.json();});
 }
 
-function showTab(tab,btn){
-  ['bots','master','logs'].forEach(function(t){document.getElementById('tab-'+t).classList.add('hidden');});
-  document.getElementById('tab-'+tab).classList.remove('hidden');
-  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+function showTab(name,btn){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('tab-'+name).classList.add('active');
   btn.classList.add('active');
-  if(tab==='logs') loadLogs();
-  if(tab==='master'){loadMasterBots();loadSignalStatus();}
+  if(name==='logs')loadLogs();
+  if(name==='master')loadMasterBots();
 }
 
-function timeAgo(d){
-  if(!d) return '-';
-  var s=Math.floor((Date.now()-new Date(d).getTime())/1000);
-  if(s<60) return s+'s ago';if(s<3600) return Math.floor(s/60)+'m ago';
-  if(s<86400) return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';
-}
-
-function fmtPnl(v){v=parseFloat(v)||0;return(v>=0?'+$':'-$')+Math.abs(v).toFixed(2);}
-function pnlColor(v){return parseFloat(v)>=0?'green':'red';}
+function loadAll(){loadBots();loadMasterBots();}
 
 function loadBots(){
   api('/api/bots').then(function(bots){
-    ALL_BOTS=bots;
-    document.getElementById('st-total').textContent=bots.length;
-    document.getElementById('st-active').textContent=bots.filter(function(b){return b.status==='ACTIVE';}).length;
-    document.getElementById('st-disabled').textContent=bots.filter(function(b){return b.status==='DISABLED';}).length;
-    document.getElementById('st-expired').textContent=bots.filter(function(b){return b.status==='EXPIRED';}).length;
-    renderTable(bots);
-  });
+    ALL_BOTS=bots||[];
+    var tot=bots.length,act=0,dis=0,exp=0;
+    var today=new Date().toISOString().split('T')[0];
+    bots.forEach(function(b){
+      if(b.expiry<today||b.status==='EXPIRED')exp++;
+      else if(b.status==='ACTIVE')act++;
+      else dis++;
+    });
+    document.getElementById('sTot').textContent=tot;
+    document.getElementById('sAct').textContent=act;
+    document.getElementById('sDis').textContent=dis;
+    document.getElementById('sExp').textContent=exp;
+    renderBots(bots);
+  }).catch(function(){showToast('Failed to load bots','error');});
 }
 
-function renderTable(bots){
+function filterBots(){
+  var q=document.getElementById('searchBar').value.toLowerCase();
+  var filtered=ALL_BOTS.filter(function(b){return b.name.toLowerCase().includes(q)||b.account.includes(q);});
+  renderBots(filtered);
+}
+
+function fmtPnl(v){v=parseFloat(v)||0;return(v>=0?'+$':'-$')+Math.abs(v).toFixed(2);}
+
+function renderBots(bots){
+  if(!bots||bots.length===0){document.getElementById('botList').innerHTML='<div class="no-bots">No bots found</div>';return;}
+  var today=new Date().toISOString().split('T')[0];
   var html='';
-  for(var i=0;i<bots.length;i++){
-    var b=bots[i];var daily=b.stats?b.stats.daily:0;
-    var dc=parseFloat(daily)>=0?'#2ecc71':'#e74c3c';
-    var btn=b.status==='ACTIVE'?'<button class="btn-sm btn-off" onclick="disableBot('+b.id+')">Disable</button>':'<button class="btn-sm btn-on" onclick="activateBot('+b.id+')">Activate</button>';
-    html+='<tr><td>'+(i+1)+'</td><td>'+b.name+'</td><td><b>'+b.account+'</b></td><td>'+b.expiry+'</td><td><span class="'+b.status+'">'+b.status+'</span></td><td style="color:#666">'+timeAgo(b.lastCheck)+'</td><td style="color:'+dc+';font-weight:600">'+fmtPnl(daily)+'</td><td><div class="acts"><button class="btn-sm btn-detail" onclick="showDetails('+b.id+')">Details</button><button class="btn-sm btn-edit" onclick="openEdit('+b.id+')">Edit</button>'+btn+'<button class="btn-sm btn-del" onclick="deleteBot('+b.id+')">Del</button></div></td></tr>';
-  }
-  document.getElementById('botsTable').innerHTML=html||'<tr><td colspan="8" style="text-align:center;color:#666;padding:20px">No bots yet</td></tr>';
-}
-
-function filterBots(v){renderTable(ALL_BOTS.filter(function(b){return b.name.toLowerCase().indexOf(v.toLowerCase())>=0||b.account.indexOf(v)>=0;}));}
-
-function showDetails(id){
-  var b=ALL_BOTS.find(function(x){return x.id===id;});if(!b) return;
-  var s=b.stats||{};var wins=parseInt(s.wins)||0,losses=parseInt(s.losses)||0;
-  var wr=wins+losses>0?Math.round(wins/(wins+losses)*100):0;
-  document.getElementById('det-title').textContent=b.name+' — Details';
-  var dEl=document.getElementById('det-daily');dEl.textContent=fmtPnl(s.daily);dEl.className='val '+pnlColor(s.daily);
-  var wEl=document.getElementById('det-weekly');wEl.textContent=fmtPnl(s.weekly);wEl.className='val '+pnlColor(s.weekly);
-  var mEl=document.getElementById('det-monthly');mEl.textContent=fmtPnl(s.monthly);mEl.className='val '+pnlColor(s.monthly);
-  document.getElementById('det-balance').textContent='$'+(parseFloat(s.balance)||0).toFixed(2);
-  document.getElementById('det-wins').textContent=wins;document.getElementById('det-losses').textContent=losses;
-  document.getElementById('det-winrate').textContent=wr+'%';document.getElementById('det-bot').textContent=s.bot||'-';
-  document.getElementById('det-email').textContent=b.clientEmail||'Not set';
-  document.getElementById('det-notes').textContent=b.notes||'-';
-  document.getElementById('det-updated').textContent=s.updatedAt?new Date(s.updatedAt).toLocaleString():'No data yet';
-  document.getElementById('detailOverlay').classList.add('show');
+  bots.forEach(function(b){
+    var s=b.stats||{};
+    var isExpired=b.expiry<today||b.status==='EXPIRED';
+    var status=isExpired?'EXPIRED':b.status;
+    var badgeCls=status==='ACTIVE'?'badge-active':status==='DISABLED'?'badge-disabled':'badge-expired';
+    var daily=parseFloat(s.daily)||0,weekly=parseFloat(s.weekly)||0,monthly=parseFloat(s.monthly)||0,balance=parseFloat(s.balance)||0;
+    html+='<div class="bot-item">'+
+      '<div class="bot-top">'+
+        '<div class="bot-info"><div class="bot-name">'+b.name+'</div><div class="bot-acc">#'+b.account+' • Exp: '+b.expiry+(b.clientEmail?' • 📧 '+b.clientEmail:'')+'</div></div>'+
+        '<span class="'+badgeCls+'">'+status+'</span>'+
+      '</div>'+
+      '<div class="bot-stats">'+
+        '<div class="bs"><div class="bl">Daily</div><div class="bv '+(daily>=0?'bv-pos':'bv-neg')+'">'+fmtPnl(daily)+'</div></div>'+
+        '<div class="bs"><div class="bl">Weekly</div><div class="bv '+(weekly>=0?'bv-pos':'bv-neg')+'">'+fmtPnl(weekly)+'</div></div>'+
+        '<div class="bs"><div class="bl">Monthly</div><div class="bv '+(monthly>=0?'bv-pos':'bv-neg')+'">'+fmtPnl(monthly)+'</div></div>'+
+        '<div class="bs"><div class="bl">Balance</div><div class="bv bv-blue">$'+balance.toFixed(2)+'</div></div>'+
+      '</div>'+
+      '<div class="bot-actions">'+
+        '<button class="bx bx-det" onclick="showDetail('+b.id+')">📊 Details</button>'+
+        '<button class="bx bx-edit" onclick="openEdit('+b.id+')">✏️ Edit</button>'+
+        (status==='ACTIVE'?'<button class="bx bx-dis" onclick="disableBot('+b.id+')">⏸ Disable</button>':'')+
+        (status!=='ACTIVE'&&!isExpired?'<button class="bx bx-act" onclick="activateBot('+b.id+')">▶ Activate</button>':'')+
+        '<button class="bx bx-del" onclick="deleteBot('+b.id+')">🗑️ Delete</button>'+
+      '</div>'+
+    '</div>';
+  });
+  document.getElementById('botList').innerHTML=html;
 }
 
 function addBot(){
-  var name=document.getElementById('f-name').value.trim();
-  var account=document.getElementById('f-account').value.trim();
-  var server=document.getElementById('f-server').value.trim();
-  var expiry=document.getElementById('f-expiry').value;
-  var clientPassword=document.getElementById('f-cpass').value;
-  var notes=document.getElementById('f-notes').value.trim();
-  if(!name||!account||!expiry||!clientPassword){document.getElementById('addErr').textContent='Sab fields zaroori!';return;}
-  document.getElementById('addErr').textContent='';
-  api('/api/bots/add',{method:'POST',body:JSON.stringify({name,account,server,expiry,clientPassword,notes})}).then(function(r){
-    if(r.ok){['f-name','f-account','f-expiry','f-cpass','f-notes'].forEach(function(id){document.getElementById(id).value='';});loadBots();}
-    else document.getElementById('addErr').textContent=r.error||'Failed';
+  var name=document.getElementById('fName').value.trim();
+  var account=document.getElementById('fAcc').value.trim();
+  var server=document.getElementById('fServer').value.trim();
+  var expiry=document.getElementById('fExpiry').value;
+  var pass=document.getElementById('fPass').value;
+  var email=document.getElementById('fEmail').value.trim();
+  var notes=document.getElementById('fNotes').value.trim();
+  var errEl=document.getElementById('addErr');errEl.textContent='';
+  if(!name||!account||!expiry||!pass){errEl.textContent='Name, Account, Expiry, Password zaroori hain!';return;}
+  api('/api/bots/add',{method:'POST',body:JSON.stringify({name:name,account:account,server:server,expiry:expiry,clientPassword:pass,email:email,notes:notes})})
+  .then(function(r){
+    if(r.ok){
+      document.getElementById('fName').value='';document.getElementById('fAcc').value='';
+      document.getElementById('fExpiry').value='';document.getElementById('fPass').value='';
+      document.getElementById('fEmail').value='';document.getElementById('fNotes').value='';
+      showToast('✅ Bot added!','success');loadBots();
+    } else errEl.textContent=r.error||'Failed';
   });
 }
 
-function openEdit(id){
-  var b=ALL_BOTS.find(function(x){return x.id===id;});if(!b) return;
-  document.getElementById('e-id').value=b.id;document.getElementById('e-name').value=b.name;
-  document.getElementById('e-server').value=b.server;document.getElementById('e-expiry').value=b.expiry;
-  document.getElementById('e-status').value=b.status;document.getElementById('e-notes').value=b.notes||'';
-  document.getElementById('e-cpass').value='';document.getElementById('editOverlay').classList.add('show');
+function activateBot(id){
+  api('/api/bots/activate/'+id,{method:'POST'}).then(function(r){
+    if(r.ok){showToast('✅ Bot activated!','success');loadBots();}
+    else showToast(r.error||'Failed','error');
+  });
 }
 
-function closeOverlay(id){document.getElementById(id).classList.remove('show');}
+function disableBot(id){
+  if(!confirm('Bot disable karna chahte ho?'))return;
+  api('/api/bots/disable/'+id,{method:'POST'}).then(function(r){
+    if(r.ok){showToast('⏸ Bot disabled!','info');loadBots();}
+    else showToast(r.error||'Failed','error');
+  });
+}
+
+function deleteBot(id){
+  if(!confirm('Bot delete karna chahte ho? Undo nahi hoga!'))return;
+  api('/api/bots/delete/'+id,{method:'POST'}).then(function(r){
+    if(r.ok){showToast('🗑️ Bot deleted!','error');loadBots();}
+    else showToast(r.error||'Failed','error');
+  });
+}
+
+function showDetail(id){
+  var b=ALL_BOTS.find(function(x){return x.id===id;});
+  if(!b)return;
+  var s=b.stats||{};
+  document.getElementById('detTitle').textContent=b.name+' — Details';
+  document.getElementById('detAcc').textContent='#'+b.account;
+  document.getElementById('detServer').textContent=b.server||'—';
+  document.getElementById('detExpiry').textContent=b.expiry||'—';
+  document.getElementById('detEmail').textContent=b.clientEmail||'—';
+  document.getElementById('detBot').textContent=s.bot||'—';
+  document.getElementById('detNotes').textContent=b.notes||'—';
+  document.getElementById('detLastCheck').textContent=b.lastCheck?new Date(b.lastCheck).toLocaleString():'—';
+  document.getElementById('detAdded').textContent=b.addedAt?new Date(b.addedAt).toLocaleString():'—';
+  var fmtD=function(v,id){var el=document.getElementById(id);var val=parseFloat(v)||0;el.textContent=(val>=0?'+$':'-$')+Math.abs(val).toFixed(2);el.style.color=val>=0?'var(--green)':'var(--red)';};
+  fmtD(s.daily,'detDaily');fmtD(s.weekly,'detWeekly');fmtD(s.monthly,'detMonthly');
+  document.getElementById('detBalance').textContent='$'+(parseFloat(s.balance)||0).toFixed(2);
+  var w=parseInt(s.wins)||0,l=parseInt(s.losses)||0;
+  document.getElementById('detWins').textContent=w;
+  document.getElementById('detLosses').textContent=l;
+  document.getElementById('detWinRate').textContent=(w+l>0?Math.round(w/(w+l)*100):0)+'%';
+  document.getElementById('detailModal').classList.add('show');
+}
+
+function openEdit(id){
+  var b=ALL_BOTS.find(function(x){return x.id===id;});
+  if(!b)return;
+  document.getElementById('editId').value=b.id;
+  document.getElementById('eName').value=b.name;
+  document.getElementById('eServer').value=b.server||'';
+  document.getElementById('eExpiry').value=b.expiry;
+  document.getElementById('eStatus').value=b.status;
+  document.getElementById('eEmail').value=b.clientEmail||'';
+  document.getElementById('eNotes').value=b.notes||'';
+  document.getElementById('ePass').value='';
+  document.getElementById('editModal').classList.add('show');
+}
 
 function saveEdit(){
-  var id=document.getElementById('e-id').value;
-  var data={name:document.getElementById('e-name').value,server:document.getElementById('e-server').value,
-    expiry:document.getElementById('e-expiry').value,status:document.getElementById('e-status').value,
-    notes:document.getElementById('e-notes').value};
-  var np=document.getElementById('e-cpass').value;if(np) data.clientPassword=np;
-  api('/api/bots/edit/'+id,{method:'POST',body:JSON.stringify(data)}).then(function(){closeOverlay('editOverlay');loadBots();});
+  var id=document.getElementById('editId').value;
+  var data={name:document.getElementById('eName').value,server:document.getElementById('eServer').value,expiry:document.getElementById('eExpiry').value,status:document.getElementById('eStatus').value,email:document.getElementById('eEmail').value,notes:document.getElementById('eNotes').value};
+  var p=document.getElementById('ePass').value;
+  if(p)data.clientPassword=p;
+  api('/api/bots/edit/'+id,{method:'POST',body:JSON.stringify(data)}).then(function(r){
+    if(r.ok){closeModal('editModal');showToast('✅ Bot updated!','success');loadBots();}
+    else showToast(r.error||'Failed','error');
+  });
 }
 
-function activateBot(id){api('/api/bots/activate/'+id,{method:'POST'}).then(function(){loadBots();});}
-function disableBot(id){if(!confirm('Disable?'))return;api('/api/bots/disable/'+id,{method:'POST'}).then(function(){loadBots();});}
-function deleteBot(id){if(!confirm('Delete?'))return;api('/api/bots/delete/'+id,{method:'POST'}).then(function(){loadBots();});}
-function disableAll(){if(!confirm('DISABLE ALL?'))return;api('/api/bots/disable-all',{method:'POST'}).then(function(){loadBots();});}
-function activateAll(){if(!confirm('ACTIVATE ALL?'))return;api('/api/bots/activate-all',{method:'POST'}).then(function(){loadBots();});}
+function closeModal(id){document.getElementById(id).classList.remove('show');}
 
 function loadMasterBots(){
   api('/api/master/bots').then(function(bots){
+    var slots=document.getElementById('masterSlots');if(!slots)return;
     var html='';
     for(var i=0;i<2;i++){
-      if(bots[i]){html+='<div class="master-bot-card"><p>'+bots[i].name+'</p><div class="acc">'+bots[i].account+'</div><button class="btn-sm btn-del" style="margin-top:8px" onclick="removeMasterBot(\''+bots[i].account+'\')">Remove</button></div>';}
-      else{html+='<div class="master-bot-card"><p>Slot '+(i+1)+'</p><div class="acc" style="color:#666">Empty</div></div>';}
+      if(bots[i]){html+='<div class="mslot"><div class="ml">Slot '+(i+1)+'</div><div class="mv">'+bots[i].name+'</div><div class="md">#'+bots[i].account+'</div><button onclick="removeMaster(\''+bots[i].account+'\')" style="background:#fee2e2;color:var(--red);border:none;padding:3px 8px;border-radius:4px;font-size:9px;cursor:pointer;margin-top:4px">Remove</button></div>';}
+      else{html+='<div class="mslot"><div class="empty">Slot '+(i+1)+' — Empty</div></div>';}
     }
-    document.getElementById('masterBotsList').innerHTML=html;
+    slots.innerHTML=html;
   });
 }
 
 function addMasterBot(){
-  var name=document.getElementById('mb-name').value.trim();
-  var account=document.getElementById('mb-account').value.trim();
-  if(!account){document.getElementById('mbErr').textContent='Account required!';return;}
-  api('/api/master/bots/add',{method:'POST',body:JSON.stringify({name:name||'Master Bot',account})}).then(function(r){
-    if(r.ok){document.getElementById('mb-name').value='';document.getElementById('mb-account').value='';document.getElementById('mbErr').textContent='';loadMasterBots();}
-    else document.getElementById('mbErr').textContent=r.error||'Failed';
+  var name=document.getElementById('mName').value.trim();
+  var account=document.getElementById('mAcc').value.trim();
+  if(!account){document.getElementById('masterErr').textContent='Account number zaroori hai!';return;}
+  api('/api/master/bots/add',{method:'POST',body:JSON.stringify({name:name,account:account})}).then(function(r){
+    if(r.ok){document.getElementById('mName').value='';document.getElementById('mAcc').value='';document.getElementById('masterErr').textContent='';showToast('✅ Master bot added!','success');loadMasterBots();}
+    else document.getElementById('masterErr').textContent=r.error||'Failed';
   });
 }
 
-function removeMasterBot(account){
-  if(!confirm('Remove?'))return;
-  api('/api/master/bots/remove/'+account,{method:'POST'}).then(function(){loadMasterBots();});
-}
-
-function setSignal(type){
-  var msg={'CLOSE_NOW':'Close all client trades NOW?','DISABLED':'Disable all?','ACTIVE':'Activate all?'};
-  if(!confirm(msg[type]))return;
-  api('/api/signal/set',{method:'POST',body:JSON.stringify({type})}).then(function(r){
-    if(r.ok){loadSignalStatus();if(type!=='CLOSE_NOW')loadBots();}
+function removeMaster(account){
+  if(!confirm('Master bot remove karna chahte ho?'))return;
+  api('/api/master/bots/remove/'+account,{method:'POST'}).then(function(r){
+    if(r.ok){showToast('Master bot removed!','info');loadMasterBots();}
   });
 }
 
-function loadSignalStatus(){
-  fetch('/api/signal').then(function(r){return r.json();}).then(function(s){
-    var el=document.getElementById('signalStatus');
-    if(el)el.textContent='Current signal: '+s.type+(s.from?' (from: '+s.from+')':'');
+function sendSignal(type){
+  if(!confirm('Sab clients ko "'+type+'" signal bhejna chahte ho?'))return;
+  api('/api/signal/set',{method:'POST',body:JSON.stringify({type:type})}).then(function(r){
+    if(r.ok){showToast('📡 Signal sent: '+type,'success');document.getElementById('currentSignal').textContent=type;}
+  });
+}
+
+function disableAll(){
+  if(!confirm('Sab bots disable karna chahte ho?'))return;
+  api('/api/bots/disable-all',{method:'POST'}).then(function(r){
+    if(r.ok){showToast('⏸ All bots disabled!','info');loadBots();}
+  });
+}
+
+function activateAll(){
+  if(!confirm('Sab bots activate karna chahte ho?'))return;
+  api('/api/bots/activate-all',{method:'POST'}).then(function(r){
+    if(r.ok){showToast('✅ All bots activated!','success');loadBots();}
   });
 }
 
 function loadLogs(){
   api('/api/logs').then(function(logs){
-    var html='';
-    for(var i=0;i<logs.length;i++){
-      var l=logs[i];
-      var dc=l.action.indexOf('DISABLED')>=0?'cr':l.action.indexOf('ACTIV')>=0?'cg':l.action.indexOf('MASTER')>=0?'co':l.action.indexOf('ADD')>=0?'cb':'cy';
-      html+='<div class="log-item"><span><span class="log-dot '+dc+'"></span>'+l.action.replace(/_/g,' ')+' — '+(l.name||'')+' ('+(l.account||'')+')</span><span class="log-time">'+new Date(l.time).toLocaleString()+'</span></div>';
-    }
-    document.getElementById('logsList').innerHTML=html||'<div class="log-item" style="color:#666">No logs yet</div>';
+    if(!logs||logs.length===0){document.getElementById('logList').innerHTML='<div class="no-bots">No logs yet</div>';return;}
+    var colors={BOT_ADDED:'#16a34a',BOT_DELETED:'#ef4444',BOT_ACTIVATED:'#22c55e',BOT_DISABLED:'#f59e0b',CLIENT_ACTIVATED:'#2563eb',CLIENT_DISABLED:'#94a3b8',ALL_ACTIVATED:'#22c55e',ALL_DISABLED:'#f97316',MASTER_BOT_ADDED:'#8b5cf6'};
+    var html=logs.map(function(l){
+      var color=colors[l.action]||'#64748b';
+      var time=l.time?new Date(l.time).toLocaleString():'—';
+      return '<div class="log-item"><span class="log-dot" style="background:'+color+'"></span><span class="log-text"><b>'+l.action+'</b> — '+l.name+' (#'+l.account+')</span><span class="log-time">'+time+'</span></div>';
+    }).join('');
+    document.getElementById('logList').innerHTML=html;
   });
 }
 
+function showToast(msg,type){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast t-'+(type||'info');t.style.display='block';
+  setTimeout(function(){t.style.display='none';},3000);
+}
+
 document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'){closeOverlay('editOverlay');closeOverlay('detailOverlay');}
-  if(e.key==='Enter'&&document.getElementById('loginWrap').style.display!=='none')doLogin();
+  if(e.key==='Enter'&&document.getElementById('loginPage').style.display!=='none')doLogin();
+  if(e.key==='Escape'){closeModal('detailModal');closeModal('editModal');}
 });
+
+setInterval(function(){if(TOKEN)loadBots();},30000);
 </script>
 </body>
 </html>
