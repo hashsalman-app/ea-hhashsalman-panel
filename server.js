@@ -639,13 +639,21 @@ app.get('/api/stats', (req, res) => {
   const found = db.bots.find(b => b.account === account);
   if (!found) return res.json({ ok: false });
   found.lastCheck = new Date().toISOString();
+  const prevTotal = found.stats ? (found.stats.total || 0) : 0;
+  const newTotal = parseFloat(total)||0;
+  
   found.stats = {
     daily: parseFloat(daily)||0, weekly: parseFloat(weekly)||0,
-    monthly: parseFloat(monthly)||0, total: parseFloat(total)||0,
+    monthly: parseFloat(monthly)||0, total: newTotal,
     wins: parseInt(wins)||0, losses: parseInt(losses)||0,
     balance: parseFloat(balance)||0, bot: bot||'',
     updatedAt: new Date().toISOString()
   };
+  
+  // ✅ Cumulative lifetime profit — never resets
+  if (!db.cumulativeProfit) db.cumulativeProfit = {};
+  db.cumulativeProfit[found.account] = newTotal;
+  
   saveDB(db); res.json({ ok: true });
 });
 
@@ -696,6 +704,25 @@ app.post('/api/client/email', clientAuth, (req, res) => {
   const { email } = req.body;
   if (!email || !email.includes('@')) return res.status(400).json({ error: 'Valid email required' });
   bot.clientEmail = email; saveDB(db); res.json({ ok: true });
+});
+
+// ── TOTAL PROFIT ─────────────────────────────────────
+app.get('/api/total-profit', (req, res) => {
+  const db = getDB();
+  // Sum all bots cumulative profit from cumulativeProfit store
+  let total = 0;
+  if (db.cumulativeProfit) {
+    Object.values(db.cumulativeProfit).forEach(v => { total += parseFloat(v) || 0; });
+  }
+  // Also add from current stats if not in cumulative yet
+  if (db.bots) {
+    db.bots.forEach(b => {
+      if (b.stats && b.stats.total && !db.cumulativeProfit?.[b.account]) {
+        total += parseFloat(b.stats.total) || 0;
+      }
+    });
+  }
+  res.json({ total: parseFloat(total.toFixed(2)), clients: db.bots ? db.bots.length : 0 });
 });
 
 // ── LEADERBOARD ───────────────────────────────────────
