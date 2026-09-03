@@ -644,7 +644,6 @@ app.get('/api/stats', (req, res) => {
   const found = db.bots.find(b => b.account === account);
   if (!found) return res.json({ ok: false });
   found.lastCheck = new Date().toISOString();
-  const prevTotal = found.stats ? (found.stats.total || 0) : 0;
   const newTotal = parseFloat(total)||0;
   
   found.stats = {
@@ -655,9 +654,13 @@ app.get('/api/stats', (req, res) => {
     updatedAt: new Date().toISOString()
   };
   
-  // ✅ Cumulative lifetime profit — never resets
+  // ✅ Peak profit — sirf badhta hai, kabhi kam nahi hota
   if (!db.cumulativeProfit) db.cumulativeProfit = {};
-  db.cumulativeProfit[found.account] = newTotal;
+  const prevPeak = db.cumulativeProfit[found.account] || 0;
+  if (newTotal > prevPeak) {
+    db.cumulativeProfit[found.account] = newTotal;
+  }
+  // Agar newTotal negative ya less hai — peak same rehta hai
   
   saveDB(db); res.json({ ok: true });
 });
@@ -714,20 +717,20 @@ app.post('/api/client/email', clientAuth, (req, res) => {
 // ── TOTAL PROFIT ─────────────────────────────────────
 app.get('/api/total-profit', (req, res) => {
   const db = getDB();
-  // ✅ Only count POSITIVE profits — losing trades ignored
+  // ✅ Sum of peak profits — never goes down
   let total = 0;
   if (db.cumulativeProfit) {
     Object.values(db.cumulativeProfit).forEach(v => {
       const val = parseFloat(v) || 0;
-      if (val > 0) total += val; // Only positive
+      if (val > 0) total += val;
     });
   }
-  // Also from current stats if not in cumulative yet
+  // Bots without peak yet — use current positive total
   if (db.bots) {
     db.bots.forEach(b => {
       if (b.stats && b.stats.total && !db.cumulativeProfit?.[b.account]) {
         const val = parseFloat(b.stats.total) || 0;
-        if (val > 0) total += val; // Only positive
+        if (val > 0) total += val;
       }
     });
   }
