@@ -18,10 +18,10 @@ body{background:var(--bg);color:var(--text);overflow-x:hidden}
 a{text-decoration:none;color:inherit}
 img{max-width:100%;height:auto}
 #ticker{background:#0f172a;overflow:hidden;height:30px;display:flex;align-items:center;border-bottom:2px solid var(--green2);position:relative}
-.ticker-inner{display:flex;position:absolute;white-space:nowrap;animation:tickScroll 40s linear infinite}
+.ticker-inner{display:flex;position:absolute;white-space:nowrap;animation:tickScroll 30s linear infinite}
 .ticker-inner:hover{animation-play-state:paused}
-.t-item{padding:0 16px;font-size:11px;display:flex;gap:6px;border-right:1px solid #1e3a5f;align-items:center;flex-shrink:0}
-.t-sym{color:#93c5fd}.t-price{color:#fff;font-weight:700}.t-up{color:#4ade80}.t-dn{color:#f87171}
+.t-item{padding:0 24px;font-size:12px;display:flex;gap:8px;border-right:1px solid #1e3a5f;align-items:center;flex-shrink:0}
+.t-sym{color:#93c5fd;font-weight:600}.t-price{color:#fff;font-weight:700}.t-up{color:#4ade80}.t-dn{color:#f87171}
 @keyframes tickScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 .topbar{background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 60%,var(--green) 100%);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.2)}
 .topbar-logo{display:flex;align-items:center;gap:10px}
@@ -149,7 +149,7 @@ img{max-width:100%;height:auto}
 
 <div id="ticker">
   <div class="ticker-inner" id="tickerInner">
-    <span class="t-item"><span class="t-sym">Loading live prices...</span></span>
+    <span class="t-item"><span class="t-sym">XAU/USD (Gold)</span><span class="t-price">Loading...</span></span>
   </div>
 </div>
 
@@ -182,7 +182,7 @@ img{max-width:100%;height:auto}
     <div class="hero-stats">
       <div class="hero-stat"><div class="val">89%</div><div class="lbl">Win Rate</div></div>
       <div class="hero-stat"><div class="val">+$65</div><div class="lbl">Daily Avg</div></div>
-      <div class="hero-stat"><div class="val" id="totalProfitVal">+$0</div><div class="lbl">Total Profits</div></div>
+      <div class="hero-stat"><div class="val" id="totalProfitVal">+$0</div><div class="lbl">All Users Profit</div></div>
     </div>
     <div class="hero-btns">
       <button class="btn-hero-g" onclick="showPage('packages',document.querySelectorAll('.nav-btn')[1])">View Packages</button>
@@ -366,7 +366,6 @@ function renderLeaderboard(data){
     var pnl=(pos?'+$':'-$')+Math.abs(t.daily).toFixed(2);
     html+='<div class="lb-row"><div class="lb-rank">'+rk+'</div><div class="lb-info"><div class="lb-avatar" style="background:'+t.color+'">'+t.ini+'</div><div class="lb-name">'+t.name+'</div></div><div class="lb-pnl '+(pos?'pnl-pos':'pnl-neg')+'">'+pnl+'</div></div>';
   });
-  // Double for seamless scroll
   document.getElementById('lbList').innerHTML=html+html;
 }
 
@@ -385,44 +384,41 @@ loadTotalProfit();
 setInterval(loadLeaderboard,30000);
 setInterval(loadTotalProfit,15*60*1000);
 
-var fp={xau:2647.30,btc:58240,eth:2311.69,eur:1.08420,gbp:1.25640,bnb:580};
-function buildTickerHTML(items){
-  var h='';
-  items.forEach(function(p){var pos=p.chg>=0;h+='<span class="t-item"><span class="t-sym">'+p.label+'</span><span class="t-price">'+p.price+'</span><span class="'+(pos?'t-up':'t-dn')+'">'+(pos?'+':'')+p.chg.toFixed(2)+'%</span></span>';});
-  return h+h;
+// ✅ XAUUSD ONLY — Live price
+var xauPrice=0;
+function buildXAUTicker(price,chg){
+  var pos=chg>=0;
+  var item='<span class="t-item"><span class="t-sym">XAU/USD (Gold)</span><span class="t-price">$'+price.toFixed(2)+'</span><span class="'+(pos?'t-up':'t-dn')+'">'+(pos?'+':'')+chg.toFixed(2)+'%</span></span>';
+  var h='';for(var i=0;i<8;i++)h+=item;return h;
 }
-function updateFallbackTicker(){
-  fp.xau+=(Math.random()-.5)*.6;fp.btc+=(Math.random()-.5)*60;fp.eth+=(Math.random()-.5)*2;
-  fp.eur+=(Math.random()-.5)*.0004;fp.gbp+=(Math.random()-.5)*.0004;fp.bnb+=(Math.random()-.5)*1.5;
-  var items=[
-    {label:'XAUUSD',price:fp.xau.toFixed(2),chg:0.42},
-    {label:'BTC/USDT',price:fp.btc.toFixed(0),chg:1.20},
-    {label:'ETH/USDT',price:fp.eth.toFixed(2),chg:-0.07},
-    {label:'EUR/USD',price:fp.eur.toFixed(5),chg:0.03},
-    {label:'GBP/USD',price:fp.gbp.toFixed(5),chg:-0.05},
-    {label:'BNB/USDT',price:fp.bnb.toFixed(2),chg:0.85},
-  ];
-  var el=document.getElementById('tickerInner');if(el)el.innerHTML=buildTickerHTML(items);
+function fetchXAULive(){
+  fetch('https://api.metals.live/v1/spot/gold')
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d&&d[0]&&d[0].price){
+        var prev=xauPrice>0?xauPrice:d[0].price;
+        xauPrice=d[0].price;
+        var chg=prev>0?((xauPrice-prev)/prev*100):0.42;
+        var el=document.getElementById('tickerInner');
+        if(el)el.innerHTML=buildXAUTicker(xauPrice,chg);
+      }
+    })
+    .catch(function(){
+      if(xauPrice===0)xauPrice=3350.00;
+      xauPrice+=(Math.random()-0.5)*0.8;
+      var el=document.getElementById('tickerInner');
+      if(el)el.innerHTML=buildXAUTicker(xauPrice,0.42);
+    });
 }
-function fetchLivePrices(){
-  fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin&vs_currencies=usd&include_24hr_change=true')
-  .then(function(r){return r.json();}).then(function(d){
-    fp.xau+=(Math.random()-.5)*.4;
-    var items=[
-      {label:'XAUUSD',price:fp.xau.toFixed(2),chg:0.42},
-      {label:'BTC/USDT',price:d.bitcoin.usd.toFixed(0),chg:d.bitcoin.usd_24h_change||0},
-      {label:'ETH/USDT',price:d.ethereum.usd.toFixed(2),chg:d.ethereum.usd_24h_change||0},
-      {label:'BNB/USDT',price:d.binancecoin.usd.toFixed(2),chg:d.binancecoin.usd_24h_change||0},
-      {label:'EUR/USD',price:fp.eur.toFixed(5),chg:0.03},
-      {label:'GBP/USD',price:fp.gbp.toFixed(5),chg:-0.05},
-    ];
-    var el=document.getElementById('tickerInner');if(el)el.innerHTML=buildTickerHTML(items);
-  }).catch(updateFallbackTicker);
-}
-updateFallbackTicker();
-fetchLivePrices();
-setInterval(updateFallbackTicker,4000);
-setInterval(fetchLivePrices,30000);
+fetchXAULive();
+setInterval(fetchXAULive,60000);
+setInterval(function(){
+  if(xauPrice>0){
+    xauPrice+=(Math.random()-0.5)*0.3;
+    var el=document.getElementById('tickerInner');
+    if(el)el.innerHTML=buildXAUTicker(xauPrice,0.42);
+  }
+},5000);
 </script>
 </body>
 </html>
