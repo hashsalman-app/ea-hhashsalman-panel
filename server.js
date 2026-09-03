@@ -645,12 +645,27 @@ app.get('/api/stats', (req, res) => {
   if (!found) return res.json({ ok: false });
   found.lastCheck = new Date().toISOString();
   const newTotal = parseFloat(total)||0;
+  const prevStats = found.stats || {};
   
+  // ✅ FIX: Agar EA restart hua aur sab zero bheja — purana data rakho
+  const newDaily   = parseFloat(daily)||0;
+  const newWeekly  = parseFloat(weekly)||0;
+  const newMonthly = parseFloat(monthly)||0;
+  const newWins    = parseInt(wins)||0;
+  const newLosses  = parseInt(losses)||0;
+  const newBalance = parseFloat(balance)||0;
+  
+  // Sirf update karo agar meaningful data aa raha hai
+  // Balance 0 matlab EA abhi connect nahi hua — purana balance rakho
   found.stats = {
-    daily: parseFloat(daily)||0, weekly: parseFloat(weekly)||0,
-    monthly: parseFloat(monthly)||0, total: newTotal,
-    wins: parseInt(wins)||0, losses: parseInt(losses)||0,
-    balance: parseFloat(balance)||0, bot: bot||'',
+    daily:   newDaily,
+    weekly:  newWeekly,
+    monthly: newMonthly,
+    total:   newTotal,
+    wins:    newWins   > 0 ? newWins   : (prevStats.wins   || 0),
+    losses:  newLosses > 0 ? newLosses : (prevStats.losses || 0),
+    balance: newBalance > 0 ? newBalance : (prevStats.balance || 0),
+    bot:     bot || prevStats.bot || '',
     updatedAt: new Date().toISOString()
   };
   
