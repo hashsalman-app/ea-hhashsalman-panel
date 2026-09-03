@@ -12,6 +12,7 @@ const RESEND_KEY = process.env.RESEND_API_KEY || '';
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname)); // ✅ Serve logo.png and other static files
 
 // ── DB ────────────────────────────────────────────────
 function getDB() {
@@ -709,16 +710,20 @@ app.post('/api/client/email', clientAuth, (req, res) => {
 // ── TOTAL PROFIT ─────────────────────────────────────
 app.get('/api/total-profit', (req, res) => {
   const db = getDB();
-  // Sum all bots cumulative profit from cumulativeProfit store
+  // ✅ Only count POSITIVE profits — losing trades ignored
   let total = 0;
   if (db.cumulativeProfit) {
-    Object.values(db.cumulativeProfit).forEach(v => { total += parseFloat(v) || 0; });
+    Object.values(db.cumulativeProfit).forEach(v => {
+      const val = parseFloat(v) || 0;
+      if (val > 0) total += val; // Only positive
+    });
   }
-  // Also add from current stats if not in cumulative yet
+  // Also from current stats if not in cumulative yet
   if (db.bots) {
     db.bots.forEach(b => {
       if (b.stats && b.stats.total && !db.cumulativeProfit?.[b.account]) {
-        total += parseFloat(b.stats.total) || 0;
+        const val = parseFloat(b.stats.total) || 0;
+        if (val > 0) total += val; // Only positive
       }
     });
   }
