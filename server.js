@@ -675,7 +675,27 @@ app.get('/api/stats', (req, res) => {
   if (newTotal > prevPeak) {
     db.cumulativeProfit[found.account] = newTotal;
   }
-  // Agar newTotal negative ya less hai — peak same rehta hai
+
+  // ✅ Daily history — har din ka profit save karo (max 365 days)
+  if (!db.dailyHistory) db.dailyHistory = {};
+  if (!db.dailyHistory[found.account]) db.dailyHistory[found.account] = [];
+  
+  const today = new Date().toISOString().split('T')[0];
+  const history = db.dailyHistory[found.account];
+  const todayIdx = history.findIndex(h => h.date === today);
+  
+  if (todayIdx >= 0) {
+    // Update today's entry
+    history[todayIdx].daily = newDaily;
+  } else {
+    // Add new entry
+    history.push({ date: today, daily: newDaily });
+    // Keep max 365 entries
+    if (history.length > 365) {
+      history.sort((a,b) => a.date.localeCompare(b.date));
+      db.dailyHistory[found.account] = history.slice(-365);
+    }
+  }
   
   saveDB(db); res.json({ ok: true });
 });
@@ -778,4 +798,10 @@ app.listen(PORT, () => {
   console.log('Hash Salman Panel running on port ' + PORT);
   console.log('DB:', DB);
   console.log('Email:', RESEND_KEY ? 'Resend configured ✅' : 'No email key ❌');
+});// ── DAILY HISTORY ────────────────────────────────────────────
+app.get('/api/history/:account', (req, res) => {
+  const db = getDB();
+  const account = req.params.account;
+  const history = (db.dailyHistory && db.dailyHistory[account]) || [];
+  res.json(history);
 });
