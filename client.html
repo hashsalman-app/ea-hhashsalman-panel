@@ -1,4 +1,29 @@
 <!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Copy Files</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:#0f172a;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.box{display:flex;flex-direction:column;gap:16px;width:100%;max-width:400px}
+h2{color:#fbbf24;text-align:center;font-size:18px;margin-bottom:8px}
+.btn{padding:16px 24px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;border:none;width:100%;transition:opacity .2s}
+.btn:hover{opacity:.9}
+.btn1{background:linear-gradient(90deg,#1a56db,#2563eb);color:#fff}
+.btn2{background:linear-gradient(90deg,#16a34a,#22c55e);color:#fff}
+.status{text-align:center;font-size:13px;color:#4ade80;min-height:20px;margin-top:4px}
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>📋 Copy Files</h2>
+  <button class="btn btn1" onclick="copy1()">📋 Copy client.html</button>
+  <button class="btn btn2" onclick="copy2()">📋 Copy home.html</button>
+  <div class="status" id="st"></div>
+</div>
+<script>
+var c1=`<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -9,12 +34,16 @@
 :root{--navy:#0a2463;--blue:#1a56db;--blue2:#2563eb;--blue3:#dbeafe;--blue4:#eff6ff;--green:#16a34a;--green2:#22c55e;--green3:#dcfce7;--green4:#f0fdf4;--gold:#f59e0b;--gold2:#fbbf24;--red:#ef4444;--text:#1e293b;--muted:#64748b;--white:#fff;--border:#e2e8f0;--bg:#f8fbff}
 html,body{height:100%;overflow-x:hidden}
 body{background:var(--bg);color:var(--text)}
+
+/* TICKER */
 #ticker{background:#0f172a;overflow:hidden;height:28px;display:flex;align-items:center;border-bottom:2px solid var(--green2)}
 .ticker-inner{display:flex;position:absolute;white-space:nowrap;animation:tickScroll 40s linear infinite}
 .ticker-wrap{overflow:hidden;position:relative;flex:1;height:28px}
 .t-item{padding:0 14px;font-size:10px;display:flex;gap:5px;border-right:1px solid #1e3a5f;align-items:center;flex-shrink:0}
 .ts{color:#93c5fd}.tp{color:#fff;font-weight:700}.tu{color:#4ade80}.td{color:#f87171}
 @keyframes tickScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* TOPBAR */
 .topbar{background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 60%,var(--green) 100%);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
 .topbar-logo{display:flex;align-items:center;gap:10px}
 .logo-wrap{width:38px;height:38px;border-radius:50%;background:#fff;padding:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -22,6 +51,8 @@ body{background:var(--bg);color:var(--text)}
 .brand-name{color:#fff;font-size:14px;font-weight:800}
 .brand-tag{color:#a5f3fc;font-size:9px;letter-spacing:1px}
 .btn-vip-top{background:linear-gradient(90deg,var(--gold),var(--gold2));color:#000;border:none;padding:7px 16px;border-radius:20px;font-weight:800;font-size:11px;cursor:pointer}
+
+/* LOGIN PAGE */
 #loginPage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
 .login-box{background:var(--white);border-radius:16px;padding:32px 24px;width:100%;max-width:380px;border:2px solid var(--blue3);box-shadow:0 8px 32px rgba(26,86,219,.1)}
 .login-logo{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--green));display:flex;align-items:center;justify-content:center;margin:0 auto 14px;border:3px solid var(--gold2);overflow:hidden}
@@ -29,20 +60,30 @@ body{background:var(--bg);color:var(--text)}
 .login-box h1{text-align:center;color:var(--text);font-size:20px;font-weight:800;margin-bottom:4px}
 .login-box .sub{text-align:center;color:var(--blue);font-size:12px;margin-bottom:24px;font-weight:600}
 .form-label{display:block;font-size:11px;font-weight:600;color:var(--text);margin-bottom:4px}
-.form-input{width:100%;padding:12px 14px;border:1.5px solid var(--blue3);border-radius:9px;font-size:13px;margin-bottom:14px;background:var(--white);color:var(--text)}
+.form-input{width:100%;padding:12px 14px;border:1.5px solid var(--blue3);border-radius:9px;font-size:13px;margin-bottom:14px;background:var(--white);color:var(--text);transition:border-color .2s}
 .form-input:focus{outline:none;border-color:var(--blue)}
 .btn-login{width:100%;padding:13px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:none;background:linear-gradient(90deg,var(--gold),var(--gold2));color:#000;margin-bottom:10px}
 .login-err{color:var(--red);font-size:12px;text-align:center;margin-top:4px;font-weight:600}
 .login-hint{background:var(--blue4);border-radius:8px;padding:8px 12px;font-size:10px;color:var(--muted);text-align:center}
+
+/* APP */
 #app{display:none}
+
+/* NAV TABS */
 .tabs{background:var(--white);display:flex;border-bottom:2px solid var(--border);overflow-x:auto}
 .tabs::-webkit-scrollbar{display:none}
 .tab-btn{flex:1;padding:10px 8px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;min-width:80px;text-align:center}
 .tab-btn.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:700}
+
+/* PAGES */
 .tab-page{display:none;padding:14px;max-width:520px;margin:0 auto}
 .tab-page.active{display:block}
+
+/* CARDS */
 .card{background:var(--white);border-radius:12px;padding:16px;margin-bottom:14px;border:1px solid var(--border)}
 .card.gold-border{border:2px solid var(--gold2)}
+
+/* CLIENT INFO */
 .client-info{display:flex;align-items:center;gap:12px}
 .client-avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--green));display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:#fff;flex-shrink:0;border:2px solid var(--gold2)}
 .client-name{font-size:16px;font-weight:800;color:var(--text)}
@@ -52,30 +93,45 @@ body{background:var(--bg);color:var(--text)}
 .badge-disabled{background:#fee2e2;color:var(--red);border:1px solid #fca5a5}
 .badge-expired{background:#f1f5f9;color:var(--muted);border:1px solid var(--border)}
 .badge-vip{background:linear-gradient(90deg,var(--gold),var(--gold2));color:#000;padding:3px 9px;border-radius:10px;font-size:9px;font-weight:800;margin-right:4px}
+
+/* P/L GRID */
 .pnl-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
 .pnl-box{background:var(--blue4);border-radius:10px;padding:12px;text-align:center;border:1px solid var(--blue3)}
 .pnl-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
 .pnl-value{font-size:19px;font-weight:900}
 .pnl-pos{color:var(--green)}.pnl-neg{color:var(--red)}.pnl-blue{color:var(--blue)}
+
+/* BOT CONTROLS */
 .bot-ctrl{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-.btn-activate{padding:12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #86efac;background:var(--green3);color:var(--green)}
-.btn-disable{padding:12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #fca5a5;background:#fee2e2;color:var(--red)}
+.btn-activate{padding:12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #86efac;background:var(--green3);color:var(--green);transition:all .2s}
+.btn-activate:hover{background:var(--green);color:#fff}
+.btn-disable{padding:12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #fca5a5;background:#fee2e2;color:var(--red);transition:all .2s}
+.btn-disable:hover{background:var(--red);color:#fff}
 .pnl-note{font-size:9px;color:var(--green);text-align:center;background:var(--green4);padding:5px;border-radius:6px;border:1px solid #86efac}
+
+/* DETAIL ROWS */
 .detail-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--blue3);font-size:12px}
 .detail-row:last-child{border:none}
 .detail-label{color:var(--muted)}.detail-val{font-weight:600;color:var(--text)}
+
+/* EXPIRED BANNER */
 .expired-banner{background:#fee2e2;border:2px solid #fca5a5;border-radius:10px;padding:14px;text-align:center;margin-bottom:14px}
 .expired-banner h3{color:var(--red);font-size:14px;font-weight:700;margin-bottom:6px}
 .expired-banner p{color:#7f1d1d;font-size:12px;line-height:1.6}
+
+/* LEADERBOARD */
 .lb-card{background:var(--white);border-radius:12px;overflow:hidden;border:1px solid var(--border)}
 .lb-thead{display:grid;grid-template-columns:38px 1fr 76px;padding:10px 14px;background:var(--blue4);border-bottom:1px solid var(--blue3);font-size:9px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px}
-.lb-row{display:grid;grid-template-columns:38px 1fr 76px;padding:11px 14px;border-bottom:1px solid #f0f4ff;align-items:center}
+.lb-row{display:grid;grid-template-columns:38px 1fr 76px;padding:11px 14px;border-bottom:1px solid #f0f4ff;align-items:center;transition:background .15s}
 .lb-row:hover{background:var(--blue4)}
+.lb-row:last-child{border:none}
 .lb-rank{font-size:15px}
 .lb-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;margin-right:8px;flex-shrink:0}
 .lb-info{display:flex;align-items:center}
 .lb-name{font-size:12px;font-weight:600;color:var(--text)}
 .lb-pnl{font-size:13px;font-weight:700;text-align:right}
+
+/* SETTINGS */
 .email-row{display:flex;gap:8px;margin-bottom:8px}
 .email-input{flex:1;padding:10px 12px;border:1.5px solid var(--blue3);border-radius:8px;font-size:12px;background:var(--blue4);color:var(--text)}
 .email-input:focus{outline:none;border-color:var(--blue)}
@@ -85,75 +141,50 @@ body{background:var(--bg);color:var(--text)}
 .wa-card h3{color:#fff;font-size:14px;font-weight:700;margin-bottom:4px}
 .wa-card p{color:#a5f3fc;font-size:11px;margin-bottom:12px}
 .btn-wa{background:#25d366;color:#fff;border:none;padding:11px 20px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+
+/* TOAST */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:10px;font-size:13px;font-weight:600;z-index:999;display:none;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.15)}
 .toast-success{background:var(--green3);color:var(--green);border:1px solid #86efac}
 .toast-error{background:#fee2e2;color:var(--red);border:1px solid #fca5a5}
 .toast-info{background:var(--blue4);color:var(--blue);border:1px solid var(--blue3)}
+
+/* RESPONSIVE */
 @media(min-width:600px){.tab-page{padding:20px}}
-@media(min-width:768px){.pnl-grid{grid-template-columns:repeat(4,1fr)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@media(min-width:768px){.pnl-grid{grid-template-columns:repeat(4,1fr)}.bot-ctrl{grid-template-columns:1fr 1fr}}
 @keyframes lbScroll{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}
-.trader-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;align-items:center;justify-content:center;padding:16px}
-.trader-modal-overlay.show{display:flex}
-.trader-modal{background:#fff;border-radius:16px;padding:20px;width:100%;max-width:360px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
-.trader-modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.trader-modal-name{font-size:16px;font-weight:800;color:var(--navy)}
-.trader-modal-close{background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer}
-.trader-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.trader-stat-box{background:var(--blue4);border-radius:10px;padding:12px;text-align:center;border:1px solid var(--blue3)}
-.trader-stat-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
-.trader-stat-val{font-size:18px;font-weight:900}
-.trader-stat-val.pos{color:var(--green)}.trader-stat-val.neg{color:var(--red)}
-.trader-wl{text-align:center;font-size:12px;color:var(--muted);margin-bottom:4px}
-.trader-updated{text-align:center;font-size:10px;color:var(--muted)}
-.cal-wrap{background:var(--white);border-radius:12px;padding:16px;border:1px solid var(--border);margin-bottom:14px}
-.cal-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.cal-nav-btn{background:var(--blue4);border:1px solid var(--blue3);border-radius:8px;padding:6px 14px;font-size:13px;font-weight:700;cursor:pointer;color:var(--blue)}
-.cal-month{font-size:15px;font-weight:800;color:var(--navy)}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-.cal-day-hdr{text-align:center;font-size:9px;font-weight:700;color:var(--muted);padding:4px 0;text-transform:uppercase}
-.cal-day{border-radius:8px;padding:6px 2px;text-align:center;min-height:52px;border:1px solid transparent}
-.cal-day.empty{background:none;border:none}
-.cal-day.today{border-color:var(--blue)!important}
-.cal-day .cal-num{font-size:10px;font-weight:600;color:var(--muted);margin-bottom:2px}
-.cal-day .cal-pnl{font-size:11px;font-weight:800}
-.cal-day.profit{background:var(--green4);border-color:#86efac}
-.cal-day.loss{background:#fef2f2;border-color:#fca5a5}
-.cal-day.nodata{background:#f8fbff}
-.cal-pnl.pos{color:var(--green)}.cal-pnl.neg{color:var(--red)}
-.cal-summary{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
-.cal-sum-box{background:var(--blue4);border-radius:8px;padding:10px;text-align:center;border:1px solid var(--blue3)}
-.cal-sum-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:3px}
-.cal-sum-val{font-size:14px;font-weight:800}
+#lbList:hover{animation-play-state:paused}
 </style>
 </head>
 <body>
 
+<!-- TICKER -->
 <div id="ticker">
   <div class="ticker-wrap">
     <div class="ticker-inner" id="tickerInner">
-      <span class="t-item"><span class="ts">XAU/USD (Gold)</span><span class="tp">Loading...</span></span>
+      <span class="t-item"><span class="ts">Loading prices...</span></span>
     </div>
   </div>
 </div>
 
+<!-- TOPBAR -->
 <div class="topbar">
   <div class="topbar-logo">
     <div class="logo-wrap">
-      <img src="/logo.png" alt="HS" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-weight:900;font-size:15px;color:#1a56db\'>HS</span>'">
+      <img src="/logo.png" alt="HS" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\\'font-weight:900;font-size:15px;color:#1a56db\\'>HS</span>'">
     </div>
     <div>
       <div class="brand-name">Hash Salman</div>
       <div class="brand-tag">FOCUS • DISCIPLINE • GROWTH</div>
     </div>
   </div>
-  <button class="btn-vip-top" onclick="window.location.href='/'">🏠 Home</button>
+  <button class="btn-vip-top" id="topVipBtn" onclick="window.location.href='/'">🏠 Home</button>
 </div>
 
+<!-- LOGIN PAGE -->
 <div id="loginPage">
   <div class="login-box">
     <div class="login-logo">
-      <img src="/logo.png" alt="HS" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-size:28px;font-weight:900;color:#fff\'>👑</span>'">
+      <img src="/logo.png" alt="HS" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\\'font-size:28px;font-weight:900;color:#fff\\'>👑</span>'">
     </div>
     <h1>VIP Login</h1>
     <div class="sub">hashsalman.com/client</div>
@@ -167,7 +198,9 @@ body{background:var(--bg);color:var(--text)}
   </div>
 </div>
 
+<!-- APP -->
 <div id="app">
+  <!-- TABS -->
   <div class="tabs">
     <button class="tab-btn active" onclick="showTab('mybot',this)">📊 My Bot</button>
     <button class="tab-btn" onclick="showTab('calendar',this)">📅 History</button>
@@ -175,12 +208,16 @@ body{background:var(--bg);color:var(--text)}
     <button class="tab-btn" onclick="showTab('settings',this)">⚙️ Settings</button>
   </div>
 
+  <!-- MY BOT TAB -->
   <div class="tab-page active" id="tab-mybot">
+    <!-- Expired banner (hidden by default) -->
     <div class="expired-banner" id="expiredBanner" style="display:none">
       <h3>⚠️ License Expired</h3>
       <p>Your license has expired. Please contact Hash Salman to renew.<br>
       <a href="https://wa.me/923023464786" style="color:#1a56db;font-weight:700">📱 WhatsApp: +92 302 3464786</a></p>
     </div>
+
+    <!-- Client info card -->
     <div class="card gold-border">
       <div class="client-info">
         <div class="client-avatar" id="clientAvatar">A</div>
@@ -193,18 +230,24 @@ body{background:var(--bg);color:var(--text)}
           <span class="status-badge badge-active" id="statusBadge">ACTIVE</span>
         </div>
       </div>
+
+      <!-- P/L Grid -->
       <div class="pnl-grid">
         <div class="pnl-box"><div class="pnl-label">Daily P/L</div><div class="pnl-value pnl-pos" id="pDaily">+$0.00</div></div>
         <div class="pnl-box"><div class="pnl-label">Balance</div><div class="pnl-value pnl-blue" id="pBalance">$0.00</div></div>
         <div class="pnl-box"><div class="pnl-label">Weekly P/L</div><div class="pnl-value pnl-pos" id="pWeekly">+$0.00</div></div>
         <div class="pnl-box"><div class="pnl-label">Monthly P/L</div><div class="pnl-value pnl-pos" id="pMonthly">+$0.00</div></div>
       </div>
+
+      <!-- Bot Controls -->
       <div class="bot-ctrl" id="botCtrl">
         <button class="btn-activate" id="btnActivate" onclick="activateBot()" style="display:none">▶ Activate Bot</button>
         <button class="btn-disable" id="btnDisable" onclick="disableBot()">⏸ Disable Bot</button>
       </div>
       <div class="pnl-note">✅ Profits are permanent — on/off does not reset your P/L history</div>
     </div>
+
+    <!-- Bot Details -->
     <div class="card">
       <div class="detail-row"><span class="detail-label">Bot Version</span><span class="detail-val" id="dBot">—</span></div>
       <div class="detail-row"><span class="detail-label">Server</span><span class="detail-val" id="dServer">—</span></div>
@@ -216,6 +259,24 @@ body{background:var(--bg);color:var(--text)}
     </div>
   </div>
 
+  <!-- LEADERBOARD TAB -->
+  <div class="tab-page" id="tab-leaderboard">
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="background:linear-gradient(135deg,var(--navy),var(--blue));padding:14px;text-align:center">
+        <div style="color:#fff;font-size:15px;font-weight:800">🏆 Live Leaderboard</div>
+        <div style="display:inline-flex;align-items:center;gap:5px;color:#4ade80;font-size:10px;margin-top:4px;font-weight:700">
+          <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block;animation:pulse 1.5s infinite"></span>LIVE
+        </div>
+      </div>
+      <div class="lb-thead"><div>#</div><div>TRADER</div><div style="text-align:right">TODAY</div></div>
+      <div style="height:420px;overflow:hidden;position:relative">
+        <div id="lbList" style="position:absolute;width:100%;animation:lbScroll 25s linear infinite"></div>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:10px;color:var(--muted)">Active traders only • Updated from MT5</p>
+  </div>
+
+  <!-- SETTINGS TAB -->
   <div class="tab-page" id="tab-calendar">
     <div class="cal-wrap">
       <div class="cal-nav">
@@ -233,22 +294,6 @@ body{background:var(--bg);color:var(--text)}
     <p style="text-align:center;font-size:10px;color:var(--muted)">Up to 1 year of trading history</p>
   </div>
 
-  <div class="tab-page" id="tab-leaderboard">
-    <div class="lb-card">
-      <div style="background:linear-gradient(135deg,var(--navy),var(--blue));padding:14px;text-align:center">
-        <div style="color:#fff;font-size:15px;font-weight:800">🏆 Live Leaderboard</div>
-        <div style="display:inline-flex;align-items:center;gap:5px;color:#4ade80;font-size:10px;margin-top:4px;font-weight:700">
-          <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block;animation:pulse 1.5s infinite"></span>LIVE • Tap name for stats
-        </div>
-      </div>
-      <div class="lb-thead"><div>#</div><div>TRADER</div><div style="text-align:right">TODAY</div></div>
-      <div style="height:420px;overflow:hidden;position:relative">
-        <div id="lbList" style="position:absolute;width:100%;animation:lbScroll 25s linear infinite"></div>
-      </div>
-    </div>
-    <p style="text-align:center;font-size:10px;color:var(--muted);margin-top:8px">Tap LIVE traders to see their stats</p>
-  </div>
-
   <div class="tab-page" id="tab-settings">
     <div class="card">
       <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:4px">📧 Email Notifications</div>
@@ -258,169 +303,223 @@ body{background:var(--bg);color:var(--text)}
         <button class="btn-save-email" onclick="saveEmail()">Save</button>
       </div>
     </div>
+
     <div class="card">
       <div class="detail-row"><span class="detail-label">Account #</span><span class="detail-val" id="sAccount">—</span></div>
       <div class="detail-row"><span class="detail-label">Server</span><span class="detail-val" id="sServer">—</span></div>
       <div class="detail-row"><span class="detail-label">License Expiry</span><span class="detail-val" style="color:var(--gold)" id="sExpiry">—</span></div>
       <div class="detail-row"><span class="detail-label">Status</span><span class="detail-val" id="sStatus">—</span></div>
     </div>
+
     <div class="wa-card">
       <h3>Need Help or Renewal?</h3>
       <p>Contact Hash Salman on WhatsApp</p>
       <a href="https://wa.me/923023464786" class="btn-wa">📱 WhatsApp: +92 302 3464786</a>
     </div>
+
     <div class="card" style="text-align:center">
       <button class="btn-signout" onclick="doLogout()">Sign Out</button>
     </div>
   </div>
 </div>
 
+<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<div class="trader-modal-overlay" id="traderModal" onclick="closeTraderModal(event)">
-  <div class="trader-modal">
-    <div class="trader-modal-head">
-      <div class="trader-modal-name" id="traderModalName">Trader</div>
-      <button class="trader-modal-close" onclick="document.getElementById('traderModal').classList.remove('show')">✕</button>
-    </div>
-    <div class="trader-stat-grid">
-      <div class="trader-stat-box"><div class="trader-stat-lbl">Daily P/L</div><div class="trader-stat-val" id="tmDaily">—</div></div>
-      <div class="trader-stat-box"><div class="trader-stat-lbl">Weekly P/L</div><div class="trader-stat-val" id="tmWeekly">—</div></div>
-      <div class="trader-stat-box"><div class="trader-stat-lbl">Monthly P/L</div><div class="trader-stat-val" id="tmMonthly">—</div></div>
-      <div class="trader-stat-box"><div class="trader-stat-lbl">Win Rate</div><div class="trader-stat-val" id="tmWinRate" style="color:var(--blue)">—</div></div>
-    </div>
-    <div class="trader-wl" id="tmWL">—</div>
-    <div class="trader-updated" id="tmUpdated">—</div>
-  </div>
-</div>
+<style>
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.trader-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;align-items:center;justify-content:center;padding:16px}
+.trader-modal-overlay.show{display:flex}
+.trader-modal{background:#fff;border-radius:16px;padding:20px;width:100%;max-width:360px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.trader-modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.trader-modal-name{font-size:16px;font-weight:800;color:var(--navy)}
+.trader-modal-close{background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer}
+.trader-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.trader-stat-box{background:var(--blue4);border-radius:10px;padding:12px;text-align:center;border:1px solid var(--blue3)}
+.trader-stat-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.trader-stat-val{font-size:18px;font-weight:900}
+.trader-stat-val.pos{color:var(--green)}.trader-stat-val.neg{color:var(--red)}
+.trader-wl{text-align:center;font-size:12px;color:var(--muted);margin-bottom:4px}
+.trader-updated{text-align:center;font-size:10px;color:var(--muted)}
+/* CALENDAR */
+.cal-wrap{background:var(--white);border-radius:12px;padding:16px;border:1px solid var(--border);margin-bottom:14px}
+.cal-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.cal-nav-btn{background:var(--blue4);border:1px solid var(--blue3);border-radius:8px;padding:6px 14px;font-size:13px;font-weight:700;cursor:pointer;color:var(--blue)}
+.cal-month{font-size:15px;font-weight:800;color:var(--navy)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-day-hdr{text-align:center;font-size:9px;font-weight:700;color:var(--muted);padding:4px 0;text-transform:uppercase}
+.cal-day{border-radius:8px;padding:6px 2px;text-align:center;min-height:52px;cursor:default;border:1px solid transparent}
+.cal-day.empty{background:none;border:none}
+.cal-day.today{border-color:var(--blue)!important}
+.cal-day .cal-num{font-size:10px;font-weight:600;color:var(--muted);margin-bottom:2px}
+.cal-day .cal-pnl{font-size:11px;font-weight:800}
+.cal-day.profit{background:var(--green4);border-color:#86efac}
+.cal-day.loss{background:#fef2f2;border-color:#fca5a5}
+.cal-day.nodata{background:#f8fbff}
+.cal-pnl.pos{color:var(--green)}.cal-pnl.neg{color:var(--red)}
+.cal-summary{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.cal-sum-box{background:var(--blue4);border-radius:8px;padding:10px;text-align:center;border:1px solid var(--blue3)}
+.cal-sum-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:3px}
+.cal-sum-val{font-size:14px;font-weight:800}
+</style>
 
 <script>
-var TOKEN=localStorage.getItem('hs_client_tok')||'';
-var FAKE_USERS=[
-  {name:'Furqan Ahmed',ini:'FA',color:'#8b5cf6'},
-  {name:'Irfan Khan',ini:'IK',color:'#ef4444'},
-  {name:'Hash Salman',ini:'HS',color:'#1a56db'},
-  {name:'Owner 2',ini:'O2',color:'#f59e0b'},
-  {name:'Rahul Sharma',ini:'RS',color:'#06b6d4'},
-  {name:'Bilal Sheikh',ini:'BS',color:'#16a34a'},
-  {name:'Priya Patel',ini:'PP',color:'#ec4899'},
-  {name:'Usman Ali',ini:'UA',color:'#f97316'},
-  {name:'Amit Verma',ini:'AV',color:'#6366f1'},
-  {name:'Zara Malik',ini:'ZM',color:'#14b8a6'},
-  {name:'Arjun Singh',ini:'AS',color:'#84cc16'},
-  {name:'Hina Baig',ini:'HB',color:'#a855f7'},
-  {name:'Vikram Nair',ini:'VN',color:'#f43f5e'},
-  {name:'Sana Qureshi',ini:'SQ',color:'#0ea5e9'},
-  {name:'Danish Raza',ini:'DR',color:'#fb923c'},
+var TOKEN = localStorage.getItem('hs_client_tok') || '';
+var botData = null;
+var FAKE_USERS = [
+  {name:'Furqan Ahmed',ini:'FA',color:'#8b5cf6',base:72,mult:1.4},
+  {name:'Irfan Khan',ini:'IK',color:'#ef4444',base:68,mult:1.8},
+  {name:'Hash Salman',ini:'HS',color:'#1a56db',base:61,mult:1.6},
+  {name:'Owner 2',ini:'O2',color:'#f59e0b',base:44,mult:1.2},
+  {name:'Rahul Sharma',ini:'RS',color:'#06b6d4',base:58,mult:1.3},
+  {name:'Bilal Sheikh',ini:'BS',color:'#16a34a',base:45,mult:1.5},
+  {name:'Priya Patel',ini:'PP',color:'#ec4899',base:38,mult:1.2},
+  {name:'Usman Ali',ini:'UA',color:'#f97316',base:63,mult:1.7},
+  {name:'Amit Verma',ini:'AV',color:'#6366f1',base:31,mult:1.1},
+  {name:'Zara Malik',ini:'ZM',color:'#14b8a6',base:55,mult:1.4},
+  {name:'Arjun Singh',ini:'AS',color:'#84cc16',base:42,mult:1.3},
+  {name:'Hina Baig',ini:'HB',color:'#a855f7',base:29,mult:1.0},
+  {name:'Vikram Nair',ini:'VN',color:'#f43f5e',base:48,mult:1.2},
+  {name:'Sana Qureshi',ini:'SQ',color:'#0ea5e9',base:35,mult:1.1},
+  {name:'Danish Raza',ini:'DR',color:'#fb923c',base:67,mult:1.6},
 ];
 
-if(TOKEN){showApp();loadBot();}
+if (TOKEN) { showApp(); loadBot(); }
 
-function doLogin(){
-  var acc=document.getElementById('loginAcc').value.trim();
-  var pass=document.getElementById('loginPass').value;
-  var errEl=document.getElementById('loginErr');
-  errEl.textContent='';
-  if(!acc||!pass){errEl.textContent='Account number aur password daalo!';return;}
-  fetch('/api/client/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:acc,password:pass})})
-  .then(function(r){return r.json();}).then(function(d){
-    if(d.token){TOKEN=d.token;localStorage.setItem('hs_client_tok',TOKEN);showApp();loadBot();}
-    else errEl.textContent=d.error||'Login failed.';
-  }).catch(function(){errEl.textContent='Server error.';});
+// ── AUTH ──────────────────────────────────────────────
+function doLogin() {
+  var acc = document.getElementById('loginAcc').value.trim();
+  var pass = document.getElementById('loginPass').value;
+  var errEl = document.getElementById('loginErr');
+  errEl.textContent = '';
+  if (!acc || !pass) { errEl.textContent = 'Account number aur password daalo!'; return; }
+  fetch('/api/client/login', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: acc, password: pass })
+  }).then(function(r) { return r.json(); }).then(function(d) {
+    if (d.token) { TOKEN = d.token; localStorage.setItem('hs_client_tok', TOKEN); showApp(); loadBot(); }
+    else errEl.textContent = d.error || 'Login failed. Check credentials.';
+  }).catch(function() { errEl.textContent = 'Server error. Try again.'; });
 }
 
-function showApp(){
-  document.getElementById('loginPage').style.display='none';
-  document.getElementById('app').style.display='block';
-  startTicker();loadLeaderboard();
+function showApp() {
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('topVipBtn').textContent = '🏠 Home';
+  startTicker();
+  loadLeaderboard();
 }
 
-function doLogout(){TOKEN='';localStorage.removeItem('hs_client_tok');location.reload();}
-
-function api(url,opts){
-  opts=opts||{};opts.headers=opts.headers||{};
-  opts.headers['Authorization']='Bearer '+TOKEN;
-  opts.headers['Content-Type']='application/json';
-  return fetch(url,opts).then(function(r){return r.json();});
+function doLogout() {
+  TOKEN = ''; localStorage.removeItem('hs_client_tok');
+  location.reload();
 }
 
-function showTab(name,btn){
-  document.querySelectorAll('.tab-page').forEach(function(p){p.classList.remove('active');});
-  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
-  document.getElementById('tab-'+name).classList.add('active');
+// ── API ───────────────────────────────────────────────
+function api(url, opts) {
+  opts = opts || {}; opts.headers = opts.headers || {};
+  opts.headers['Authorization'] = 'Bearer ' + TOKEN;
+  opts.headers['Content-Type'] = 'application/json';
+  return fetch(url, opts).then(function(r) { return r.json(); });
+}
+
+// ── TABS ──────────────────────────────────────────────
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-page').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('tab-' + name).classList.add('active');
   btn.classList.add('active');
-  if(name==='leaderboard')loadLeaderboard();
-  if(name==='calendar')renderCalendar();
+  if (name === 'leaderboard') loadLeaderboard();
 }
 
-function fmtPnl(v){v=parseFloat(v)||0;return(v>=0?'+$':'-$')+Math.abs(v).toFixed(2);}
-function setPnlClass(el,v){el.className='pnl-value '+(v>=0?'pnl-pos':'pnl-neg');}
-function fmtVal(v){var n=parseFloat(v)||0;return(n>=0?'+$':'-$')+Math.abs(n).toFixed(2);}
-
-function loadBot(){
-  api('/api/client/bot').then(function(b){
-    if(b.error){doLogout();return;}
-    var name=b.name||'Client';
-    var initials=name.split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
-    document.getElementById('clientAvatar').textContent=initials;
-    document.getElementById('clientName').textContent=name;
-    document.getElementById('clientAcc').textContent='Account #'+b.account;
-    document.getElementById('sAccount').textContent=b.account;
-    document.getElementById('sServer').textContent=b.server||'—';
-    document.getElementById('sExpiry').textContent=b.expiry||'—';
-    document.getElementById('sStatus').textContent=b.status||'—';
-    if(b.clientEmail)document.getElementById('emailInput').value=b.clientEmail;
-    var badge=document.getElementById('statusBadge');
-    badge.textContent=b.status;
-    badge.className='status-badge '+(b.status==='ACTIVE'?'badge-active':b.status==='DISABLED'?'badge-disabled':'badge-expired');
-    document.getElementById('expiredBanner').style.display=b.status==='EXPIRED'?'block':'none';
-    var isActive=b.status==='ACTIVE';var isExpired=b.status==='EXPIRED';
-    document.getElementById('btnActivate').style.display=(!isActive&&!isExpired)?'block':'none';
-    document.getElementById('btnDisable').style.display=isActive?'block':'none';
-    document.getElementById('botCtrl').style.display=isExpired?'none':'grid';
-    var s=b.stats||{};
-    var dEl=document.getElementById('pDaily');dEl.textContent=fmtPnl(s.daily);setPnlClass(dEl,s.daily);
-    var wEl=document.getElementById('pWeekly');wEl.textContent=fmtPnl(s.weekly);setPnlClass(wEl,s.weekly);
-    var mEl=document.getElementById('pMonthly');mEl.textContent=fmtPnl(s.monthly);setPnlClass(mEl,s.monthly);
-    document.getElementById('pBalance').textContent='$'+(parseFloat(s.balance)||0).toFixed(2);
-    var wins=parseInt(s.wins)||0,losses=parseInt(s.losses)||0;
-    document.getElementById('dWins').textContent=wins;
-    document.getElementById('dLosses').textContent=losses;
-    document.getElementById('dWinRate').textContent=(wins+losses>0?Math.round(wins/(wins+losses)*100):0)+'%';
-    document.getElementById('dBot').textContent=s.bot||'—';
-    document.getElementById('dServer').textContent=b.server||'—';
-    document.getElementById('dExpiry').textContent=b.expiry||'—';
-    document.getElementById('dUpdated').textContent=s.updatedAt?new Date(s.updatedAt).toLocaleString():'No data yet';
-    loadHistory(b.account);
-  }).catch(function(){showToast('Connection error','error');});
+// ── BOT LOAD ──────────────────────────────────────────
+function fmtPnl(v) {
+  v = parseFloat(v) || 0;
+  return (v >= 0 ? '+$' : '-$') + Math.abs(v).toFixed(2);
+}
+function setPnlClass(el, v) {
+  el.className = 'pnl-value ' + (v >= 0 ? 'pnl-pos' : 'pnl-neg');
 }
 
-function activateBot(){
-  api('/api/client/activate',{method:'POST'}).then(function(r){
-    if(r.ok){showToast('✅ Bot activated!','success');loadBot();}
-    else showToast(r.error||'Failed','error');
+function loadBot() {
+  api('/api/client/bot').then(function(b) {
+    if (b.error) { doLogout(); return; }
+    botData = b;
+    var name = b.name || 'Client';
+    var initials = name.split(' ').map(function(w) { return w[0]; }).join('').toUpperCase().slice(0, 2);
+    document.getElementById('clientAvatar').textContent = initials;
+    document.getElementById('clientName').textContent = name;
+    document.getElementById('clientAcc').textContent = 'Account #' + b.account;
+
+    // Settings
+    document.getElementById('sAccount').textContent = b.account;
+    document.getElementById('sServer').textContent = b.server || '—';
+    document.getElementById('sExpiry').textContent = b.expiry || '—';
+    document.getElementById('sStatus').textContent = b.status || '—';
+    if (b.clientEmail) document.getElementById('emailInput').value = b.clientEmail;
+
+    // Status badge
+    var badge = document.getElementById('statusBadge');
+    badge.textContent = b.status;
+    badge.className = 'status-badge ' + (b.status === 'ACTIVE' ? 'badge-active' : b.status === 'DISABLED' ? 'badge-disabled' : 'badge-expired');
+
+    // Expired banner
+    document.getElementById('expiredBanner').style.display = b.status === 'EXPIRED' ? 'block' : 'none';
+
+    // Bot controls
+    var isActive = b.status === 'ACTIVE';
+    var isExpired = b.status === 'EXPIRED';
+    document.getElementById('btnActivate').style.display = (!isActive && !isExpired) ? 'block' : 'none';
+    document.getElementById('btnDisable').style.display = isActive ? 'block' : 'none';
+    document.getElementById('botCtrl').style.display = isExpired ? 'none' : 'grid';
+
+    // Stats
+    var s = b.stats || {};
+    var dEl = document.getElementById('pDaily'); dEl.textContent = fmtPnl(s.daily); setPnlClass(dEl, s.daily);
+    var wEl = document.getElementById('pWeekly'); wEl.textContent = fmtPnl(s.weekly); setPnlClass(wEl, s.weekly);
+    var mEl = document.getElementById('pMonthly'); mEl.textContent = fmtPnl(s.monthly); setPnlClass(mEl, s.monthly);
+    document.getElementById('pBalance').textContent = '$' + (parseFloat(s.balance) || 0).toFixed(2);
+
+    var wins = parseInt(s.wins) || 0, losses = parseInt(s.losses) || 0;
+    document.getElementById('dWins').textContent = wins;
+    document.getElementById('dLosses').textContent = losses;
+    document.getElementById('dWinRate').textContent = (wins + losses > 0 ? Math.round(wins / (wins + losses) * 100) : 0) + '%';
+    document.getElementById('dBot').textContent = s.bot || '—';
+    document.getElementById('dServer').textContent = b.server || '—';
+    document.getElementById('dExpiry').textContent = b.expiry || '—';
+    document.getElementById('dUpdated').textContent = s.updatedAt ? new Date(s.updatedAt).toLocaleString() : 'No data yet';
+  }).catch(function() { showToast('Connection error', 'error'); });
+}
+
+function activateBot() {
+  api('/api/client/activate', { method: 'POST' }).then(function(r) {
+    if (r.ok) { showToast('✅ Bot activated!', 'success'); loadBot(); }
+    else showToast(r.error || 'Failed', 'error');
   });
 }
-function disableBot(){
-  if(!confirm('Bot disable karna chahte ho?'))return;
-  api('/api/client/disable',{method:'POST'}).then(function(r){
-    if(r.ok){showToast('⏸ Bot disabled.','info');loadBot();}
-    else showToast(r.error||'Failed','error');
-  });
-}
-function saveEmail(){
-  var email=document.getElementById('emailInput').value.trim();
-  if(!email){showToast('Email daalo!','error');return;}
-  api('/api/client/email',{method:'POST',body:JSON.stringify({email:email})}).then(function(r){
-    if(r.ok)showToast('📧 Email saved!','success');
-    else showToast(r.error||'Failed','error');
+
+function disableBot() {
+  if (!confirm('Bot disable karna chahte ho?')) return;
+  api('/api/client/disable', { method: 'POST' }).then(function(r) {
+    if (r.ok) { showToast('⏸ Bot disabled.', 'info'); loadBot(); }
+    else showToast(r.error || 'Failed', 'error');
   });
 }
 
+function saveEmail() {
+  var email = document.getElementById('emailInput').value.trim();
+  if (!email) { showToast('Email daalo!', 'error'); return; }
+  api('/api/client/email', { method: 'POST', body: JSON.stringify({ email: email }) }).then(function(r) {
+    if (r.ok) showToast('📧 Email saved!', 'success');
+    else showToast(r.error || 'Failed', 'error');
+  });
+}
+
+// ── LEADERBOARD ───────────────────────────────────────
 function getDailySeed(){var d=new Date();return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();}
 function seededRand(seed,idx){var x=Math.sin(seed+idx*9301+49297)*233280;return x-Math.floor(x);}
 
-function loadLeaderboard(){
+function loadLeaderboard() {
   fetch('/api/leaderboard').then(function(r){return r.json();}).then(function(realData){
     var realAvg=0;
     if(realData&&realData.length>0) realAvg=realData.reduce(function(s,b){return s+(parseFloat(b.daily)||0);},0)/realData.length;
@@ -431,9 +530,12 @@ function loadLeaderboard(){
     });
     var seed=getDailySeed();
     FAKE_USERS.forEach(function(f,idx){
-      var r1=seededRand(seed,idx);var r2=seededRand(seed,idx+100);
-      var d=Math.max(0.5,Math.min(80,1+r1*79+(r2-0.5)*6+(realAvg>0?realAvg*0.1:0)));
-      all.push({name:f.name,ini:f.ini,color:f.color,daily:parseFloat(d.toFixed(2)),real:false});
+      var r1=seededRand(seed,idx);
+      var r2=seededRand(seed,idx+100);
+      var baseProfit=1+r1*79;
+      var tick=(r2-0.5)*6;
+      var d=Math.max(0.5,Math.min(80,baseProfit+tick+(realAvg>0?realAvg*0.1:0)));
+      all.push({name:f.name,ini:f.ini,color:f.color,daily:parseFloat(d.toFixed(2))});
     });
     all.sort(function(a,b){return b.daily-a.daily;});
     renderLeaderboard(all);
@@ -441,14 +543,17 @@ function loadLeaderboard(){
     var seed=getDailySeed();
     var fallback=FAKE_USERS.map(function(f,idx){
       var r=seededRand(seed,idx);
-      return {name:f.name,ini:f.ini,color:f.color,daily:parseFloat((1+r*79).toFixed(2)),real:false};
+      return {name:f.name,ini:f.ini,color:f.color,daily:parseFloat((1+r*79).toFixed(2))};
     });
     fallback.sort(function(a,b){return b.daily-a.daily;});
     renderLeaderboard(fallback);
   });
 }
 
-function showTraderModal(name){
+function fmtVal(v){var n=parseFloat(v)||0;return(n>=0?'+$':'-$')+Math.abs(n).toFixed(2);}
+
+function showTraderModal(el){
+  var name=el.getAttribute('data-name');
   fetch('/api/trader/'+encodeURIComponent(name))
     .then(function(r){return r.json();})
     .then(function(d){
@@ -478,14 +583,95 @@ function renderLeaderboard(data){
     var rk=i<3?medals[i]:'<span style="color:var(--muted);font-size:11px">#'+(i+1)+'</span>';
     var pos=t.daily>=0;
     var pnl=(pos?'+$':'-$')+Math.abs(t.daily).toFixed(2);
-    var rowClick=t.real?' style="cursor:pointer" onclick="showTraderModal(\''+t.name+'\')"':'';
-    var liveBadge=t.real?' <span style="font-size:9px;background:#dbeafe;color:#1a56db;padding:1px 5px;border-radius:6px;font-weight:700">LIVE</span>':'';
-    html+='<div class="lb-row"'+rowClick+'><div class="lb-rank">'+rk+'</div><div class="lb-info"><div class="lb-av" style="background:'+t.color+'">'+t.ini+'</div><div class="lb-name">'+t.name+liveBadge+'</div></div><div class="lb-pnl '+(pos?'pnl-pos':'pnl-neg')+'">'+pnl+'</div></div>';
+    if(t.real){
+      // Real user — click se popup aaye
+      html+='<div class="lb-row" style="cursor:pointer" onclick="showTraderModal(this)"  data-name="'+t.name.replace(/"/g,"&quot;")+'"><div class="lb-rank">'+rk+'</div><div class="lb-info"><div class="lb-av" style="background:'+t.color+'">'+t.ini+'</div><div class="lb-name">'+t.name+'</div></div><div class="lb-pnl '+(pos?'pnl-pos':'pnl-neg')+'">'+pnl+'</div></div>';
+    } else {
+      // Fake user — no click, no badge
+      html+='<div class="lb-row"><div class="lb-rank">'+rk+'</div><div class="lb-info"><div class="lb-av" style="background:'+t.color+'">'+t.ini+'</div><div class="lb-name">'+t.name+'</div></div><div class="lb-pnl '+(pos?'pnl-pos':'pnl-neg')+'">'+pnl+'</div></div>';
+    }
   });
   document.getElementById('lbList').innerHTML=html+html;
 }
 
-// CALENDAR
+
+// ── TICKER ────────────────────────────────────────────
+var fp = { xau: 2647.30, btc: 58240, eth: 2311.69, eur: 1.08420, gbp: 1.25640, bnb: 580 };
+
+function buildTicker(items) {
+  var h = '';
+  items.forEach(function(p) {
+    var pos = p.chg >= 0;
+    h += '<span class="t-item"><span class="ts">' + p.label + '</span><span class="tp">' + p.price + '</span><span class="' + (pos ? 'tu' : 'td') + '">' + (pos ? '+' : '') + p.chg.toFixed(2) + '%</span></span>';
+  });
+  var el = document.getElementById('tickerInner');
+  if (el) el.innerHTML = h + h;
+}
+
+function updateTicker() {
+  fp.xau += (Math.random() - 0.5) * 0.5; fp.btc += (Math.random() - 0.5) * 50;
+  fp.eth += (Math.random() - 0.5) * 1.5; fp.eur += (Math.random() - 0.5) * 0.0003;
+  fp.gbp += (Math.random() - 0.5) * 0.0003; fp.bnb += (Math.random() - 0.5) * 1;
+  buildTicker([
+    { label: 'XAUUSD', price: fp.xau.toFixed(2), chg: 0.42 },
+    { label: 'BTC/USDT', price: fp.btc.toFixed(0), chg: 1.20 },
+    { label: 'ETH/USDT', price: fp.eth.toFixed(2), chg: -0.07 },
+    { label: 'EUR/USD', price: fp.eur.toFixed(5), chg: 0.03 },
+    { label: 'GBP/USD', price: fp.gbp.toFixed(5), chg: -0.05 },
+    { label: 'BNB/USDT', price: fp.bnb.toFixed(2), chg: 0.85 },
+  ]);
+}
+
+function startTicker() {
+  updateTicker();
+  fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin&vs_currencies=usd&include_24hr_change=true')
+    .then(function(r) { return r.json(); }).then(function(d) {
+      buildTicker([
+        { label: 'XAUUSD', price: fp.xau.toFixed(2), chg: 0.42 },
+        { label: 'BTC/USDT', price: d.bitcoin.usd.toFixed(0), chg: d.bitcoin.usd_24h_change || 0 },
+        { label: 'ETH/USDT', price: d.ethereum.usd.toFixed(2), chg: d.ethereum.usd_24h_change || 0 },
+        { label: 'BNB/USDT', price: d.binancecoin.usd.toFixed(2), chg: d.binancecoin.usd_24h_change || 0 },
+        { label: 'EUR/USD', price: fp.eur.toFixed(5), chg: 0.03 },
+        { label: 'GBP/USD', price: fp.gbp.toFixed(5), chg: -0.05 },
+      ]);
+    }).catch(updateTicker);
+  setInterval(updateTicker, 4000);
+  setInterval(function() {
+    fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin&vs_currencies=usd&include_24hr_change=true')
+      .then(function(r) { return r.json(); }).then(function(d) {
+        buildTicker([
+          { label: 'XAUUSD', price: fp.xau.toFixed(2), chg: 0.42 },
+          { label: 'BTC/USDT', price: d.bitcoin.usd.toFixed(0), chg: d.bitcoin.usd_24h_change || 0 },
+          { label: 'ETH/USDT', price: d.ethereum.usd.toFixed(2), chg: d.ethereum.usd_24h_change || 0 },
+          { label: 'BNB/USDT', price: d.binancecoin.usd.toFixed(2), chg: d.binancecoin.usd_24h_change || 0 },
+          { label: 'EUR/USD', price: fp.eur.toFixed(5), chg: 0.03 },
+          { label: 'GBP/USD', price: fp.gbp.toFixed(5), chg: -0.05 },
+        ]);
+      }).catch(updateTicker);
+  }, 30000);
+}
+
+// Start ticker on load
+startTicker();
+
+// ── TOAST ─────────────────────────────────────────────
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast toast-' + (type || 'info');
+  t.style.display = 'block';
+  setTimeout(function() { t.style.display = 'none'; }, 3000);
+}
+
+// ── AUTO REFRESH ──────────────────────────────────────
+setInterval(function() { if (TOKEN) { loadBot(); loadLeaderboard(); } }, 30000);
+
+// ── KEYBOARD ─────────────────────────────────────────
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') doLogin();
+});
+
+// ── CALENDAR ──────────────────────────────────
 var calHistory=[];
 var calYear=new Date().getFullYear();
 var calMonth=new Date().getMonth();
@@ -516,8 +702,7 @@ function renderCalendar(){
   var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
   var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   var today=new Date().toISOString().split('T')[0];
-  var el=document.getElementById('calMonthTitle');
-  if(el)el.textContent=months[calMonth]+' '+calYear;
+  document.getElementById('calMonthTitle').textContent=months[calMonth]+' '+calYear;
   var lookup={};
   calHistory.forEach(function(h){lookup[h.date]=h.daily;});
   var firstDay=new Date(calYear,calMonth,1).getDay();
@@ -541,21 +726,630 @@ function renderCalendar(){
     }
     html+='<div class="'+cls+'"><div class="cal-num">'+d+'</div>'+pnlHtml+'</div>';
   }
-  var grid=document.getElementById('calGrid');
-  if(grid)grid.innerHTML=html;
+  document.getElementById('calGrid').innerHTML=html;
   var mtEl=document.getElementById('calMonthTotal');
-  if(mtEl){mtEl.textContent=(monthTotal>=0?'+$':'-$')+Math.abs(monthTotal).toFixed(2);mtEl.style.color=monthTotal>=0?'var(--green)':'var(--red)';}
-  var bdEl=document.getElementById('calBestDay');
-  if(bdEl)bdEl.textContent='+$'+bestDay.toFixed(2);
-  var tdEl=document.getElementById('calTradeDays');
-  if(tdEl)tdEl.textContent=tradeDays;
+  mtEl.textContent=(monthTotal>=0?'+$':'-$')+Math.abs(monthTotal).toFixed(2);
+  mtEl.style.color=monthTotal>=0?'var(--green)':'var(--red)';
+  document.getElementById('calBestDay').textContent='+$'+bestDay.toFixed(2);
+  document.getElementById('calTradeDays').textContent=tradeDays;
+}
+</script>
+
+<!-- TRADER MODAL -->
+<div class="trader-modal-overlay" id="traderModal" onclick="closeTraderModal(event)">
+  <div class="trader-modal">
+    <div class="trader-modal-head">
+      <div class="trader-modal-name" id="traderModalName">Trader</div>
+      <button class="trader-modal-close" onclick="document.getElementById('traderModal').classList.remove('show')">✕</button>
+    </div>
+    <div class="trader-stat-grid">
+      <div class="trader-stat-box"><div class="trader-stat-lbl">Daily P/L</div><div class="trader-stat-val" id="tmDaily">—</div></div>
+      <div class="trader-stat-box"><div class="trader-stat-lbl">Weekly P/L</div><div class="trader-stat-val" id="tmWeekly">—</div></div>
+      <div class="trader-stat-box"><div class="trader-stat-lbl">Monthly P/L</div><div class="trader-stat-val" id="tmMonthly">—</div></div>
+      <div class="trader-stat-box"><div class="trader-stat-lbl">Win Rate</div><div class="trader-stat-val" id="tmWinRate" style="color:var(--blue)">—</div></div>
+    </div>
+    <div class="trader-wl" id="tmWL">—</div>
+    <div class="trader-updated" id="tmUpdated">—</div>
+  </div>
+</div>
+</body>
+</html>
+`;
+var c2=`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Trade Master HS — Premium XAUUSD MT5 Trading System by Hash Salman">
+<title>Trade Master HS — Premium XAUUSD Trading</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif}
+:root{
+  --navy:#0a2463;--blue:#1a56db;--blue2:#2563eb;--blue3:#dbeafe;--blue4:#eff6ff;
+  --green:#16a34a;--green2:#22c55e;--green3:#dcfce7;--green4:#f0fdf4;
+  --gold:#f59e0b;--gold2:#fbbf24;--red:#ef4444;
+  --text:#1e293b;--muted:#64748b;--white:#fff;--border:#e2e8f0;--bg:#f8fbff;
 }
 
-// TICKER
-var xauPrice=0;
+/* ── RESET & BASE ── */
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;height:auto}
+
+/* ── TICKER ── */
+#ticker{background:#0f172a;overflow:hidden;height:30px;display:flex;align-items:center;border-bottom:2px solid var(--green2);position:relative}
+.ticker-inner{display:flex;position:absolute;white-space:nowrap;animation:tickScroll 40s linear infinite}
+.ticker-inner:hover{animation-play-state:paused}
+.t-item{padding:0 16px;font-size:11px;display:flex;gap:6px;border-right:1px solid #1e3a5f;align-items:center;flex-shrink:0}
+.t-sym{color:#93c5fd}.t-price{color:#fff;font-weight:700}.t-up{color:#4ade80}.t-dn{color:#f87171}
+@keyframes tickScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ── TOPBAR ── */
+.topbar{background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 60%,var(--green) 100%);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+.topbar-logo{display:flex;align-items:center;gap:10px}
+.logo-wrap{width:40px;height:40px;border-radius:50%;background:#fff;padding:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.logo-wrap img{width:34px;height:34px;object-fit:contain;border-radius:50%}
+.brand-name{color:#fff;font-size:15px;font-weight:800;letter-spacing:.3px}
+.brand-tag{color:#a5f3fc;font-size:9px;letter-spacing:1.5px;font-weight:600}
+.btn-vip-top{background:linear-gradient(90deg,var(--gold),var(--gold2));color:#000;border:none;padding:8px 18px;border-radius:20px;font-weight:800;font-size:12px;cursor:pointer;box-shadow:0 2px 8px rgba(245,158,11,.4);white-space:nowrap}
+.btn-vip-top:hover{background:linear-gradient(90deg,var(--gold2),var(--gold));transform:translateY(-1px)}
+
+/* ── NAV ── */
+.nav{background:#fff;display:flex;border-bottom:2px solid var(--border);overflow-x:auto;box-shadow:0 1px 4px rgba(0,0,0,.06);position:sticky;top:61px;z-index:99}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{padding:11px 18px;font-size:12px;font-weight:500;cursor:pointer;border:none;background:none;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .2s}
+.nav-btn.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:700}
+.nav-btn:hover{color:var(--blue)}
+
+/* ── PAGES ── */
+.page{display:none}
+.page.active{display:block}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(160deg,var(--navy) 0%,var(--blue) 55%,#15803d 100%);padding:40px 16px 36px;text-align:center}
+.hero-badge{background:rgba(74,222,128,.18);border:1px solid #4ade80;color:#4ade80;padding:5px 16px;border-radius:20px;font-size:10px;font-weight:700;display:inline-block;margin-bottom:14px;letter-spacing:1.5px}
+.hero-title{color:#fff;font-size:clamp(26px,6vw,36px);font-weight:900;margin-bottom:6px;line-height:1.2}
+.hero-title span{color:var(--gold2)}
+.hero-sub{color:#bfdbfe;font-size:13px;margin-bottom:4px}
+.hero-tag{color:var(--gold2);font-size:11px;margin-bottom:22px;font-style:italic}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px;max-width:400px;margin-left:auto;margin-right:auto}
+.hero-stat{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:12px 8px;text-align:center}
+.hero-stat .val{font-size:22px;font-weight:900;color:#4ade80}
+.hero-stat .lbl{font-size:10px;color:#bfdbfe;margin-top:2px}
+.hero-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:400px;margin:0 auto}
+.btn-hero-g{padding:13px 10px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;border:none;text-align:center;background:linear-gradient(90deg,var(--green),var(--green2));color:#fff;transition:opacity .2s}
+.btn-hero-g:hover{opacity:.9}
+.btn-hero-o{padding:13px 10px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.1);color:#fff;transition:all .2s}
+.btn-hero-o:hover{background:rgba(255,255,255,.2)}
+
+/* ── SECTION ── */
+.section{padding:24px 16px}
+.section-title{text-align:center;margin-bottom:18px}
+.section-title h2{font-size:clamp(18px,4vw,22px);font-weight:800;color:var(--text)}
+.section-title p{font-size:12px;color:var(--muted);margin-top:4px}
+
+/* ── FEATURES ── */
+.features-bg{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:600px;margin:0 auto}
+@media(min-width:480px){.feat-grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:720px){.feat-grid{grid-template-columns:repeat(3,1fr)}}
+.feat-card{background:var(--bg);border-radius:10px;padding:14px;border:1px solid var(--border);text-align:center}
+.feat-icon{font-size:22px;margin-bottom:6px}
+.feat-card h3{font-size:12px;font-weight:700;color:var(--blue);margin-bottom:3px}
+.feat-card p{font-size:10px;color:var(--muted);line-height:1.5}
+
+/* ── RESULTS ── */
+.results-bg{background:var(--bg)}
+.results-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:400px;margin:0 auto}
+.result-card{border-radius:12px;padding:16px;text-align:center}
+.result-val{font-size:32px;font-weight:900}
+.result-lbl{font-size:11px;font-weight:600;margin-top:3px}
+
+/* ── PACKAGES ── */
+.packages-bg{background:var(--white)}
+.pkg-header{background:linear-gradient(135deg,var(--navy),var(--blue));padding:20px 16px;text-align:center}
+.pkg-header h2{color:#fff;font-size:20px;font-weight:800}
+.pkg-header p{color:#a5f3fc;font-size:11px;margin-top:4px;letter-spacing:1px}
+.pkg-grid{display:grid;grid-template-columns:1fr;gap:14px;max-width:500px;margin:0 auto;padding:16px}
+@media(min-width:640px){.pkg-grid{grid-template-columns:repeat(3,1fr)}}
+.pkg-card{background:var(--white);border-radius:14px;padding:18px;border:2px solid var(--border);position:relative;transition:transform .2s,box-shadow .2s}
+.pkg-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+.pkg-card.pop{border-color:var(--blue2)}
+.pkg-card.best{border-color:var(--green)}
+.pkg-badge{position:absolute;top:-10px;right:14px;padding:3px 12px;border-radius:20px;font-size:9px;font-weight:700;color:#fff}
+.pkg-badge.blue{background:var(--blue2)}.pkg-badge.green{background:var(--green)}
+.pkg-icon{font-size:24px;margin-bottom:8px}
+.pkg-name{font-size:16px;font-weight:800;color:var(--text);margin-bottom:2px}
+.pkg-sub{font-size:10px;color:var(--muted);margin-bottom:14px}
+.pkg-prices{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.price-box{background:var(--blue4);border-radius:8px;padding:10px;text-align:center;border:1px solid var(--blue3)}
+.price-box .plbl{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.price-box .pval{font-size:20px;font-weight:900;color:var(--blue)}
+.price-box .pval.green{color:var(--green)}
+.pkg-details{margin-bottom:14px}
+.pkg-detail-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:11px}
+.pkg-detail-row:last-child{border:none}
+.pkg-detail-row .dlbl{color:var(--muted)}.pkg-detail-row .dval{font-weight:700;color:var(--green)}
+.btn-wa-pkg{width:100%;padding:13px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:none;color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;transition:opacity .2s}
+.btn-wa-pkg:hover{opacity:.88}
+.btn-wa-pkg.starter{background:var(--navy)}
+.btn-wa-pkg.standard{background:var(--blue2)}
+.btn-wa-pkg.pro{background:linear-gradient(90deg,var(--green),var(--green2))}
+
+/* ── INCLUDES ── */
+.includes-box{background:var(--blue4);border-radius:12px;padding:16px;margin:0 auto;max-width:500px;border:1px solid var(--blue3)}
+.includes-box h4{font-size:13px;font-weight:700;color:var(--blue);margin-bottom:12px}
+.inc-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text);margin-bottom:8px}
+.inc-chk{width:18px;height:18px;border-radius:5px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700;flex-shrink:0}
+
+/* ── WARNING ── */
+.warning-box{background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:14px;max-width:500px;margin:14px auto 0}
+.warning-box h4{color:#92400e;font-size:12px;font-weight:700;margin-bottom:5px}
+.warning-box p{color:#78350f;font-size:11px;line-height:1.6}
+
+/* ── LEADERBOARD ── */
+.lb-header{background:linear-gradient(135deg,var(--navy),var(--blue));padding:18px 16px;text-align:center}
+.lb-header h2{color:#fff;font-size:18px;font-weight:800}
+.lb-live{display:inline-flex;align-items:center;gap:6px;color:#4ade80;font-size:11px;margin-top:5px;font-weight:700}
+.lb-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.lb-body{padding:16px;max-width:500px;margin:0 auto}
+.lb-card{background:var(--white);border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.lb-thead{display:grid;grid-template-columns:40px 1fr 80px;padding:10px 14px;background:var(--blue4);border-bottom:1px solid var(--blue3);font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px}
+.lb-row{display:grid;grid-template-columns:40px 1fr 80px;padding:12px 14px;border-bottom:1px solid #f0f4ff;align-items:center;transition:background .15s}
+.lb-row:hover{background:var(--blue4)}
+.lb-row:last-child{border:none}
+.lb-rank{font-size:16px}
+.lb-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;margin-right:8px;flex-shrink:0}
+.lb-info{display:flex;align-items:center}
+.lb-name{font-size:13px;font-weight:600;color:var(--text)}
+.lb-pnl{font-size:14px;font-weight:700;text-align:right}
+.pnl-pos{color:var(--green)}.pnl-neg{color:var(--red)}
+.lb-empty{text-align:center;padding:32px;color:var(--muted);font-size:13px}
+
+/* ── GET STARTED ── */
+.gs-header{background:linear-gradient(135deg,var(--navy),var(--blue));padding:20px 16px;text-align:center}
+.gs-header h2{color:#fff;font-size:18px;font-weight:800}
+.gs-header p{color:#a5f3fc;font-size:11px;margin-top:4px;letter-spacing:1px}
+.gs-body{padding:16px;max-width:500px;margin:0 auto}
+.step-card{background:var(--white);border-radius:12px;padding:16px;margin-bottom:12px;border:1px solid var(--border);display:flex;gap:14px;align-items:flex-start;transition:box-shadow .2s}
+.step-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.step-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;color:#fff}
+.step-num.s1{background:linear-gradient(135deg,var(--navy),var(--blue))}
+.step-num.s2{background:var(--blue2)}
+.step-num.s3{background:var(--green)}
+.step-content h3{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.step-content p{font-size:11px;color:var(--muted);line-height:1.6}
+.contact-card{background:linear-gradient(135deg,var(--navy),var(--blue));border-radius:14px;padding:20px;text-align:center;margin-bottom:14px}
+.contact-card h3{color:#fff;font-size:16px;font-weight:800;margin-bottom:4px}
+.contact-card p{color:#a5f3fc;font-size:11px;margin-bottom:14px}
+.btn-whatsapp{background:#25d366;color:#fff;border:none;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;text-decoration:none;transition:opacity .2s}
+.btn-whatsapp:hover{opacity:.9}
+
+/* ── IMPORTANT NOTES ── */
+.notes-box{background:var(--green4);border:1px solid #86efac;border-radius:10px;padding:14px;margin-bottom:14px}
+.notes-box h4{color:var(--green);font-size:13px;font-weight:700;margin-bottom:8px}
+.note-item{display:flex;align-items:flex-start;gap:8px;font-size:11px;color:var(--text);margin-bottom:7px;line-height:1.5}
+
+/* ── WA BANNER ── */
+.wa-banner{background:linear-gradient(135deg,var(--navy),var(--blue));padding:24px 16px;text-align:center}
+.wa-banner .tagline{color:var(--gold2);font-weight:900;font-size:clamp(16px,4vw,20px);margin-bottom:4px}
+.wa-banner .sub{color:#a5f3fc;font-size:12px;margin-bottom:16px}
+
+/* ── FOOTER ── */
+.footer{background:var(--navy);padding:20px 16px;text-align:center;border-top:2px solid var(--blue)}
+.footer .brand{color:var(--gold2);font-weight:800;font-size:15px;margin-bottom:4px}
+.footer p{color:#94a3b8;font-size:11px;margin-bottom:3px}
+.footer a{color:#93c5fd}
+
+/* ── RESPONSIVE ── */
+@media(max-width:400px){
+  .hero-btns{grid-template-columns:1fr}
+  .hero-stats{gap:6px}
+  .topbar{padding:8px 12px}
+  .nav-btn{padding:10px 12px;font-size:11px}
+}
+@media(min-width:768px){
+  .hero{padding:60px 24px 50px}
+  .hero-stats{max-width:480px}
+  .hero-btns{max-width:480px}
+  .section{padding:32px 24px}
+  .feat-grid{grid-template-columns:repeat(3,1fr)}
+  .pkg-grid{padding:24px}
+}
+@media(min-width:1024px){
+  .topbar{padding:12px 32px}
+  .nav-btn{padding:13px 24px;font-size:13px}
+  .hero{padding:80px 32px 70px}
+  .feat-grid{grid-template-columns:repeat(3,1fr);max-width:720px}
+  .pkg-grid{grid-template-columns:repeat(3,1fr);max-width:800px}
+  .lb-body{max-width:600px}
+  .gs-body{max-width:600px}
+}
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div id="ticker">
+  <div class="ticker-inner" id="tickerInner">
+    <span class="t-item"><span class="t-sym">Loading live prices...</span></span>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <div class="logo-wrap">
+      <img src="/logo.png" alt="HS" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\\'font-weight:900;font-size:14px;color:#1a56db\\'>HS</span>'">
+    </div>
+    <div>
+      <div class="brand-name">Hash Salman</div>
+      <div class="brand-tag">FOCUS • DISCIPLINE • GROWTH</div>
+    </div>
+  </div>
+  <button class="btn-vip-top" onclick="window.location.href='/client'">VIP Login</button>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="nav-btn active" onclick="showPage('home',this)">Home</button>
+  <button class="nav-btn" onclick="showPage('packages',this)">Packages</button>
+  <button class="nav-btn" onclick="showPage('leaderboard',this)">Leaderboard</button>
+  <button class="nav-btn" onclick="showPage('getstarted',this)">Get Started</button>
+</div>
+
+<!-- ═══ HOME PAGE ═══ -->
+<div class="page active" id="page-home">
+
+  <div class="hero">
+    <div class="hero-badge">🏆 PREMIUM XAUUSD MT5 TRADING</div>
+    <h1 class="hero-title">Trade Master <span>HS</span></h1>
+    <p class="hero-sub">Smart • Trend Based • Fully Managed</p>
+    <p class="hero-tag">📌 Designed Exclusively for XAUUSD (Gold)</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="val">89%</div><div class="lbl">Win Rate</div></div>
+      <div class="hero-stat"><div class="val">+$65</div><div class="lbl">Daily Avg</div></div>
+      <div class="hero-stat"><div class="val" id="totalProfitVal">+$0</div><div class="lbl">All Users Profit</div></div>
+    </div>
+    <div class="hero-btns">
+      <button class="btn-hero-g" onclick="showPage('packages',document.querySelectorAll('.nav-btn')[1])">View Packages</button>
+      <button class="btn-hero-o" onclick="window.location.href='/client'">VIP Client Login</button>
+    </div>
+  </div>
+
+  <div class="section features-bg">
+    <div class="section-title"><h2>What's Included</h2><p>Everything managed by our team 24/7</p></div>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon">🖥️</div><h3>24/7 VPS Hosting</h3><p>Bot runs non-stop on dedicated VPS server</p></div>
+      <div class="feat-card"><div class="feat-icon">⚙️</div><h3>MT5 Setup & Config</h3><p>Full installation and configuration by our team</p></div>
+      <div class="feat-card"><div class="feat-icon">📊</div><h3>Performance Monitor</h3><p>Real-time monitoring and optimization</p></div>
+      <div class="feat-card"><div class="feat-icon">🔧</div><h3>Technical Support</h3><p>Fast issue resolution and MT5 updates</p></div>
+      <div class="feat-card"><div class="feat-icon">🔒</div><h3>VIP Portal</h3><p>Live P/L tracking dashboard for clients</p></div>
+      <div class="feat-card"><div class="feat-icon">📈</div><h3>24/7 Monitoring</h3><p>Always watching your account performance</p></div>
+    </div>
+  </div>
+
+  <div class="section results-bg">
+    <div class="section-title"><h2>📊 Live Trading Results</h2><p>Based on historical live trading data</p></div>
+    <div class="results-grid">
+      <div class="result-card" style="background:var(--green4);border:1px solid #86efac">
+        <div class="result-val" style="color:var(--green)">89%</div>
+        <div class="result-lbl" style="color:var(--green)">Winning Trades</div>
+      </div>
+      <div class="result-card" style="background:#fef2f2;border:1px solid #fca5a5">
+        <div class="result-val" style="color:var(--red)">11%</div>
+        <div class="result-lbl" style="color:var(--red)">Losing Trades</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wa-banner">
+    <div class="tagline">Trade Gold Smarter</div>
+    <div class="sub">Powered by Hash Salman</div>
+    <a href="https://wa.me/923023464786" class="btn-whatsapp">📱 WhatsApp now</a>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Trade Master HS</div>
+    <p>hashsalman.com &nbsp;•&nbsp; +92 302 3464786</p>
+    <p>FOCUS • DISCIPLINE • GROWTH</p>
+  </div>
+
+</div>
+
+<!-- ═══ PACKAGES PAGE ═══ -->
+<div class="page" id="page-packages">
+
+  <div class="pkg-header"><h2>Vip Lounge</h2><p>CHOOSE YOUR PLAN</p></div>
+
+  <div class="section packages-bg">
+    <div class="pkg-grid">
+
+      <!-- STARTER -->
+      <div class="pkg-card">
+        <div class="pkg-icon">🥉</div>
+        <div class="pkg-name">Hash Legend Starter</div>
+        <div class="pkg-sub">Perfect for beginners</div>
+        <div class="pkg-prices">
+          <div class="price-box"><div class="plbl">One Time</div><div class="pval">$297</div></div>
+          <div class="price-box"><div class="plbl">Weekly Fee</div><div class="pval green">$20</div></div>
+        </div>
+        <div class="pkg-details">
+          <div class="pkg-detail-row"><span class="dlbl">Recommended account</span><span class="dval">$300</span></div>
+          <div class="pkg-detail-row"><span class="dlbl">Daily profit range</span><span class="dval">$15 – $50</span></div>
+        </div>
+        <a href="https://wa.me/923023464786?text=Hi%20Hash%20Salman!%20I%20am%20interested%20in%20Hash%20Legend%20Starter%20package%20(%24297).%20Please%20guide%20me." class="btn-wa-pkg starter">📱 Get Starter</a>
+      </div>
+
+      <!-- STANDARD -->
+      <div class="pkg-card pop">
+        <div class="pkg-badge blue">POPULAR</div>
+        <div class="pkg-icon">🥈</div>
+        <div class="pkg-name">Hash Legend Standard</div>
+        <div class="pkg-sub">For growing traders</div>
+        <div class="pkg-prices">
+          <div class="price-box"><div class="plbl">One Time</div><div class="pval">$395</div></div>
+          <div class="price-box"><div class="plbl">Weekly Fee</div><div class="pval green">$25</div></div>
+        </div>
+        <div class="pkg-details">
+          <div class="pkg-detail-row"><span class="dlbl">Recommended account</span><span class="dval">$500</span></div>
+          <div class="pkg-detail-row"><span class="dlbl">Daily profit range</span><span class="dval">$30 – $120</span></div>
+        </div>
+        <a href="https://wa.me/923023464786?text=Hi%20Hash%20Salman!%20I%20am%20interested%20in%20Hash%20Legend%20Standard%20package%20(%24395).%20Please%20guide%20me." class="btn-wa-pkg standard">📱 Get Standard</a>
+      </div>
+
+      <!-- PRO -->
+      <div class="pkg-card best">
+        <div class="pkg-badge green">BEST VALUE</div>
+        <div class="pkg-icon">🥇</div>
+        <div class="pkg-name">Hash Legend Pro</div>
+        <div class="pkg-sub">For serious traders</div>
+        <div class="pkg-prices">
+          <div class="price-box"><div class="plbl">One Time</div><div class="pval">$790</div></div>
+          <div class="price-box"><div class="plbl">Weekly Fee</div><div class="pval green">$35</div></div>
+        </div>
+        <div class="pkg-details">
+          <div class="pkg-detail-row"><span class="dlbl">Recommended account</span><span class="dval">$1,000</span></div>
+          <div class="pkg-detail-row"><span class="dlbl">Daily profit range</span><span class="dval">$120 – $500</span></div>
+        </div>
+        <a href="https://wa.me/923023464786?text=Hi%20Hash%20Salman!%20I%20am%20interested%20in%20Hash%20Legend%20Pro%20package%20(%24790).%20Please%20guide%20me." class="btn-wa-pkg pro">📱 Get Pro</a>
+      </div>
+
+    </div>
+
+    <div class="includes-box">
+      <h4>✅ All packages include:</h4>
+      <div class="inc-item"><div class="inc-chk">✓</div>24/7 VPS Hosting & Monitoring</div>
+      <div class="inc-item"><div class="inc-chk">✓</div>MT5 Installation & Configuration</div>
+      <div class="inc-item"><div class="inc-chk">✓</div>Complete System Setup</div>
+      <div class="inc-item"><div class="inc-chk">✓</div>Performance Monitoring & Optimization</div>
+      <div class="inc-item"><div class="inc-chk">✓</div>VPS Maintenance & MT5 Updates</div>
+      <div class="inc-item"><div class="inc-chk">✓</div>Technical Support & Fast Resolution</div>
+      <div class="inc-item"><div class="inc-chk">✓</div>VIP Client Portal Access</div>
+    </div>
+
+    <div class="warning-box">
+      <h4>⚠️ Important Information</h4>
+      <p>Hash Legend is designed and optimized exclusively for XAUUSD (Gold). It is not designed for Forex currency pairs such as EURUSD, GBPUSD, USDJPY etc. Daily profit may vary depending on market conditions and volatility. The 89% win rate is based on historical live trading results and does not guarantee future performance.</p>
+    </div>
+
+  </div>
+
+  <div class="wa-banner">
+    <div class="tagline">Ready to start?</div>
+    <div class="sub">Contact Hash Salman on WhatsApp</div>
+    <a href="https://wa.me/923023464786" class="btn-whatsapp">📱 WhatsApp now</a>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Trade Master HS</div>
+    <p>hashsalman.com &nbsp;•&nbsp; +92 302 3464786</p>
+    <p>FOCUS • DISCIPLINE • GROWTH</p>
+  </div>
+
+</div>
+
+<!-- ═══ LEADERBOARD PAGE ═══ -->
+<div class="page" id="page-leaderboard">
+
+  <div class="lb-header">
+    <h2>Live Leaderboard</h2>
+    <div class="lb-live"><div class="lb-dot"></div>LIVE • Updated every few seconds</div>
+  </div>
+
+  <div class="lb-body">
+    <div class="lb-card">
+      <div class="lb-thead"><div>#</div><div>TRADER</div><div style="text-align:right">TODAY</div></div>
+      <div id="lbList"><div class="lb-empty">Loading traders...</div></div>
+    </div>
+    <p style="text-align:center;font-size:10px;color:var(--muted);margin-top:12px">Active traders only • Profits updated live from MT5</p>
+  </div>
+
+  <div class="wa-banner">
+    <div class="tagline">Join our traders!</div>
+    <div class="sub">Get started with Trade Master HS today</div>
+    <a href="https://wa.me/923023464786" class="btn-whatsapp">📱 WhatsApp now</a>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Trade Master HS</div>
+    <p>hashsalman.com &nbsp;•&nbsp; +92 302 3464786</p>
+    <p>FOCUS • DISCIPLINE • GROWTH</p>
+  </div>
+
+</div>
+
+<!-- ═══ GET STARTED PAGE ═══ -->
+<div class="page" id="page-getstarted">
+
+  <div class="gs-header"><h2>How to Get Started</h2><p>3 SIMPLE STEPS</p></div>
+
+  <div class="gs-body">
+
+    <div class="step-card">
+      <div class="step-num s1">1</div>
+      <div class="step-content">
+        <h3>Create an Exness Account</h3>
+        <p>Register on Exness and make the required deposit based on your chosen package — $300, $500, or $1,000.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num s2">2</div>
+      <div class="step-content">
+        <h3>Share MT5 Credentials</h3>
+        <p>Send your MT5 Login ID and Trading Password to Hash Salman via WhatsApp: <strong>+923023464786</strong></p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num s3">3</div>
+      <div class="step-content">
+        <h3>We Handle Everything</h3>
+        <p>Our team sets up the VPS, configures MT5, activates the bot system, and monitors 24/7 — all done for you.</p>
+      </div>
+    </div>
+
+    <div class="notes-box">
+      <h4>📊 Historical Live Trading Results</h4>
+      <div class="note-item"><span>✅</span><span>Winning Trades: <strong>89%</strong></span></div>
+      <div class="note-item"><span>📉</span><span>Losing Trades: <strong>11%</strong></span></div>
+      <div class="note-item"><span>📌</span><span>Based on historical live results — does not guarantee future performance</span></div>
+    </div>
+
+    <div class="warning-box" style="margin-bottom:14px">
+      <h4>⚠️ Important</h4>
+      <p>📌 Hash Legend is designed exclusively for XAUUSD (Gold).<br>
+      👤 You remain the complete owner of your trading account, funds, and withdrawals.<br>
+      🔒 Our team provides VPS management, setup, monitoring, and support only.</p>
+    </div>
+
+    <div class="contact-card">
+      <h3>⭐ Trade Gold Smarter</h3>
+      <p>Powered by Hash Salman. Contact us to get started today!</p>
+      <a href="https://wa.me/923023464786" class="btn-whatsapp">📱 WhatsApp: +923023464786</a>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="brand">Trade Master HS</div>
+    <p>hashsalman.com &nbsp;•&nbsp; +92 302 3464786</p>
+    <p style="margin-top:6px">FOCUS • DISCIPLINE • GROWTH</p>
+  </div>
+
+</div>
+
+<script>
+// ── NAV ──────────────────────────────────────────────
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('page-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+  if (name === 'leaderboard') loadLeaderboard();
+}
+
+// ── LEADERBOARD ───────────────────────────────────────
+var FAKE_USERS = [
+  { name: 'Furqan Ahmed', ini: 'FA', color: '#8b5cf6', base: 72, mult: 1.4 },
+  { name: 'Irfan Khan', ini: 'IK', color: '#ef4444', base: 68, mult: 1.8 },
+  { name: 'Hash Salman', ini: 'HS', color: '#1a56db', base: 61, mult: 1.6 },
+  { name: 'Owner 2', ini: 'O2', color: '#f59e0b', base: 44, mult: 1.2 },
+  { name: 'Rahul Sharma', ini: 'RS', color: '#06b6d4', base: 58, mult: 1.3 },
+  { name: 'Bilal Sheikh', ini: 'BS', color: '#16a34a', base: 45, mult: 1.5 },
+  { name: 'Priya Patel', ini: 'PP', color: '#ec4899', base: 38, mult: 1.2 },
+  { name: 'Usman Ali', ini: 'UA', color: '#f97316', base: 63, mult: 1.7 },
+  { name: 'Amit Verma', ini: 'AV', color: '#6366f1', base: 31, mult: 1.1 },
+  { name: 'Zara Malik', ini: 'ZM', color: '#14b8a6', base: 55, mult: 1.4 },
+  { name: 'Arjun Singh', ini: 'AS', color: '#84cc16', base: 42, mult: 1.3 },
+  { name: 'Hina Baig', ini: 'HB', color: '#a855f7', base: 29, mult: 1.0 },
+  { name: 'Vikram Nair', ini: 'VN', color: '#f43f5e', base: 48, mult: 1.2 },
+  { name: 'Sana Qureshi', ini: 'SQ', color: '#0ea5e9', base: 35, mult: 1.1 },
+  { name: 'Danish Raza', ini: 'DR', color: '#fb923c', base: 67, mult: 1.6 },
+];
+
+function loadLeaderboard() {
+  fetch('/api/leaderboard')
+    .then(function(r) { return r.json(); })
+    .then(function(realData) {
+      var realAvg = 0;
+      if (realData && realData.length > 0) {
+        realAvg = realData.reduce(function(s, b) { return s + (parseFloat(b.daily) || 0); }, 0) / realData.length;
+      }
+      var dir = realAvg >= 0 ? 1 : -1;
+      var all = [];
+      if (realData && realData.length > 0) {
+        realData.forEach(function(b) {
+          all.push({ name: b.name, ini: b.name.split(' ').map(function(w) { return w[0]; }).join('').toUpperCase().slice(0, 2), color: '#06b6d4', daily: parseFloat(b.daily) || 0 });
+        });
+      }
+      FAKE_USERS.forEach(function(f) {
+        var d = dir * (f.base + realAvg * f.mult * 0.3 + (Math.random() - 0.3) * 8);
+        all.push({ name: f.name, ini: f.ini, color: f.color, daily: parseFloat(d.toFixed(2)) });
+      });
+      all.sort(function(a, b) { return b.daily - a.daily; });
+      renderLeaderboard(all);
+    })
+    .catch(function() {
+      var fallback = [
+        { name: 'Irfan', ini: 'IR', color: '#ef4444', daily: 92.4 },
+        { name: 'Hash Salman', ini: 'HS', color: '#1a56db', daily: 78.5 },
+        { name: 'PAVAN', ini: 'PA', color: '#06b6d4', daily: 71.2 },
+        { name: 'Furqan', ini: 'FU', color: '#8b5cf6', daily: 65.3 },
+        { name: 'Owner 2', ini: 'O2', color: '#f59e0b', daily: 52.1 },
+      ];
+      renderLeaderboard(fallback);
+    });
+}
+
+function fmtVal(v){var n=parseFloat(v)||0;return(n>=0?'+$':'-$')+Math.abs(n).toFixed(2);}
+
+function showTraderModal(el){
+  var name=el.getAttribute('data-name');
+  fetch('/api/trader/'+encodeURIComponent(name))
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(!d.found)return;
+      document.getElementById('traderModalName').textContent='📊 '+d.name;
+      var dEl=document.getElementById('tmDaily');dEl.textContent=fmtVal(d.daily);dEl.className='trader-stat-val '+(parseFloat(d.daily)>=0?'pos':'neg');
+      var wEl=document.getElementById('tmWeekly');wEl.textContent=fmtVal(d.weekly);wEl.className='trader-stat-val '+(parseFloat(d.weekly)>=0?'pos':'neg');
+      var mEl=document.getElementById('tmMonthly');mEl.textContent=fmtVal(d.monthly);mEl.className='trader-stat-val '+(parseFloat(d.monthly)>=0?'pos':'neg');
+      var w=parseInt(d.wins)||0,l=parseInt(d.losses)||0;
+      var wr=w+l>0?Math.round(w/(w+l)*100):0;
+      document.getElementById('tmWinRate').textContent=wr+'%';
+      document.getElementById('tmWL').textContent='Wins: '+w+' | Losses: '+l;
+      document.getElementById('tmUpdated').textContent=d.updatedAt?'Updated: '+new Date(d.updatedAt).toLocaleString():'';
+      document.getElementById('traderModal').classList.add('show');
+    }).catch(function(){});
+}
+
+function closeTraderModal(e){
+  if(e.target===document.getElementById('traderModal'))
+    document.getElementById('traderModal').classList.remove('show');
+}
+
+function renderLeaderboard(data){
+  var medals=['🥇','🥈','🥉'];
+  var html='';
+  data.forEach(function(t,i){
+    var rk=i<3?medals[i]:'<span style="color:var(--muted);font-size:12px">#'+(i+1)+'</span>';
+    var pos=t.daily>=0;
+    var pnl=(pos?'+$':'-$')+Math.abs(t.daily).toFixed(2);
+    var rowClass=t.real?'lb-row" style="cursor:pointer" onclick="showTraderModal(''+t.name+'')':'lb-row';
+    var liveBadge=t.real?' <span style="font-size:9px;background:#dbeafe;color:#1a56db;padding:1px 5px;border-radius:6px;font-weight:700">LIVE</span>':'';
+    html+='<div class="'+rowClass+'"><div class="lb-rank">'+rk+'</div><div class="lb-info"><div class="lb-avatar" style="background:'+t.color+'">'+t.ini+'</div><div class="lb-name">'+t.name+liveBadge+'</div></div><div class="lb-pnl '+(pos?'pnl-pos':'pnl-neg')+'">'+pnl+'</div></div>';
+  });
+  document.getElementById('lbList').innerHTML=html+html;
+}
+
+
 function buildXAUTicker(price,chg){
   var pos=chg>=0;
-  var item='<span class="t-item"><span class="ts">XAU/USD (Gold)</span><span class="tp">$'+price.toFixed(2)+'</span><span class="'+(pos?'tu':'td')+'">'+(pos?'+':'')+chg.toFixed(2)+'%</span></span>';
+  var item='<span class="t-item"><span class="t-sym">XAU/USD (Gold)</span><span class="t-price">$'+price.toFixed(2)+'</span><span class="'+(pos?'t-up':'t-dn')+'">'+(pos?'+':'')+chg.toFixed(2)+'%</span></span>';
   var h='';for(var i=0;i<8;i++)h+=item;return h;
 }
 function fetchXAULive(){
@@ -577,22 +1371,52 @@ function fetchXAULive(){
       if(el)el.innerHTML=buildXAUTicker(xauPrice,0.42);
     });
 }
-function startTicker(){
-  fetchXAULive();
-  setInterval(fetchXAULive,60000);
-  setInterval(function(){
-    if(xauPrice>0){xauPrice+=(Math.random()-0.5)*0.3;var el=document.getElementById('tickerInner');if(el)el.innerHTML=buildXAUTicker(xauPrice,0.42);}
-  },5000);
-}
+fetchXAULive();
+setInterval(fetchXAULive,60000);
+setInterval(function(){
+  if(xauPrice>0){xauPrice+=(Math.random()-0.5)*0.3;var el=document.getElementById('tickerInner');if(el)el.innerHTML=buildXAUTicker(xauPrice,0.42);}
+},5000);
+</script>
 
-function showToast(msg,type){
-  var t=document.getElementById('toast');
-  t.textContent=msg;t.className='toast toast-'+(type||'info');t.style.display='block';
-  setTimeout(function(){t.style.display='none';},3000);
+<!-- TRADER MODAL -->
+<div class="trader-modal-overlay" id="traderModal" onclick="closeTraderModal(event)">
+  <div class="trader-modal">
+    <div class="trader-modal-head">
+      <div class="trader-modal-name" id="traderModalName">Trader</div>
+      <button class="trader-modal-close" onclick="document.getElementById('traderModal').classList.remove('show')">✕</button>
+    </div>
+    <div class="trader-stat-grid">
+      <div class="trader-stat-box"><div class="trader-stat-lbl">Daily P/L</div><div class="trader-stat-val" id="tmDaily">—</div></div>
+      <div class="trader-stat-box"><div class="trader-stat-lbl">Weekly P/L</div><div class="trader-stat-val" id="tmWeekly">—</div></div>
+      <div class="trader-stat-box"><div class="trader-stat-lbl">Monthly P/L</div><div class="trader-stat-val" id="tmMonthly">—</div></div>
+      <div class="trader-stat-box"><div class="trader-stat-lbl">Win Rate</div><div class="trader-stat-val" id="tmWinRate" style="color:var(--blue)">—</div></div>
+    </div>
+    <div class="trader-wl" id="tmWL">—</div>
+    <div class="trader-updated" id="tmUpdated">—</div>
+  </div>
+</div>
+</body>
+</html>
+`;
+function copy1(){
+  navigator.clipboard.writeText(c1).then(function(){
+    document.getElementById('st').textContent='✅ client.html copied!';
+    setTimeout(function(){document.getElementById('st').textContent='';},3000);
+  }).catch(function(){fallback(c1,'client.html');});
 }
-
-setInterval(function(){if(TOKEN){loadBot();loadLeaderboard();}},30000);
-document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.getElementById('loginPage').style.display!=='none')doLogin();});
+function copy2(){
+  navigator.clipboard.writeText(c2).then(function(){
+    document.getElementById('st').textContent='✅ home.html copied!';
+    setTimeout(function(){document.getElementById('st').textContent='';},3000);
+  }).catch(function(){fallback(c2,'home.html');});
+}
+function fallback(text,name){
+  var ta=document.createElement('textarea');
+  ta.value=text;document.body.appendChild(ta);ta.select();
+  document.execCommand('copy');document.body.removeChild(ta);
+  document.getElementById('st').textContent='✅ '+name+' copied!';
+  setTimeout(function(){document.getElementById('st').textContent='';},3000);
+}
 </script>
 </body>
 </html>
