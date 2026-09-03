@@ -117,7 +117,6 @@ img{max-width:100%;height:auto}
 .lb-name{font-size:13px;font-weight:600;color:var(--text)}
 .lb-pnl{font-size:14px;font-weight:700;text-align:right}
 .pnl-pos{color:var(--green)}.pnl-neg{color:var(--red)}
-.lb-empty{text-align:center;padding:32px;color:var(--muted);font-size:13px}
 .gs-header{background:linear-gradient(135deg,var(--navy),var(--blue));padding:20px 16px;text-align:center}
 .gs-header h2{color:#fff;font-size:18px;font-weight:800}
 .gs-header p{color:#a5f3fc;font-size:11px;margin-top:4px;letter-spacing:1px}
@@ -140,6 +139,20 @@ img{max-width:100%;height:auto}
 .footer{background:var(--navy);padding:20px 16px;text-align:center;border-top:2px solid var(--blue)}
 .footer .brand{color:var(--gold2);font-weight:800;font-size:15px;margin-bottom:4px}
 .footer p{color:#94a3b8;font-size:11px;margin-bottom:3px}
+/* TRADER MODAL */
+.trader-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;align-items:center;justify-content:center;padding:16px}
+.trader-modal-overlay.show{display:flex}
+.trader-modal{background:#fff;border-radius:16px;padding:20px;width:100%;max-width:360px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.trader-modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.trader-modal-name{font-size:16px;font-weight:800;color:var(--navy)}
+.trader-modal-close{background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer}
+.trader-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.trader-stat-box{background:var(--blue4);border-radius:10px;padding:12px;text-align:center;border:1px solid var(--blue3)}
+.trader-stat-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.trader-stat-val{font-size:18px;font-weight:900}
+.trader-stat-val.pos{color:var(--green)}.trader-stat-val.neg{color:var(--red)}
+.trader-wl{text-align:center;font-size:12px;color:var(--muted);margin-bottom:4px}
+.trader-updated{text-align:center;font-size:10px;color:var(--muted)}
 @media(max-width:400px){.hero-btns{grid-template-columns:1fr}.topbar{padding:8px 12px}.nav-btn{padding:10px 12px;font-size:11px}}
 @media(min-width:768px){.hero{padding:60px 24px 50px}.section{padding:32px 24px}.feat-grid{grid-template-columns:repeat(3,1fr)}.pkg-grid{padding:24px}}
 @media(min-width:1024px){.topbar{padding:12px 32px}.nav-btn{padding:13px 24px;font-size:13px}.hero{padding:80px 32px 70px}.feat-grid{max-width:720px}.pkg-grid{grid-template-columns:repeat(3,1fr);max-width:800px}.lb-body{max-width:600px}.gs-body{max-width:600px}}
@@ -260,7 +273,7 @@ img{max-width:100%;height:auto}
 </div>
 
 <div class="page" id="page-leaderboard">
-  <div class="lb-header"><h2>Live Leaderboard</h2><div class="lb-live"><div class="lb-dot"></div>LIVE • Scroll to see all traders</div></div>
+  <div class="lb-header"><h2>Live Leaderboard</h2><div class="lb-live"><div class="lb-dot"></div>LIVE • Tap name for stats</div></div>
   <div class="lb-body">
     <div class="lb-card">
       <div class="lb-thead"><div>#</div><div>TRADER</div><div style="text-align:right">TODAY</div></div>
@@ -268,7 +281,7 @@ img{max-width:100%;height:auto}
         <div class="lb-scroll-track" id="lbList"></div>
       </div>
     </div>
-    <p style="text-align:center;font-size:10px;color:var(--muted);margin-top:12px">Active traders only • Hover to pause scroll</p>
+    <p style="text-align:center;font-size:10px;color:var(--muted);margin-top:12px">Tap LIVE traders to see their stats • Hover to pause</p>
   </div>
   <div class="wa-banner"><div class="tagline">Join our traders!</div><div class="sub">Get started with Trade Master HS today</div><a href="https://wa.me/923023464786" class="btn-whatsapp">📱 WhatsApp now</a></div>
   <div class="footer"><div class="brand">Trade Master HS</div><p>hashsalman.com • +92 302 3464786</p><p>FOCUS • DISCIPLINE • GROWTH</p></div>
@@ -293,6 +306,24 @@ img{max-width:100%;height:auto}
     <div class="contact-card"><h3>⭐ Trade Gold Smarter</h3><p>Powered by Hash Salman. Contact us to get started today!</p><a href="https://wa.me/923023464786" class="btn-whatsapp">📱 WhatsApp: +923023464786</a></div>
   </div>
   <div class="footer"><div class="brand">Trade Master HS</div><p>hashsalman.com • +92 302 3464786</p><p style="margin-top:6px">FOCUS • DISCIPLINE • GROWTH</p></div>
+</div>
+
+<!-- TRADER MODAL -->
+<div class="trader-modal-overlay" id="traderModal" onclick="closeTraderModal(event)">
+  <div class="trader-modal">
+    <div class="trader-modal-head">
+      <div class="trader-modal-name" id="traderModalName">Trader</div>
+      <button class="trader-modal-close" onclick="document.getElementById('traderModal').classList.remove('show')">✕</button>
+    </div>
+    <div class="trader-stat-grid">
+      <div class="trader-stat-box"><div class="trader-stat-lbl">Daily P/L</div><div class="trader-stat-val" id="tmDaily">—</div></div>
+      <div class="trader-stat-box"><div class="trader-stat-lbl">Weekly P/L</div><div class="trader-stat-val" id="tmWeekly">—</div></div>
+      <div class="trader-stat-box"><div class="trader-stat-lbl">Monthly P/L</div><div class="trader-stat-val" id="tmMonthly">—</div></div>
+      <div class="trader-stat-box"><div class="trader-stat-lbl">Win Rate</div><div class="trader-stat-val" id="tmWinRate" style="color:var(--blue)">—</div></div>
+    </div>
+    <div class="trader-wl" id="tmWL">—</div>
+    <div class="trader-updated" id="tmUpdated">—</div>
+  </div>
 </div>
 
 <script>
@@ -333,7 +364,7 @@ function loadLeaderboard(){
     var all=[];
     if(realData&&realData.length>0) realData.forEach(function(b){
       var ini=b.name.split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
-      all.push({name:b.name,ini:ini,color:'#06b6d4',daily:parseFloat(b.daily)||0});
+      all.push({name:b.name,ini:ini,color:'#06b6d4',daily:parseFloat(b.daily)||0,real:true});
     });
     var seed=getDailySeed();
     FAKE_USERS.forEach(function(f,idx){
@@ -342,7 +373,7 @@ function loadLeaderboard(){
       var baseProfit=1+r1*79;
       var tick=(r2-0.5)*6;
       var d=Math.max(0.5,Math.min(80,baseProfit+tick+(realAvg>0?realAvg*0.1:0)));
-      all.push({name:f.name,ini:f.ini,color:f.color,daily:parseFloat(d.toFixed(2))});
+      all.push({name:f.name,ini:f.ini,color:f.color,daily:parseFloat(d.toFixed(2)),real:false});
     });
     all.sort(function(a,b){return b.daily-a.daily;});
     renderLeaderboard(all);
@@ -350,11 +381,36 @@ function loadLeaderboard(){
     var seed=getDailySeed();
     var fallback=FAKE_USERS.map(function(f,idx){
       var r=seededRand(seed,idx);
-      return {name:f.name,ini:f.ini,color:f.color,daily:parseFloat((1+r*79).toFixed(2))};
+      return {name:f.name,ini:f.ini,color:f.color,daily:parseFloat((1+r*79).toFixed(2)),real:false};
     });
     fallback.sort(function(a,b){return b.daily-a.daily;});
     renderLeaderboard(fallback);
   });
+}
+
+function fmtVal(v){var n=parseFloat(v)||0;return(n>=0?'+$':'-$')+Math.abs(n).toFixed(2);}
+
+function showTraderModal(name){
+  fetch('/api/trader/'+encodeURIComponent(name))
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(!d.found)return;
+      document.getElementById('traderModalName').textContent='📊 '+d.name;
+      var dEl=document.getElementById('tmDaily');dEl.textContent=fmtVal(d.daily);dEl.className='trader-stat-val '+(parseFloat(d.daily)>=0?'pos':'neg');
+      var wEl=document.getElementById('tmWeekly');wEl.textContent=fmtVal(d.weekly);wEl.className='trader-stat-val '+(parseFloat(d.weekly)>=0?'pos':'neg');
+      var mEl=document.getElementById('tmMonthly');mEl.textContent=fmtVal(d.monthly);mEl.className='trader-stat-val '+(parseFloat(d.monthly)>=0?'pos':'neg');
+      var w=parseInt(d.wins)||0,l=parseInt(d.losses)||0;
+      var wr=w+l>0?Math.round(w/(w+l)*100):0;
+      document.getElementById('tmWinRate').textContent=wr+'%';
+      document.getElementById('tmWL').textContent='Wins: '+w+' | Losses: '+l;
+      document.getElementById('tmUpdated').textContent=d.updatedAt?'Updated: '+new Date(d.updatedAt).toLocaleString():'';
+      document.getElementById('traderModal').classList.add('show');
+    }).catch(function(){});
+}
+
+function closeTraderModal(e){
+  if(e.target===document.getElementById('traderModal'))
+    document.getElementById('traderModal').classList.remove('show');
 }
 
 function renderLeaderboard(data){
@@ -364,7 +420,9 @@ function renderLeaderboard(data){
     var rk=i<3?medals[i]:'<span style="color:var(--muted);font-size:12px">#'+(i+1)+'</span>';
     var pos=t.daily>=0;
     var pnl=(pos?'+$':'-$')+Math.abs(t.daily).toFixed(2);
-    html+='<div class="lb-row"><div class="lb-rank">'+rk+'</div><div class="lb-info"><div class="lb-avatar" style="background:'+t.color+'">'+t.ini+'</div><div class="lb-name">'+t.name+'</div></div><div class="lb-pnl '+(pos?'pnl-pos':'pnl-neg')+'">'+pnl+'</div></div>';
+    var rowClick=t.real?' style="cursor:pointer" onclick="showTraderModal(\''+t.name+'\')"':'';
+    var liveBadge=t.real?' <span style="font-size:9px;background:#dbeafe;color:#1a56db;padding:1px 5px;border-radius:6px;font-weight:700">LIVE</span>':'';
+    html+='<div class="lb-row"'+rowClick+'><div class="lb-rank">'+rk+'</div><div class="lb-info"><div class="lb-avatar" style="background:'+t.color+'">'+t.ini+'</div><div class="lb-name">'+t.name+liveBadge+'</div></div><div class="lb-pnl '+(pos?'pnl-pos':'pnl-neg')+'">'+pnl+'</div></div>';
   });
   document.getElementById('lbList').innerHTML=html+html;
 }
@@ -384,7 +442,6 @@ loadTotalProfit();
 setInterval(loadLeaderboard,30000);
 setInterval(loadTotalProfit,15*60*1000);
 
-// ✅ XAUUSD ONLY — Live price
 var xauPrice=0;
 function buildXAUTicker(price,chg){
   var pos=chg>=0;
