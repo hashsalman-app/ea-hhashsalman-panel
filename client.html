@@ -128,7 +128,6 @@ body{background:var(--bg);color:var(--text)}
 </style>
 </head>
 <body>
-
 <div id="ticker">
   <div class="ticker-wrap">
     <div class="ticker-inner" id="tickerInner">
@@ -136,7 +135,6 @@ body{background:var(--bg);color:var(--text)}
     </div>
   </div>
 </div>
-
 <div class="topbar">
   <div class="topbar-logo">
     <div class="logo-wrap">
@@ -149,7 +147,6 @@ body{background:var(--bg);color:var(--text)}
   </div>
   <button class="btn-vip-top" onclick="window.location.href='/'">🏠 Home</button>
 </div>
-
 <div id="loginPage">
   <div class="login-box">
     <div class="login-logo">
@@ -166,7 +163,6 @@ body{background:var(--bg);color:var(--text)}
     <div class="login-hint">Need help? WhatsApp: +92 302 3464786</div>
   </div>
 </div>
-
 <div id="app">
   <div class="tabs">
     <button class="tab-btn active" onclick="showTab('mybot',this)">📊 My Bot</button>
@@ -174,7 +170,6 @@ body{background:var(--bg);color:var(--text)}
     <button class="tab-btn" onclick="showTab('leaderboard',this)">🏆 Leaderboard</button>
     <button class="tab-btn" onclick="showTab('settings',this)">⚙️ Settings</button>
   </div>
-
   <div class="tab-page active" id="tab-mybot">
     <div class="expired-banner" id="expiredBanner" style="display:none">
       <h3>⚠️ License Expired</h3>
@@ -215,7 +210,6 @@ body{background:var(--bg);color:var(--text)}
       <div class="detail-row"><span class="detail-label">Last Update</span><span class="detail-val" style="font-size:10px;color:var(--muted)" id="dUpdated">—</span></div>
     </div>
   </div>
-
   <div class="tab-page" id="tab-calendar">
     <div class="cal-wrap">
       <div class="cal-nav">
@@ -232,13 +226,12 @@ body{background:var(--bg);color:var(--text)}
     </div>
     <p style="text-align:center;font-size:10px;color:var(--muted)">Up to 1 year of trading history</p>
   </div>
-
   <div class="tab-page" id="tab-leaderboard">
     <div class="lb-card">
       <div style="background:linear-gradient(135deg,var(--navy),var(--blue));padding:14px;text-align:center">
         <div style="color:#fff;font-size:15px;font-weight:800">🏆 Live Leaderboard</div>
         <div style="display:inline-flex;align-items:center;gap:5px;color:#4ade80;font-size:10px;margin-top:4px;font-weight:700">
-          <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block;animation:pulse 1.5s infinite"></span>LIVE • Tap name for stats
+          <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block;animation:pulse 1.5s infinite"></span>LIVE
         </div>
       </div>
       <div class="lb-thead"><div>#</div><div>TRADER</div><div style="text-align:right">TODAY</div></div>
@@ -246,9 +239,8 @@ body{background:var(--bg);color:var(--text)}
         <div id="lbList" style="position:absolute;width:100%;animation:lbScroll 25s linear infinite"></div>
       </div>
     </div>
-    <p style="text-align:center;font-size:10px;color:var(--muted);margin-top:8px">Tap LIVE traders to see their stats</p>
+    <p style="text-align:center;font-size:10px;color:var(--muted);margin-top:8px">Tap real traders to see their stats</p>
   </div>
-
   <div class="tab-page" id="tab-settings">
     <div class="card">
       <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:4px">📧 Email Notifications</div>
@@ -274,9 +266,7 @@ body{background:var(--bg);color:var(--text)}
     </div>
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
-
 <div class="trader-modal-overlay" id="traderModal" onclick="closeTraderModal(event)">
   <div class="trader-modal">
     <div class="trader-modal-head">
@@ -293,7 +283,6 @@ body{background:var(--bg);color:var(--text)}
     <div class="trader-updated" id="tmUpdated">—</div>
   </div>
 </div>
-
 <script>
 var TOKEN=localStorage.getItem('hs_client_tok')||'';
 var FAKE_USERS=[
@@ -313,9 +302,7 @@ var FAKE_USERS=[
   {name:'Sana Qureshi',ini:'SQ',color:'#0ea5e9'},
   {name:'Danish Raza',ini:'DR',color:'#fb923c'},
 ];
-
 if(TOKEN){showApp();loadBot();}
-
 function doLogin(){
   var acc=document.getElementById('loginAcc').value.trim();
   var pass=document.getElementById('loginPass').value;
@@ -328,22 +315,18 @@ function doLogin(){
     else errEl.textContent=d.error||'Login failed.';
   }).catch(function(){errEl.textContent='Server error.';});
 }
-
 function showApp(){
   document.getElementById('loginPage').style.display='none';
   document.getElementById('app').style.display='block';
   startTicker();loadLeaderboard();
 }
-
 function doLogout(){TOKEN='';localStorage.removeItem('hs_client_tok');location.reload();}
-
 function api(url,opts){
   opts=opts||{};opts.headers=opts.headers||{};
   opts.headers['Authorization']='Bearer '+TOKEN;
   opts.headers['Content-Type']='application/json';
   return fetch(url,opts).then(function(r){return r.json();});
 }
-
 function showTab(name,btn){
   document.querySelectorAll('.tab-page').forEach(function(p){p.classList.remove('active');});
   document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
@@ -352,11 +335,9 @@ function showTab(name,btn){
   if(name==='leaderboard')loadLeaderboard();
   if(name==='calendar')renderCalendar();
 }
-
 function fmtPnl(v){v=parseFloat(v)||0;return(v>=0?'+$':'-$')+Math.abs(v).toFixed(2);}
 function setPnlClass(el,v){el.className='pnl-value '+(v>=0?'pnl-pos':'pnl-neg');}
 function fmtVal(v){var n=parseFloat(v)||0;return(n>=0?'+$':'-$')+Math.abs(n).toFixed(2);}
-
 function loadBot(){
   api('/api/client/bot').then(function(b){
     if(b.error){doLogout();return;}
@@ -394,7 +375,6 @@ function loadBot(){
     loadHistory(b.account);
   }).catch(function(){showToast('Connection error','error');});
 }
-
 function activateBot(){
   api('/api/client/activate',{method:'POST'}).then(function(r){
     if(r.ok){showToast('✅ Bot activated!','success');loadBot();}
@@ -416,10 +396,8 @@ function saveEmail(){
     else showToast(r.error||'Failed','error');
   });
 }
-
 function getDailySeed(){var d=new Date();return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();}
 function seededRand(seed,idx){var x=Math.sin(seed+idx*9301+49297)*233280;return x-Math.floor(x);}
-
 function loadLeaderboard(){
   fetch('/api/leaderboard').then(function(r){return r.json();}).then(function(realData){
     var realAvg=0;
@@ -447,8 +425,8 @@ function loadLeaderboard(){
     renderLeaderboard(fallback);
   });
 }
-
-function showTraderModal(name){
+function showTraderModal(el){
+  var name=el.getAttribute('data-name');
   fetch('/api/trader/'+encodeURIComponent(name))
     .then(function(r){return r.json();})
     .then(function(d){
@@ -465,12 +443,10 @@ function showTraderModal(name){
       document.getElementById('traderModal').classList.add('show');
     }).catch(function(){});
 }
-
 function closeTraderModal(e){
   if(e.target===document.getElementById('traderModal'))
     document.getElementById('traderModal').classList.remove('show');
 }
-
 function renderLeaderboard(data){
   var medals=['🥇','🥈','🥉'];
   var html='';
@@ -478,19 +454,18 @@ function renderLeaderboard(data){
     var rk=i<3?medals[i]:'<span style="color:var(--muted);font-size:11px">#'+(i+1)+'</span>';
     var pos=t.daily>=0;
     var pnl=(pos?'+$':'-$')+Math.abs(t.daily).toFixed(2);
-    var rowClick=t.real?' style="cursor:pointer" onclick="showTraderModal(\''+t.name+'\')"':'';
-    var liveBadge=t.real?' <span style="font-size:9px;background:#dbeafe;color:#1a56db;padding:1px 5px;border-radius:6px;font-weight:700">LIVE</span>':'';
-    html+='<div class="lb-row"'+rowClick+'><div class="lb-rank">'+rk+'</div><div class="lb-info"><div class="lb-av" style="background:'+t.color+'">'+t.ini+'</div><div class="lb-name">'+t.name+liveBadge+'</div></div><div class="lb-pnl '+(pos?'pnl-pos':'pnl-neg')+'">'+pnl+'</div></div>';
+    if(t.real){
+      html+='<div class="lb-row" style="cursor:pointer" onclick="showTraderModal(this)" data-name="'+t.name.replace(/"/g,'&quot;')+'"><div class="lb-rank">'+rk+'</div><div class="lb-info"><div class="lb-av" style="background:'+t.color+'">'+t.ini+'</div><div class="lb-name">'+t.name+'</div></div><div class="lb-pnl '+(pos?'pnl-pos':'pnl-neg')+'">'+pnl+'</div></div>';
+    }else{
+      html+='<div class="lb-row"><div class="lb-rank">'+rk+'</div><div class="lb-info"><div class="lb-av" style="background:'+t.color+'">'+t.ini+'</div><div class="lb-name">'+t.name+'</div></div><div class="lb-pnl '+(pos?'pnl-pos':'pnl-neg')+'">'+pnl+'</div></div>';
+    }
   });
   document.getElementById('lbList').innerHTML=html+html;
 }
-
-// CALENDAR
 var calHistory=[];
 var calYear=new Date().getFullYear();
 var calMonth=new Date().getMonth();
 var calAccount='';
-
 function loadHistory(account){
   calAccount=account;
   fetch('/api/history/'+account)
@@ -498,28 +473,19 @@ function loadHistory(account){
     .then(function(data){calHistory=data||[];renderCalendar();})
     .catch(function(){calHistory=[];renderCalendar();});
 }
-
-function calPrev(){
-  calMonth--;
-  if(calMonth<0){calMonth=11;calYear--;}
-  renderCalendar();
-}
+function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendar();}
 function calNext(){
   var now=new Date();
   if(calYear>now.getFullYear()||(calYear===now.getFullYear()&&calMonth>=now.getMonth()))return;
-  calMonth++;
-  if(calMonth>11){calMonth=0;calYear++;}
-  renderCalendar();
+  calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar();
 }
-
 function renderCalendar(){
   var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
   var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   var today=new Date().toISOString().split('T')[0];
   var el=document.getElementById('calMonthTitle');
   if(el)el.textContent=months[calMonth]+' '+calYear;
-  var lookup={};
-  calHistory.forEach(function(h){lookup[h.date]=h.daily;});
+  var lookup={};calHistory.forEach(function(h){lookup[h.date]=h.daily;});
   var firstDay=new Date(calYear,calMonth,1).getDay();
   var daysInMonth=new Date(calYear,calMonth+1,0).getDate();
   var html='';
@@ -541,17 +507,12 @@ function renderCalendar(){
     }
     html+='<div class="'+cls+'"><div class="cal-num">'+d+'</div>'+pnlHtml+'</div>';
   }
-  var grid=document.getElementById('calGrid');
-  if(grid)grid.innerHTML=html;
+  var grid=document.getElementById('calGrid');if(grid)grid.innerHTML=html;
   var mtEl=document.getElementById('calMonthTotal');
   if(mtEl){mtEl.textContent=(monthTotal>=0?'+$':'-$')+Math.abs(monthTotal).toFixed(2);mtEl.style.color=monthTotal>=0?'var(--green)':'var(--red)';}
-  var bdEl=document.getElementById('calBestDay');
-  if(bdEl)bdEl.textContent='+$'+bestDay.toFixed(2);
-  var tdEl=document.getElementById('calTradeDays');
-  if(tdEl)tdEl.textContent=tradeDays;
+  var bdEl=document.getElementById('calBestDay');if(bdEl)bdEl.textContent='+$'+bestDay.toFixed(2);
+  var tdEl=document.getElementById('calTradeDays');if(tdEl)tdEl.textContent=tradeDays;
 }
-
-// TICKER
 var xauPrice=0;
 function buildXAUTicker(price,chg){
   var pos=chg>=0;
@@ -563,34 +524,24 @@ function fetchXAULive(){
     .then(function(r){return r.json();})
     .then(function(d){
       if(d&&d[0]&&d[0].price){
-        var prev=xauPrice>0?xauPrice:d[0].price;
-        xauPrice=d[0].price;
+        var prev=xauPrice>0?xauPrice:d[0].price;xauPrice=d[0].price;
         var chg=prev>0?((xauPrice-prev)/prev*100):0.42;
-        var el=document.getElementById('tickerInner');
-        if(el)el.innerHTML=buildXAUTicker(xauPrice,chg);
+        var el=document.getElementById('tickerInner');if(el)el.innerHTML=buildXAUTicker(xauPrice,chg);
       }
-    })
-    .catch(function(){
-      if(xauPrice===0)xauPrice=3350.00;
-      xauPrice+=(Math.random()-0.5)*0.8;
-      var el=document.getElementById('tickerInner');
-      if(el)el.innerHTML=buildXAUTicker(xauPrice,0.42);
+    }).catch(function(){
+      if(xauPrice===0)xauPrice=3350.00;xauPrice+=(Math.random()-0.5)*0.8;
+      var el=document.getElementById('tickerInner');if(el)el.innerHTML=buildXAUTicker(xauPrice,0.42);
     });
 }
 function startTicker(){
-  fetchXAULive();
-  setInterval(fetchXAULive,60000);
-  setInterval(function(){
-    if(xauPrice>0){xauPrice+=(Math.random()-0.5)*0.3;var el=document.getElementById('tickerInner');if(el)el.innerHTML=buildXAUTicker(xauPrice,0.42);}
-  },5000);
+  fetchXAULive();setInterval(fetchXAULive,60000);
+  setInterval(function(){if(xauPrice>0){xauPrice+=(Math.random()-0.5)*0.3;var el=document.getElementById('tickerInner');if(el)el.innerHTML=buildXAUTicker(xauPrice,0.42);}},5000);
 }
-
 function showToast(msg,type){
   var t=document.getElementById('toast');
   t.textContent=msg;t.className='toast toast-'+(type||'info');t.style.display='block';
   setTimeout(function(){t.style.display='none';},3000);
 }
-
 setInterval(function(){if(TOKEN){loadBot();loadLeaderboard();}},30000);
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.getElementById('loginPage').style.display!=='none')doLogin();});
 </script>
