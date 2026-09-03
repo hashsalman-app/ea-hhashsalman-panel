@@ -473,7 +473,7 @@ app.get('/api/signal', (req, res) => {
   const sig = db.signal || { type: 'NORMAL' };
   if (sig.type === 'CLOSE_NOW' && sig.time) {
     const elapsed = (Date.now() - new Date(sig.time).getTime()) / 1000;
-    if (elapsed > 10) { db.signal = { type: 'NORMAL', time: null }; saveDB(db); return res.json({ type: 'NORMAL' }); }
+    if (elapsed > 60) { db.signal = { type: 'NORMAL', time: null }; saveDB(db); return res.json({ type: 'NORMAL' }); }
   }
   res.json(sig);
 });
@@ -741,7 +741,7 @@ app.get('/api/total-profit', (req, res) => {
 app.get('/api/leaderboard', (req, res) => {
   const db = getDB();
   const lb = db.bots
-    .filter(b => b.status === 'ACTIVE' && b.stats && b.stats.updatedAt)
+    .filter(b => b.status !== 'EXPIRED' && b.stats && b.stats.updatedAt)
     .map(b => ({ name: b.name, daily: b.stats.daily || 0, monthly: b.stats.monthly || 0, wins: b.stats.wins || 0, losses: b.stats.losses || 0 }))
     .sort((a, b) => b.daily - a.daily);
   res.json(lb);
