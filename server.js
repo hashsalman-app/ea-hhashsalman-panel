@@ -657,11 +657,16 @@ app.get('/api/stats', (req, res) => {
   
   // Sirf update karo agar meaningful data aa raha hai
   // Balance 0 matlab EA abhi connect nahi hua — purana balance rakho
+  // ✅ FIX: Agar EA restart hua — sirf badhta hua data save karo
+  // Daily/Weekly/Monthly zero aaye matlab EA abhi fresh start hua
+  // Purana data safe rakho jab tak EA ne kuch earn/lose na kiya ho
+  const isEARestart = (newBalance === 0 && newWins === 0 && newLosses === 0);
+
   found.stats = {
-    daily:   newDaily,
-    weekly:  newWeekly,
-    monthly: newMonthly,
-    total:   newTotal,
+    daily:   isEARestart ? (prevStats.daily   || 0) : newDaily,
+    weekly:  isEARestart ? (prevStats.weekly  || 0) : newWeekly,
+    monthly: isEARestart ? (prevStats.monthly || 0) : newMonthly,
+    total:   isEARestart ? (prevStats.total   || 0) : newTotal,
     wins:    newWins   > 0 ? newWins   : (prevStats.wins   || 0),
     losses:  newLosses > 0 ? newLosses : (prevStats.losses || 0),
     balance: newBalance > 0 ? newBalance : (prevStats.balance || 0),
@@ -805,3 +810,5 @@ app.get('/api/history/:account', (req, res) => {
   const history = (db.dailyHistory && db.dailyHistory[account]) || [];
   res.json(history);
 });
+
+
