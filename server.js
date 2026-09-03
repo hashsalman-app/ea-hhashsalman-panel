@@ -12,7 +12,11 @@ const RESEND_KEY = process.env.RESEND_API_KEY || '';
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(__dirname)); // ✅ Serve logo.png and other static files
+
+// ✅ Serve ONLY logo.png and specific static files — NOT index.html
+app.get('/logo.png', (req, res) => {
+  res.sendFile(require('path').join(__dirname, 'logo.png'));
+});
 
 // ── DB ────────────────────────────────────────────────
 function getDB() {
