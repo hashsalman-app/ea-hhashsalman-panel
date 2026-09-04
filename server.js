@@ -660,8 +660,12 @@ app.get('/api/stats', (req, res) => {
   // ✅ FIX: Agar EA restart hua — sirf badhta hua data save karo
   // Daily/Weekly/Monthly zero aaye matlab EA abhi fresh start hua
   // Purana data safe rakho jab tak EA ne kuch earn/lose na kiya ho
+  // ✅ EA restart detect — balance=0 AND wins=0 AND losses=0
   const isEARestart = (newBalance === 0 && newWins === 0 && newLosses === 0);
 
+  // ✅ Weekly/Monthly — sirf tab update karo jab EA chal raha ho
+  // Agar EA restart hua toh purana data rakho
+  // Agar EA chal raha hai toh jo bhi value aaye woh rakho
   found.stats = {
     daily:   isEARestart ? (prevStats.daily   || 0) : newDaily,
     weekly:  isEARestart ? (prevStats.weekly  || 0) : newWeekly,
@@ -689,18 +693,35 @@ app.get('/api/stats', (req, res) => {
   const history = db.dailyHistory[found.account];
   const todayIdx = history.findIndex(h => h.date === today);
   
-  if (todayIdx >= 0) {
-    // Update today's entry
-    history[todayIdx].daily = newDaily;
-  } else {
-    // Add new entry
-    history.push({ date: today, daily: newDaily });
-    // Keep max 365 entries
-    if (history.length > 365) {
-      history.sort((a,b) => a.date.localeCompare(b.date));
-      db.dailyHistory[found.account] = history.slice(-365);
+  if (!isEARestart) {
+    if (todayIdx >= 0) {
+      history[todayIdx].daily = newDaily;
+    } else {
+      history.push({ date: today, daily: newDaily });
+      if (history.length > 365) {
+        history.sort((a,b) => a.date.localeCompare(b.date));
+        db.dailyHistory[found.account] = history.slice(-365);
+      }
     }
   }
+
+  // ✅ Server calculates weekly/monthly from dailyHistory — never trust EA
+  const now = new Date();
+  const weekStart = new Date(now);
+  weekStart.setDate(now.getDate() - now.getDay()); // Sunday
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const weekStartStr = weekStart.toISOString().split('T')[0];
+  const monthStartStr = monthStart.toISOString().split('T')[0];
+
+  let serverWeekly = 0, serverMonthly = 0;
+  db.dailyHistory[found.account].forEach(h => {
+    if (h.date >= weekStartStr) serverWeekly += (h.daily || 0);
+    if (h.date >= monthStartStr) serverMonthly += (h.daily || 0);
+  });
+
+  // Override EA weekly/monthly with server calculated values
+  found.stats.weekly = parseFloat(serverWeekly.toFixed(2));
+  found.stats.monthly = parseFloat(serverMonthly.toFixed(2));
   
   saveDB(db); res.json({ ok: true });
 });
@@ -810,5 +831,3 @@ app.get('/api/history/:account', (req, res) => {
   const history = (db.dailyHistory && db.dailyHistory[account]) || [];
   res.json(history);
 });
-
-
